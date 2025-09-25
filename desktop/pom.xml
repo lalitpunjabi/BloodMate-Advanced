@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.bloodmate</groupId>
+  <artifactId>bloodmate-desktop</artifactId>
+  <version>1.0.0</version>
+  <name>BloodMate Desktop</name>
+  <description>JavaFX desktop app with Core Java and MySQL JDBC</description>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <javafx.version>21.0.4</javafx.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.4.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>com.bloodmate.desktop.MainApp</mainClass>
+          <launcher>bloodmate-desktop</launcher>
+          <jlinkZipName>bloodmate-desktop</jlinkZipName>
+          <stripDebug>true</stripDebug>
+          <noManPages>true</noManPages>
+          <noHeaderFiles>true</noHeaderFiles>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
