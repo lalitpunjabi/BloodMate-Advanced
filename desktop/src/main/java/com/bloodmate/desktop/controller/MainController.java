@@ -24,6 +24,9 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class MainController implements Initializable {
+	// Logo Button
+	@FXML private Button logoBtn;
+	
 	// Navigation Buttons
 	@FXML private Button dashboardBtn;
 	@FXML private Button donorsBtn;
@@ -56,30 +59,30 @@ public class MainController implements Initializable {
 	// Content Areas
 	@FXML private StackPane contentArea;
 	@FXML private ScrollPane dashboardView;
-	@FXML private VBox donorsView;
-	@FXML private VBox recipientsView;
-	@FXML private VBox inventoryView;
-	@FXML private VBox campaignsView;
-	@FXML private VBox rewardsView;
-	@FXML private VBox statisticsView;
-	@FXML private VBox emergencyView;
+	@FXML private ScrollPane donorsView;
+	@FXML private ScrollPane recipientsView;
+	@FXML private ScrollPane inventoryView;
+	@FXML private ScrollPane campaignsView;
+	@FXML private ScrollPane rewardsView;
+	@FXML private ScrollPane statisticsView;
+	@FXML private ScrollPane emergencyView;
 	
 	// AI & Innovation Content Areas
-	@FXML private VBox aiPredictionView;
-	@FXML private VBox gamificationView;
-	@FXML private VBox iotMonitoringView;
-	@FXML private VBox blockchainView;
-	@FXML private VBox voiceCommandsView;
+	@FXML private ScrollPane aiPredictionView;
+	@FXML private ScrollPane gamificationView;
+	@FXML private ScrollPane iotMonitoringView;
+	@FXML private ScrollPane blockchainView;
+	@FXML private ScrollPane voiceCommandsView;
 	
 	// Revolutionary Technology Content Areas
-	@FXML private VBox quantumMatchingView;
-	@FXML private VBox biometricAuthView;
-	@FXML private VBox arVisualizationView;
-	@FXML private VBox neuralQualityView;
-	@FXML private VBox droneDeliveryView;
-	@FXML private VBox digitalTwinView;
-	@FXML private VBox satelliteCommView;
-	@FXML private VBox holographicView;
+	@FXML private ScrollPane quantumMatchingView;
+	@FXML private ScrollPane biometricAuthView;
+	@FXML private ScrollPane arVisualizationView;
+	@FXML private ScrollPane neuralQualityView;
+	@FXML private ScrollPane droneDeliveryView;
+	@FXML private ScrollPane digitalTwinView;
+	@FXML private ScrollPane satelliteCommView;
+	@FXML private ScrollPane holographicView;
 	
 	// Theme Toggle
 	@FXML private Button themeToggleBtn;
@@ -137,6 +140,9 @@ public class MainController implements Initializable {
 		// Initialize database connection
 		this.donorDao = new DonorDao(Db.get());
 		
+		// Setup navigation button handlers
+		setupNavigationHandlers();
+		
 		// Setup dashboard
 		setupDashboard();
 		
@@ -161,6 +167,97 @@ public class MainController implements Initializable {
 	}
 
 	// =============================================================================
+	// NAVIGATION SETUP
+	// =============================================================================
+	
+	private void setupNavigationHandlers() {
+		// Main navigation buttons
+		if (logoBtn != null) {
+			logoBtn.setOnAction(e -> showDashboard());
+		}
+		if (dashboardBtn != null) {
+			dashboardBtn.setOnAction(e -> showDashboard());
+		}
+		if (donorsBtn != null) {
+			donorsBtn.setOnAction(e -> showDonors());
+		}
+		if (recipientsBtn != null) {
+			recipientsBtn.setOnAction(e -> showRecipients());
+		}
+		if (inventoryBtn != null) {
+			inventoryBtn.setOnAction(e -> showInventory());
+		}
+		if (campaignsBtn != null) {
+			campaignsBtn.setOnAction(e -> showCampaigns());
+		}
+		if (rewardsBtn != null) {
+			rewardsBtn.setOnAction(e -> showRewards());
+		}
+		if (statisticsBtn != null) {
+			statisticsBtn.setOnAction(e -> showStatistics());
+		}
+		if (emergencyBtn != null) {
+			emergencyBtn.setOnAction(e -> showEmergency());
+		}
+		
+		// AI & Innovation buttons
+		if (aiPredictionBtn != null) {
+			aiPredictionBtn.setOnAction(e -> showAIPrediction());
+		}
+		if (gamificationBtn != null) {
+			gamificationBtn.setOnAction(e -> showGamification());
+		}
+		if (iotMonitoringBtn != null) {
+			iotMonitoringBtn.setOnAction(e -> showIoTMonitoring());
+		}
+		if (blockchainBtn != null) {
+			blockchainBtn.setOnAction(e -> showBlockchain());
+		}
+		if (voiceCommandsBtn != null) {
+			voiceCommandsBtn.setOnAction(e -> showVoiceCommands());
+		}
+		
+		// Revolutionary Technology buttons
+		if (quantumMatchingBtn != null) {
+			quantumMatchingBtn.setOnAction(e -> showQuantumMatching());
+		}
+		if (biometricAuthBtn != null) {
+			biometricAuthBtn.setOnAction(e -> showBiometricAuth());
+		}
+		if (arVisualizationBtn != null) {
+			arVisualizationBtn.setOnAction(e -> showARVisualization());
+		}
+		if (neuralQualityBtn != null) {
+			neuralQualityBtn.setOnAction(e -> showNeuralQuality());
+		}
+		if (droneDeliveryBtn != null) {
+			droneDeliveryBtn.setOnAction(e -> showDroneDelivery());
+		}
+		if (digitalTwinBtn != null) {
+			digitalTwinBtn.setOnAction(e -> showDigitalTwin());
+		}
+		if (satelliteCommBtn != null) {
+			satelliteCommBtn.setOnAction(e -> showSatelliteComm());
+		}
+		if (holographicBtn != null) {
+			holographicBtn.setOnAction(e -> showHolographic());
+		}
+		
+		// Theme toggle button
+		if (themeToggleBtn != null) {
+			themeToggleBtn.setOnAction(e -> toggleTheme());
+		}
+		
+		// Settings and logout
+		if (settingsBtn != null) {
+			settingsBtn.setOnAction(e -> showSettings());
+		}
+		if (logoutBtn != null) {
+			logoutBtn.setOnAction(e -> logout());
+		}
+	}
+
+	// =============================================================================
 	// VIEW MANAGEMENT AND NAVIGATION
 	// =============================================================================
 	
@@ -168,11 +265,9 @@ public class MainController implements Initializable {
 	private void loadDonorManagementView() {
 		// Load donor management interface dynamically
 		if (donorsView != null) {
-			donorsView.getChildren().clear();
-			
 			// Create donor registration and management interface
 			VBox donorContent = createDonorManagementInterface();
-			donorsView.getChildren().add(donorContent);
+			donorsView.setContent(donorContent);
 		}
 	}
 	
@@ -648,6 +743,15 @@ public class MainController implements Initializable {
 	public void showDashboard() {
 		switchView("dashboard", dashboardView);
 		updateNavigationButtons(dashboardBtn);
+		
+		// Add special logo highlight when dashboard is active
+		if (logoBtn != null) {
+			logoBtn.getStyleClass().removeAll("dashboard-active");
+			logoBtn.getStyleClass().add("dashboard-active");
+		}
+		
+		// Show welcome message when logo is clicked
+		showStatusMessage("Welcome to BloodMate Dashboard! 🩸", "success");
 	}
 	
 	@FXML
@@ -713,6 +817,8 @@ public class MainController implements Initializable {
 		}
 	}
 	
+
+	
 	private void switchView(String viewName, javafx.scene.Node targetView) {
 		currentView = viewName;
 		
@@ -764,6 +870,11 @@ public class MainController implements Initializable {
 		// Add active class to the clicked button
 		if (activeButton != null) {
 			activeButton.getStyleClass().add("active");
+		}
+		
+		// Remove logo highlight when other sections are active
+		if (logoBtn != null && activeButton != dashboardBtn) {
+			logoBtn.getStyleClass().removeAll("dashboard-active");
 		}
 	}
 	

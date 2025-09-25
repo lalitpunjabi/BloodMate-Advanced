@@ -4,15 +4,62 @@
   <groupId>com.bloodmate</groupId>
   <artifactId>bloodmate-desktop</artifactId>
   <version>1.0.0</version>
+  <packaging>jar</packaging>
   <name>BloodMate Desktop</name>
-  <description>JavaFX desktop app with Core Java and MySQL JDBC</description>
+  <description>Revolutionary Blood Bank Management System with JavaFX, AI, IoT, and Blockchain</description>
+  <url>https://github.com/bloodmate/BloodMate-Web-Test</url>
+  
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>bloodmate-team</id>
+      <name>BloodMate Development Team</name>
+      <email>dev@bloodmate.org</email>
+      <organization>BloodMate</organization>
+      <roles>
+        <role>Lead Developer</role>
+      </roles>
+    </developer>
+  </developers>
 
   <properties>
+    <!-- Java and Encoding -->
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+    <!-- JavaFX -->
     <javafx.version>21.0.4</javafx.version>
     <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+    <!-- Dependencies -->
+    <mysql.version>8.4.0</mysql.version>
+    <controlsfx.version>11.2.1</controlsfx.version>
+    <jfoenix.version>9.0.10</jfoenix.version>
+    
+    <!-- Testing -->
+    <junit.version>5.10.0</junit.version>
+    <testfx.version>4.0.16-alpha</testfx.version>
+    <mockito.version>5.5.0</mockito.version>
+    
+    <!-- Plugin Versions -->
+    <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+    <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
+    <maven.failsafe.plugin.version>3.2.5</maven.failsafe.plugin.version>
+    <jacoco.plugin.version>0.8.10</jacoco.plugin.version>
+    <maven.site.plugin.version>4.0.0-M9</maven.site.plugin.version>
+    
+    <!-- Application Properties -->
+    <main.class>com.bloodmate.desktop.MainApp</main.class>
+    <application.name>BloodMate</application.name>
   </properties>
 
   <dependencies>
@@ -49,14 +96,46 @@
     <dependency>
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
-      <version>11.2.1</version>
+      <version>${controlsfx.version}</version>
     </dependency>
     
     <!-- Animation Library -->
     <dependency>
       <groupId>com.jfoenix</groupId>
       <artifactId>jfoenix</artifactId>
-      <version>9.0.10</version>
+      <version>${jfoenix.version}</version>
+    </dependency>
+    
+    <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-core</artifactId>
+      <version>${testfx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>${testfx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -79,26 +158,239 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>${javafx.maven.plugin.version}</version>
         <configuration>
-          <mainClass>com.bloodmate.desktop.MainApp</mainClass>
+          <mainClass>${main.class}</mainClass>
           <launcher>bloodmate-desktop</launcher>
           <jlinkZipName>bloodmate-desktop</jlinkZipName>
           <stripDebug>true</stripDebug>
           <noManPages>true</noManPages>
           <noHeaderFiles>true</noHeaderFiles>
-          <!-- Add JavaFX runtime args to fix module issues -->
-          <commandlineArgs>--add-modules javafx.controls,javafx.fxml,javafx.web</commandlineArgs>
+          <!-- JavaFX runtime arguments for module compatibility -->
+          <args>
+            <arg>--add-modules</arg>
+            <arg>javafx.controls,javafx.fxml,javafx.web,javafx.media</arg>
+            <arg>--add-exports</arg>
+            <arg>javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</arg>
+          </args>
+          <!-- JVM arguments for performance optimization -->
+          <jvmArgs>
+            <jvmArg>-Xms512m</jvmArg>
+            <jvmArg>-Xmx2g</jvmArg>
+            <jvmArg>-Dprism.vsync=true</jvmArg>
+            <jvmArg>-Dprism.lcdtext=false</jvmArg>
+            <jvmArg>-Dfile.encoding=UTF-8</jvmArg>
+          </jvmArgs>
         </configuration>
       </plugin>
       
-      <!-- Surefire Plugin for Testing -->
+      <!-- Surefire Plugin for Unit Testing -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.5</version>
+        <version>${maven.surefire.plugin.version}</version>
         <configuration>
-          <argLine>--add-modules javafx.controls,javafx.fxml --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
+          <argLine>
+            --add-modules javafx.controls,javafx.fxml,javafx.web
+            --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-exports javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
+            -Djava.awt.headless=true
+            -Dtestfx.robot=glass
+            -Dtestfx.headless=true
+            -Dprism.order=sw
+            -Dprism.text=t2k
+          </argLine>
+          <systemPropertyVariables>
+            <testfx.robot>glass</testfx.robot>
+            <testfx.headless>true</testfx.headless>
+            <prism.order>sw</prism.order>
+          </systemPropertyVariables>
         </configuration>
+      </plugin>
+      
+      <!-- Failsafe Plugin for Integration Testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven.failsafe.plugin.version}</version>
+        <configuration>
+          <argLine>
+            --add-modules javafx.controls,javafx.fxml,javafx.web
+            --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+          </argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- JaCoCo Code Coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- Maven JAR Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${main.class}</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+            </manifest>
+            <manifestEntries>
+              <Built-By>BloodMate Development Team</Built-By>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>BloodMate</Implementation-Vendor>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <!-- Maven Dependency Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- Maven Site Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${maven.site.plugin.version}</version>
       </plugin>
     </plugins>
   </build>
+  
+  <!-- Reporting for Code Quality -->
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.4.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+  
+  <!-- Profiles for Different Environments -->
+  <profiles>
+    <profile>
+      <id>development</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <maven.test.skip>false</maven.test.skip>
+        <javafx.args>-Dprism.verbose=true</javafx.args>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>production</id>
+      <properties>
+        <maven.test.skip>false</maven.test.skip>
+        <javafx.args>-Dprism.order=hw</javafx.args>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <optimize>true</optimize>
+              <showDeprecation>false</showDeprecation>
+              <showWarnings>false</showWarnings>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <platform.classifier>win</platform.classifier>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <platform.classifier>mac</platform.classifier>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <name>!mac os x</name>
+        </os>
+      </activation>
+      <properties>
+        <platform.classifier>linux</platform.classifier>
+      </properties>
+    </profile>
+  </profiles>
 </project>

@@ -1,0 +1,65 @@
+MIT License
+
+Copyright (c) 2025 BloodMate Development Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project uses the following third-party libraries:
+
+### JavaFX
+- License: GPL v2 with Classpath Exception
+- Copyright: Oracle Corporation
+- Website: https://openjfx.io/
+
+### MySQL Connector/J
+- License: GPL v2 with Universal FOSS Exception
+- Copyright: Oracle Corporation
+- Website: https://dev.mysql.com/
+
+### Apache Maven
+- License: Apache License 2.0
+- Copyright: Apache Software Foundation
+- Website: https://maven.apache.org/
+
+### Java Development Kit (OpenJDK)
+- License: GPL v2 with Classpath Exception
+- Copyright: Oracle Corporation and OpenJDK Contributors
+- Website: https://openjdk.java.net/
+
+---
+
+## Medical Disclaimer
+
+BloodMate is a software application designed to assist in blood bank management. 
+This software is not intended to replace professional medical judgment or clinical 
+decision-making. All medical decisions should be made by qualified healthcare 
+professionals. The developers of BloodMate are not responsible for any medical 
+outcomes resulting from the use of this software.
+
+## Data Privacy Notice
+
+This software may process sensitive medical data. Users are responsible for 
+ensuring compliance with applicable data protection regulations including but 
+not limited to HIPAA, GDPR, and local privacy laws. The developers recommend 
+implementing appropriate security measures and obtaining necessary consents 
+before processing personal health information.

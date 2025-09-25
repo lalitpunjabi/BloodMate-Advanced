@@ -1,0 +1,7 @@
+com\bloodmate\desktop\controller\MainController.class
+com\bloodmate\desktop\MainApp.class
+com\bloodmate\desktop\util\ConfigurationManager.class
+com\bloodmate\desktop\model\Donor.class
+com\bloodmate\desktop\db\Db.class
+com\bloodmate\desktop\repo\DonorDao.class
+com\bloodmate\desktop\controller\MainController$1.class

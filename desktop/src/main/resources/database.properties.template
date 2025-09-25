@@ -1,0 +1,57 @@
+# BloodMate Database Configuration Template
+# =========================================
+# Copy this file to database.properties and configure your settings
+
+# Database Connection Settings
+db.url=jdbc:mysql://localhost:3306/bloodmate?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
+db.username=root
+db.password=Lalit@sql04
+db.driver=com.mysql.cj.jdbc.Driver
+
+# Connection Pool Configuration
+db.pool.initialSize=5
+db.pool.maxActive=20
+db.pool.maxIdle=10
+db.pool.minIdle=5
+db.pool.maxWait=30000
+db.pool.validationQuery=SELECT 1
+db.pool.testOnBorrow=true
+db.pool.testOnReturn=false
+db.pool.testWhileIdle=true
+db.pool.timeBetweenEvictionRunsMillis=30000
+db.pool.minEvictableIdleTimeMillis=60000
+
+# Database Performance Settings
+db.cache.enabled=true
+db.cache.size=1000
+db.batch.size=100
+db.timeout.connection=30
+db.timeout.query=60
+
+# Database Schema Settings
+db.schema.auto.create=false
+db.schema.auto.update=true
+db.schema.validate=true
+
+# Backup and Maintenance
+db.backup.enabled=true
+db.backup.schedule=0 2 * * *
+db.backup.retention.days=30
+db.maintenance.enabled=true
+db.maintenance.schedule=0 3 * * 0
+
+# Security Settings
+db.ssl.enabled=true
+db.ssl.verify.certificate=true
+db.encryption.enabled=true
+
+# Monitoring and Logging
+db.logging.enabled=true
+db.logging.level=WARN
+db.monitoring.enabled=true
+db.metrics.enabled=true
+
+# Development Settings (disable in production)
+db.debug.enabled=false
+db.show.sql=false
+db.format.sql=false

@@ -131,6 +131,224 @@
     -fx-font-style: italic;
 }
 
+/* =============================================================================
+ * NEW BLOOD DROP LOGO STYLES
+ * ============================================================================= */
+
+/* Clickable Logo Button */
+.logo-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 15 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.4, 0, 2);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.logo-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0.5, 0, 3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.logo-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Blood Drop Logo Container */
+.blood-drop-logo {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        #ff4444,
+        #cc0000
+    );
+    -fx-background-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    -fx-border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    -fx-border-color: #990000;
+    -fx-border-width: 2;
+    -fx-pref-width: 45;
+    -fx-pref-height: 50;
+    -fx-effect: dropshadow(gaussian, rgba(204, 0, 0, 0.6), 6, 0.3, 0, 2);
+}
+
+/* Blood Drop Icon */
+.blood-drop-icon {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 1.0, 0, 1);
+}
+
+/* Logo Title */
+.logo-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 1.0, 0, 1);
+}
+
+/* Updated Logo Subtitle for new design */
+.logo-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Blood Drop Animation Effects */
+.blood-drop-logo:hover {
+    -fx-effect: dropshadow(gaussian, rgba(204, 0, 0, 0.8), 8, 0.4, 0, 3),
+                innershadow(gaussian, rgba(255, 255, 255, 0.3), 3, 0.2, 0, 1);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Pulse animation for active dashboard */
+.logo-button.dashboard-active .blood-drop-logo {
+    -fx-effect: dropshadow(gaussian, rgba(204, 0, 0, 0.9), 10, 0.5, 0, 3),
+                dropshadow(gaussian, rgba(255, 68, 68, 0.7), 15, 0.8, 0, 0);
+}
+
+/* Additional glow effect for logo icon */
+.blood-drop-icon:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.9), 4, 1.0, 0, 0),
+                dropshadow(gaussian, rgba(0,0,0,0.8), 2, 1.0, 0, 1);
+}
+
+/* =============================================================================
+ * SCROLLBAR STYLING
+ * ============================================================================= */
+
+/* Sidebar ScrollPane */
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.sidebar-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Custom ScrollBar Styling */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 12;
+    -fx-max-height: 12;
+    -fx-min-height: 12;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12;
+    -fx-max-width: 12;
+    -fx-min-width: 12;
+}
+
+/* ScrollBar Track */
+.scroll-bar:horizontal .track {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+/* ScrollBar Thumb */
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: linear-gradient(to bottom, -color-red-secondary, -color-red-primary);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(0, 0, 0, 0.2);
+    -fx-border-width: 1;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(to right, -color-red-secondary, -color-red-primary);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(0, 0, 0, 0.2);
+    -fx-border-width: 1;
+}
+
+/* ScrollBar Thumb Hover */
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, -color-red-primary, #990000);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: linear-gradient(to right, -color-red-primary, #990000);
+}
+
+/* ScrollBar Thumb Pressed */
+.scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: #990000;
+}
+
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #990000;
+}
+
+/* ScrollBar Buttons (Arrow buttons) */
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+/* Content Area ScrollPanes */
+.content-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.content-area .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Dark Mode Scrollbar Adjustments */
+.root[data-theme="dark"] .scroll-bar:horizontal .track,
+.root[data-theme="dark"] .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.root[data-theme="dark"] .scroll-bar:horizontal .thumb,
+.root[data-theme="dark"] .scroll-bar:vertical .thumb {
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth Scrolling for All ScrollPanes */
+.scroll-pane {
+    -fx-smooth: true;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
 /* Theme Toggle Button */
 .theme-toggle {
     -fx-background-color: transparent;
