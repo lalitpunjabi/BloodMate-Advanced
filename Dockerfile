@@ -1,25 +1,20 @@
-# Use OpenJDK 17 as base image
-FROM openjdk:17-jdk-slim
+FROM mcr.microsoft.com/openjdk/jdk:17-ubuntu
+
+# Install Maven
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends maven \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
+# Copy pom and resolve dependencies
+COPY pom.xml ./
+RUN mvn -B -e -DskipTests dependency:go-offline
 
-# Make Maven wrapper executable
-RUN chmod +x mvnw
-
-# Download dependencies
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code
-COPY src src
-
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Copy source code and build
+COPY src ./src
+RUN mvn -B -e clean package -DskipTests
 
 # Create a non-root user
 RUN groupadd -r bloodmate && useradd -r -g bloodmate bloodmate

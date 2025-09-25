@@ -1,3 +1,4 @@
+com\blooddonation\repository\DonorRepository.class
 com\blooddonation\service\EligibilityChecker.class
 com\blooddonation\entity\Admin$AdminRole.class
 com\blooddonation\entity\Campaign$CampaignStatus.class
@@ -7,10 +8,12 @@ com\blooddonation\entity\BloodInventory.class
 com\blooddonation\entity\Recipient$RequestPriority.class
 com\blooddonation\entity\Recipient$RequestStatus.class
 com\blooddonation\entity\Donor.class
+com\blooddonation\service\DonorService.class
 com\blooddonation\entity\Recipient.class
 com\blooddonation\entity\Campaign$CampaignType.class
 com\blooddonation\entity\Rewards$RewardTier.class
 com\blooddonation\entity\Campaign.class
 com\blooddonation\entity\BloodInventory$SourceType.class
 com\blooddonation\BloodMateApplication.class
+com\blooddonation\controller\DonorController.class
 com\blooddonation\entity\Admin.class
