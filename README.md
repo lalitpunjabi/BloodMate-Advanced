@@ -558,7 +558,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📖 **Documentation**: Check this README and code comments
 - 🐛 **Bug Reports**: Open an issue on GitHub
 - 💡 **Feature Requests**: Submit enhancement proposals
-- 📧 **Contact**: [your.email@example.com]
+- 📧 **Contact**: [lalitpunjabi.pro@gmail.com]
 
 ### Community
 - **Discord**: [Join our community](https://discord.gg/bloodmate)
