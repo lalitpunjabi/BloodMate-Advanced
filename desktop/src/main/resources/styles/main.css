@@ -1,0 +1,653 @@
+/* =============================================================================
+ * BLOODMATE RED/WHITE/BLACK THEME SYSTEM
+ * Complete responsive theme with dark/light mode switching
+ * ============================================================================= */
+
+/* Root Color Variables - Light Theme (Default) */
+.root {
+    /* Primary Red Colors */
+    -primary-red: #dc2626;          /* Bright red */
+    -primary-red-dark: #b91c1c;     /* Dark red */
+    -primary-red-light: #f87171;    /* Light red */
+    -primary-red-hover: #ef4444;    /* Hover red */
+    
+    /* Black/Gray Colors */
+    -primary-black: #111827;         /* Deep black */
+    -secondary-black: #1f2937;      /* Secondary black */
+    -text-black: #111827;           /* Text black */
+    -border-black: #374151;         /* Border black */
+    
+    /* White/Light Colors */
+    -primary-white: #ffffff;         /* Pure white */
+    -secondary-white: #f9fafb;      /* Off white */
+    -card-white: #ffffff;           /* Card white */
+    -text-white: #ffffff;           /* Text white */
+    
+    /* Theme Variables - Light Mode */
+    -bg-primary: -primary-white;     /* Main background */
+    -bg-secondary: -secondary-white; /* Secondary background */
+    -bg-card: -card-white;          /* Card background */
+    -bg-sidebar: -primary-black;    /* Sidebar background */
+    
+    -text-primary: -text-black;     /* Primary text */
+    -text-secondary: #6b7280;       /* Secondary text */
+    -text-muted: #9ca3af;          /* Muted text */
+    -text-inverse: -text-white;     /* Inverse text */
+    
+    -border-primary: #e5e7eb;       /* Primary border */
+    -border-secondary: #d1d5db;     /* Secondary border */
+    -border-accent: -primary-red;   /* Accent border */
+    
+    /* Shadows */
+    -shadow-light: rgba(0, 0, 0, 0.05);
+    -shadow-medium: rgba(0, 0, 0, 0.1);
+    -shadow-heavy: rgba(0, 0, 0, 0.15);
+    
+    /* Theme specific */
+    -theme-accent: -primary-red;
+    -theme-success: #10b981;
+    -theme-warning: #f59e0b;
+    -theme-error: #ef4444;
+    -theme-info: #3b82f6;
+    
+    /* Sizes */
+    -border-radius: 12px;
+    -border-radius-small: 8px;
+    -border-radius-large: 16px;
+    
+    /* Transitions */
+    -transition-fast: 0.2s ease;
+    -transition-normal: 0.3s ease;
+    -transition-slow: 0.5s ease;
+}
+
+/* Dark Theme Variables */
+.root.dark-theme {
+    /* Dark Mode Backgrounds */
+    -bg-primary: #0f0f0f;           /* Very dark background */
+    -bg-secondary: #1a1a1a;         /* Secondary dark background */
+    -bg-card: #262626;              /* Dark card background */
+    -bg-sidebar: #000000;           /* Pure black sidebar */
+    
+    /* Dark Mode Text */
+    -text-primary: #f9fafb;         /* Light text */
+    -text-secondary: #d1d5db;       /* Secondary light text */
+    -text-muted: #9ca3af;          /* Muted text */
+    -text-inverse: -text-black;     /* Inverse text (dark) */
+    
+    /* Dark Mode Borders */
+    -border-primary: #404040;       /* Dark border */
+    -border-secondary: #525252;     /* Lighter dark border */
+    
+    /* Dark Mode Shadows */
+    -shadow-light: rgba(255, 255, 255, 0.05);
+    -shadow-medium: rgba(255, 255, 255, 0.1);
+    -shadow-heavy: rgba(255, 255, 255, 0.15);
+}
+
+/* Base Root Styling */
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: -bg-primary;
+    -fx-text-fill: -text-primary;
+}
+
+/* =============================================================================
+ * LAYOUT COMPONENTS
+ * ============================================================================= */
+
+/* Main Application Layout */
+.border-pane {
+    -fx-background-color: -bg-primary;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    -fx-background-color: -bg-sidebar;
+    -fx-min-width: 280px;
+    -fx-max-width: 280px;
+    -fx-effect: dropshadow(gaussian, -shadow-heavy, 20, 0.3, 2, 0);
+}
+
+.sidebar-header {
+    -fx-alignment: center;
+    -fx-padding: 25px 20px 30px 20px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-color: transparent;
+}
+
+.logo-text {
+    -fx-text-fill: -text-white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, -shadow-medium, 10, 0, 0, 2);
+}
+
+.logo-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-text-fill: -text-white;
+    -fx-font-size: 12px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, -shadow-light, 5, 0, 0, 1);
+}
+
+.theme-toggle:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: -primary-red;
+    -fx-text-fill: -primary-red-light;
+    -fx-effect: dropshadow(gaussian, -primary-red, 10, 0.3, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* =============================================================================
+ * NAVIGATION COMPONENTS
+ * ============================================================================= */
+
+/* Navigation Section Titles */
+.nav-section-title {
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 15px 20px 8px 20px;
+}
+
+/* Navigation Buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 16px 20px;
+    -fx-alignment: center-left;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-pref-width: 280px;
+    -fx-background-radius: 0;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.1);
+    -fx-text-fill: -primary-red-light;
+    -fx-border-color: -primary-red;
+    -fx-border-width: 0 0 0 3px;
+    -fx-effect: dropshadow(gaussian, -primary-red, 5, 0.2, 0, 0);
+}
+
+.nav-button:pressed {
+    -fx-background-color: rgba(220, 38, 38, 0.2);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.nav-button.active {
+    -fx-background-color: -primary-red;
+    -fx-text-fill: -text-white;
+    -fx-border-color: -primary-red-dark;
+    -fx-border-width: 0 0 0 4px;
+    -fx-effect: dropshadow(gaussian, -primary-red, 15, 0.4, 0, 2);
+    -fx-font-weight: bold;
+}
+
+/* =============================================================================
+ * CONTENT AREA COMPONENTS
+ * ============================================================================= */
+
+/* Main Content Area */
+.content-area {
+    -fx-background-color: -bg-secondary;
+    -fx-padding: 30px;
+}
+
+/* Page Titles */
+.page-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 0 0 25px 0;
+    -fx-effect: dropshadow(gaussian, -shadow-light, 5, 0, 0, 1);
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 15px 0;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+
+/* =============================================================================
+ * DASHBOARD CARDS
+ * ============================================================================= */
+
+/* Dashboard Cards */
+.dashboard-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: -border-radius;
+    -fx-effect: dropshadow(gaussian, -shadow-medium, 15, 0.3, 0, 2);
+    -fx-padding: 25px;
+    -fx-spacing: 15px;
+}
+
+.dashboard-card:hover {
+    -fx-effect: dropshadow(gaussian, -shadow-heavy, 20, 0.4, 0, 4);
+    -fx-scale-y: 1.02;
+    -fx-scale-x: 1.02;
+}
+
+/* Statistics Cards */
+.stat-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: -border-radius;
+    -fx-effect: dropshadow(gaussian, -shadow-medium, 10, 0.2, 0, 1);
+    -fx-padding: 20px;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-pref-height: 120px;
+}
+
+.stat-number {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-secondary;
+    -fx-text-alignment: center;
+}
+
+.stat-icon {
+    -fx-font-size: 24px;
+    -fx-text-fill: -theme-accent;
+}
+
+/* =============================================================================
+ * FORM CONTROLS
+ * ============================================================================= */
+
+/* Text Fields */
+.modern-text-field {
+    -fx-background-color: -bg-card;
+    -fx-border-color: -border-primary;
+    -fx-border-width: 1px;
+    -fx-border-radius: -border-radius-small;
+    -fx-background-radius: -border-radius-small;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+}
+
+.modern-text-field:focused {
+    -fx-border-color: -theme-accent;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.3), 5, 0.3, 0, 0);
+}
+
+/* Buttons */
+.modern-button {
+    -fx-background-color: -theme-accent;
+    -fx-text-fill: -text-white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: -border-radius-small;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-effect: dropshadow(gaussian, -shadow-light, 5, 0, 0, 1);
+}
+
+.modern-button:hover {
+    -fx-background-color: -primary-red-hover;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.4), 8, 0.3, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.modern-button:pressed {
+    -fx-background-color: -primary-red-dark;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.6), 4, 0.3, 0, 1);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Button Variants */
+.success-button {
+    -fx-background-color: -theme-success;
+}
+
+.success-button:hover {
+    -fx-background-color: derive(-theme-success, -15%);
+}
+
+.warning-button {
+    -fx-background-color: -theme-warning;
+    -fx-text-fill: -text-black;
+}
+
+.warning-button:hover {
+    -fx-background-color: derive(-theme-warning, -15%);
+}
+
+.error-button {
+    -fx-background-color: -theme-error;
+}
+
+.error-button:hover {
+    -fx-background-color: derive(-theme-error, -15%);
+}
+
+/* =============================================================================
+ * TABLE STYLING
+ * ============================================================================= */
+
+.modern-table {
+    -fx-background-color: -bg-card;
+    -fx-border-radius: -border-radius;
+    -fx-background-radius: -border-radius;
+    -fx-effect: dropshadow(gaussian, -shadow-light, 5, 0, 0, 1);
+}
+
+.modern-table .column-header {
+    -fx-background-color: linear-gradient(to bottom, -bg-secondary 0%, -border-primary 100%);
+    -fx-text-fill: -text-primary;
+    -fx-font-weight: bold;
+    -fx-padding: 15px;
+    -fx-border-color: -border-secondary;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.modern-table .table-row-cell {
+    -fx-padding: 12px 15px;
+    -fx-border-color: -border-primary;
+    -fx-border-width: 0 0 1px 0;
+    -fx-text-fill: -text-primary;
+}
+
+.modern-table .table-row-cell:selected {
+    -fx-background-color: rgba(220, 38, 38, 0.1);
+    -fx-text-fill: -text-primary;
+}
+
+/* =============================================================================
+ * PROGRESSIVE BARS AND CHARTS
+ * ============================================================================= */
+
+.modern-progress-bar {
+    -fx-background-color: -border-primary;
+    -fx-background-radius: 20px;
+    -fx-pref-height: 8px;
+}
+
+.modern-progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, -theme-accent, -primary-red-light);
+    -fx-background-radius: 20px;
+}
+
+.chart-container {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: -border-radius;
+    -fx-effect: dropshadow(gaussian, -shadow-medium, 10, 0.2, 0, 1);
+    -fx-padding: 20px;
+}
+
+.chart-placeholder {
+    -fx-background-color: linear-gradient(to bottom right, -bg-secondary, -border-primary);
+    -fx-border-color: -border-secondary;
+    -fx-border-radius: -border-radius-small;
+    -fx-background-radius: -border-radius-small;
+}
+
+/* =============================================================================
+ * ALERT AND NOTIFICATION STYLES
+ * ============================================================================= */
+
+.alert-success {
+    -fx-background-color: rgba(16, 185, 129, 0.1);
+    -fx-border-color: -theme-success;
+    -fx-border-width: 1px 0 1px 4px;
+    -fx-padding: 15px;
+    -fx-background-radius: -border-radius-small;
+}
+
+.alert-warning {
+    -fx-background-color: rgba(245, 158, 11, 0.1);
+    -fx-border-color: -theme-warning;
+    -fx-border-width: 1px 0 1px 4px;
+    -fx-padding: 15px;
+    -fx-background-radius: -border-radius-small;
+}
+
+.alert-error {
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-border-color: -theme-error;
+    -fx-border-width: 1px 0 1px 4px;
+    -fx-padding: 15px;
+    -fx-background-radius: -border-radius-small;
+}
+
+/* =============================================================================
+ * REVOLUTIONARY FEATURES STYLING
+ * ============================================================================= */
+
+/* Quantum Styling */
+.quantum-processing {
+    -fx-background-color: linear-gradient(to bottom right, -primary-red, -primary-red-dark) !important;
+    -fx-text-fill: -text-white !important;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.6), 15, 0, 0, 0);
+}
+
+.quantum-accuracy {
+    -fx-background-color: linear-gradient(to bottom right, #4ecdc4, #44a08d) !important;
+    -fx-text-fill: -text-white !important;
+    -fx-effect: dropshadow(gaussian, rgba(78, 205, 196, 0.6), 15, 0, 0, 0);
+}
+
+.quantum-optimization {
+    -fx-background-color: linear-gradient(to bottom right, #f093fb, #f5576c) !important;
+    -fx-text-fill: -text-white !important;
+    -fx-effect: dropshadow(gaussian, rgba(240, 147, 251, 0.6), 15, 0, 0, 0);
+}
+
+.quantum-predictions {
+    -fx-background-color: linear-gradient(to bottom right, #4facfe, #00f2fe) !important;
+    -fx-text-fill: -text-white !important;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.6), 15, 0, 0, 0);
+}
+
+.quantum-visualization {
+    -fx-background-color: linear-gradient(to bottom right, -primary-red, -primary-red-dark);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: -primary-red;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.3), 10, 0, 0, 0);
+}
+
+.network-visualization {
+    -fx-background-color: linear-gradient(to bottom right, #4ecdc4, #44a08d);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: #4ecdc4;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(78, 205, 196, 0.3), 10, 0, 0, 0);
+}
+
+/* =============================================================================
+ * RESPONSIVE GRID SYSTEM
+ * ============================================================================= */
+
+.responsive-grid {
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+    -fx-padding: 0;
+}
+
+/* Responsive breakpoints for different screen sizes */
+@media screen and (max-width: 1200px) {
+    .responsive-grid {
+        -fx-hgap: 15px;
+        -fx-vgap: 15px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        -fx-min-width: 250px;
+        -fx-max-width: 250px;
+    }
+    
+    .content-area {
+        -fx-padding: 20px;
+    }
+    
+    .responsive-grid {
+        -fx-hgap: 10px;
+        -fx-vgap: 10px;
+    }
+}
+
+/* =============================================================================
+ * SCROLLBAR STYLING
+ * ============================================================================= */
+
+.scroll-pane .scroll-bar:horizontal,
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: -border-primary;
+    -fx-background-radius: 5px;
+}
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: -border-secondary;
+    -fx-background-radius: 5px;
+}
+
+.scroll-pane .scroll-bar .thumb:hover {
+    -fx-background-color: -theme-accent;
+}
+
+/* =============================================================================
+ * TOOLTIP STYLING
+ * ============================================================================= */
+
+.tooltip {
+    -fx-background-color: rgba(17, 24, 39, 0.95);
+    -fx-text-fill: -text-white;
+    -fx-background-radius: -border-radius-small;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, -shadow-medium, 5, 0.3, 0, 2);
+}
+
+/* =============================================================================
+ * LOADING ANIMATIONS
+ * ============================================================================= */
+
+.loading-indicator {
+    -fx-progress-color: -theme-accent;
+    -fx-background-color: transparent;
+}
+
+/* =============================================================================
+ * PRIORITY INDICATORS
+ * ============================================================================= */
+
+.priority-high {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-border-color: -theme-error;
+    -fx-border-width: 2px;
+    -fx-border-radius: -border-radius-small;
+    -fx-background-radius: -border-radius-small;
+}
+
+.priority-medium {
+    -fx-background-color: rgba(245, 158, 11, 0.2);
+    -fx-border-color: -theme-warning;
+    -fx-border-width: 2px;
+    -fx-border-radius: -border-radius-small;
+    -fx-background-radius: -border-radius-small;
+}
+
+.priority-low {
+    -fx-background-color: rgba(16, 185, 129, 0.2);
+    -fx-border-color: -theme-success;
+    -fx-border-width: 2px;
+    -fx-border-radius: -border-radius-small;
+    -fx-background-radius: -border-radius-small;
+}
+
+/* =============================================================================
+ * BLOOD GROUP SPECIFIC CARDS WITH RED THEME
+ * ============================================================================= */
+
+.blood-card-o-negative { 
+    -fx-border-color: -primary-red-dark; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(220, 38, 38, 0.05);
+}
+
+.blood-card-o-positive { 
+    -fx-border-color: -primary-red; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(220, 38, 38, 0.05);
+}
+
+.blood-card-a-negative { 
+    -fx-border-color: #f59e0b; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(245, 158, 11, 0.05);
+}
+
+.blood-card-a-positive { 
+    -fx-border-color: #d97706; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(217, 119, 6, 0.05);
+}
+
+.blood-card-b-negative { 
+    -fx-border-color: #3b82f6; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(59, 130, 246, 0.05);
+}
+
+.blood-card-b-positive { 
+    -fx-border-color: #1d4ed8; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(29, 78, 216, 0.05);
+}
+
+.blood-card-ab-negative { 
+    -fx-border-color: #8b5cf6; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(139, 92, 246, 0.05);
+}
+
+.blood-card-ab-positive { 
+    -fx-border-color: #7c3aed; 
+    -fx-border-width: 0 0 4px 0; 
+    -fx-background-color: rgba(124, 58, 237, 0.05);
+}

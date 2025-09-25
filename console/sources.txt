@@ -1,9 +1,0 @@
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\Main.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\model\BloodInventory.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\model\Campaign.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\model\Donor.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\model\Recipient.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\model\Rewards.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\repo\DonorRepository.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\service\DonorService.java 
-C:\Users\HP\BloodMate-Web-Test\console\src\bloodmate\storage\CsvUtil.java 

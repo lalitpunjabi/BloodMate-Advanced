@@ -10,8 +10,15 @@ public class MainApp extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/com/bloodmate/desktop/view/MainView.fxml"));
-		Scene scene = new Scene(root, 900, 600);
-		stage.setTitle("BloodMate Desktop");
+		Scene scene = new Scene(root, 1200, 800);
+		
+		// Load CSS stylesheet
+		String css = getClass().getResource("/styles/main.css").toExternalForm();
+		scene.getStylesheets().add(css);
+		
+		stage.setTitle("🩸 BloodMate - Blood Bank Management System");
+		stage.setMinWidth(1000);
+		stage.setMinHeight(700);
 		stage.setScene(scene);
 		stage.show();
 	}
