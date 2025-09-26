@@ -216,6 +216,23 @@ CREATE TABLE IF NOT EXISTS iot_monitoring (
     INDEX idx_alerts (alert_triggered)
 );
 
+-- Sensor Data table (for IoT Monitoring feature)
+CREATE TABLE IF NOT EXISTS sensor_data (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    sensor_id VARCHAR(50) NOT NULL,
+    sensor_type VARCHAR(50) NOT NULL,
+    value DOUBLE NOT NULL,
+    unit VARCHAR(20) NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    location VARCHAR(100),
+    status VARCHAR(20) DEFAULT 'ACTIVE',
+    blood_bag_id VARCHAR(50),
+    INDEX idx_sensor_id (sensor_id),
+    INDEX idx_sensor_type (sensor_type),
+    INDEX idx_timestamp (timestamp),
+    INDEX idx_blood_bag_id (blood_bag_id)
+);
+
 -- Drone Delivery table
 CREATE TABLE IF NOT EXISTS drone_deliveries (
     id VARCHAR(64) PRIMARY KEY,
@@ -258,6 +275,28 @@ CREATE TABLE IF NOT EXISTS blockchain_records (
     INDEX idx_hash (transaction_hash),
     INDEX idx_type (transaction_type),
     INDEX idx_verification (verification_status)
+);
+
+-- Blood Unit Verification table (for Blockchain feature)
+CREATE TABLE IF NOT EXISTS blood_unit_verifications (
+    id VARCHAR(36) PRIMARY KEY,
+    blood_bag_id VARCHAR(50) NOT NULL,
+    donor_id VARCHAR(36),
+    donor_name VARCHAR(100),
+    blood_group VARCHAR(10),
+    collection_date TIMESTAMP,
+    verification_date TIMESTAMP NOT NULL,
+    verification_status VARCHAR(20) DEFAULT 'PENDING',
+    verifier VARCHAR(100),
+    location VARCHAR(100),
+    hash VARCHAR(64),
+    previous_hash VARCHAR(64),
+    signature VARCHAR(256),
+    notes TEXT,
+    INDEX idx_blood_bag_id (blood_bag_id),
+    INDEX idx_donor_id (donor_id),
+    INDEX idx_verification_status (verification_status),
+    INDEX idx_verification_date (verification_date)
 );
 
 -- AR/VR Sessions table
