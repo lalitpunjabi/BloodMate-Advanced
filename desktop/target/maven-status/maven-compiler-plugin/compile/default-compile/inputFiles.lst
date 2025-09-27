@@ -1,6 +1,7 @@
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\controller\MainController.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\db\Db.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\MainApp.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\model\AdvancedReport.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\model\AIPrediction.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\model\BloodInventory.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\model\BloodStatistics.java
@@ -21,5 +22,9 @@ C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\repo\EmergencyRequestDao.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\repo\RecipientDao.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\repo\SensorDataDao.java
-C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\TestFeatures.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\report\CustomReportDialog.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\report\ReportGenerator.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\report\ScheduledReportDialog.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\report\ScheduledReportManager.java
+C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\service\ReportService.java
 C:\Users\Lalit Punjabi\Desktop\BloodMate-Web-Test\BloodMate-Web-Test\desktop\src\main\java\com\bloodmate\desktop\util\ConfigurationManager.java

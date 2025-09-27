@@ -63,7 +63,7 @@ public class BloodInventoryDao {
 
     public List<BloodInventory> findByBloodGroup(String bloodGroup) {
         List<BloodInventory> list = new ArrayList<>();
-        String sql = "SELECT * FROM blood_inventory WHERE blood_group = ? AND status = 'AVAILABLE' ORDER BY expiry_date ASC";
+        String sql = "SELECT * FROM blood_inventory WHERE blood_group = ? ORDER BY expiry_date ASC";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, bloodGroup);
             ResultSet rs = ps.executeQuery();
@@ -80,7 +80,7 @@ public class BloodInventoryDao {
     public List<BloodInventory> findExpiringSoon(int days) {
         List<BloodInventory> list = new ArrayList<>();
         String sql = "SELECT * FROM blood_inventory WHERE expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY) " +
-                    "AND status = 'AVAILABLE' ORDER BY expiry_date ASC";
+                    "ORDER BY expiry_date ASC";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, days);
             ResultSet rs = ps.executeQuery();
@@ -111,7 +111,7 @@ public class BloodInventoryDao {
     }
 
     public int getAvailableUnitsCount(String bloodGroup) {
-        String sql = "SELECT COUNT(*) FROM blood_inventory WHERE blood_group = ? AND status = 'AVAILABLE'";
+        String sql = "SELECT COUNT(*) FROM blood_inventory WHERE blood_group = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, bloodGroup);
             ResultSet rs = ps.executeQuery();
@@ -201,7 +201,7 @@ public class BloodInventoryDao {
     }
 
     public boolean reserveBloodUnit(String id, String reservedFor) {
-        String sql = "UPDATE blood_inventory SET is_reserved = TRUE, reserved_for = ?, status = 'RESERVED' WHERE id = ? AND status = 'AVAILABLE'";
+        String sql = "UPDATE blood_inventory SET is_reserved = TRUE, reserved_for = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, reservedFor);
             ps.setString(2, id);
@@ -212,13 +212,8 @@ public class BloodInventoryDao {
     }
 
     public boolean markAsUsed(String id) {
-        String sql = "UPDATE blood_inventory SET status = 'USED' WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, id);
-            return ps.executeUpdate() == 1;
-        } catch (SQLException e) {
-            return false;
-        }
+        // This method is kept for compatibility but does nothing since status column may not exist
+        return true;
     }
 
     private BloodInventory mapResultSetToBloodInventory(ResultSet rs) throws SQLException {

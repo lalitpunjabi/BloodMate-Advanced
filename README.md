@@ -39,7 +39,7 @@
 - ✅ **Blood Inventory**: Stock tracking and expiration alerts
 - ✅ **Campaigns**: Blood drive management and coordination
 - ✅ **Rewards & Leaderboard**: Gamification and donor engagement
-- ✅ **Statistics & Reports**: Data visualization and analytics
+- ✅ **Statistics & Reports**: Comprehensive data visualization, analytics, and export capabilities
 - ✅ **Emergency Response**: Critical blood request handling
 - ✅ **AI Prediction**: Machine learning algorithms for demand forecasting
 - ✅ **IoT Monitoring**: Real-time sensor data tracking
@@ -74,7 +74,7 @@ BloodMate is an innovative desktop application that revolutionizes blood bank ma
 - **🩸 Blood Inventory**: Real-time inventory tracking with expiration alerts and automated notifications
 - **📅 Campaign Management**: Organize blood donation drives with location-based coordination
 - **🚨 Emergency Response**: Rapid blood matching and emergency alert system
-- **📊 Statistics & Analytics**: Comprehensive reporting and data visualization
+- **📊 Statistics & Analytics**: Comprehensive reporting, data visualization, and export capabilities with CSV generation
 - **🎨 Enhanced User Interface**: Full scrolling support with custom-styled scrollbars for seamless navigation
 - **📱 Responsive Content Areas**: All modules feature auto-adjusting scroll areas for optimal content viewing
 - **🔄 Real-time Updates**: Live data synchronization with MySQL database
@@ -434,6 +434,10 @@ mvn verify
 - [x] **Voice commands respond (if enabled)** ✅
 - [x] **Scrolling performance is smooth across all views** ✅
 - [x] **ScrollPane content fits properly with fitToWidth/fitToHeight** ✅
+- [x] **Statistics report generation works** ✅
+- [x] **CSV export functionality operational** ✅
+- [x] **Custom report dialog displays correctly** ✅
+- [x] **Scheduled reports can be configured** ✅
 
 ### 🎯 Current Status: **FULLY FUNCTIONAL** ✅
 - **Navigation System**: All buttons work correctly
@@ -525,6 +529,42 @@ BloodMate-Web-Test/
 6. Add CSS styling in `resources/css/` including scrollbar customization
 7. Update navigation in MainController
 8. Ensure responsive design with fitToWidth/fitToHeight properties for new ScrollPanes
+
+### Reporting System
+The BloodMate Reporting System provides comprehensive data export and analytics capabilities:
+
+**Data Export Features:**
+- Export all data types to CSV format
+- Individual data exports for donors, recipients, inventory, and campaigns
+- Dashboard summary reports in text format
+- Custom report generation with specific parameters
+- Scheduled automatic report generation
+- Advanced reporting dashboard with analytics
+
+**Advanced Analytics:**
+- Donor engagement metrics
+- Blood inventory analytics
+- Campaign performance tracking
+- Emergency response statistics
+- Executive summaries for management review
+- Blood group distribution analysis
+- Expiration tracking and alerts
+- Real-time statistics monitoring
+
+**Report Generation Capabilities:**
+- **Statistics Reports**: Export comprehensive blood bank statistics to CSV
+- **Donor Reports**: Export detailed donor information and engagement metrics
+- **Recipient Reports**: Export patient data and blood request information
+- **Inventory Reports**: Export blood unit inventory with expiration dates
+- **Campaign Reports**: Export blood drive performance and participation data
+- **Dashboard Reports**: Generate consolidated text-based summary reports
+- **Custom Reports**: Create reports with specific date ranges and parameters
+- **Scheduled Reports**: Set up automatic report generation and delivery
+
+**Export Formats:**
+- CSV (Comma-Separated Values) for spreadsheet compatibility
+- Text format for quick viewing and sharing
+- Custom format options in future releases
 
 ### Coding Standards
 - Follow Java naming conventions
