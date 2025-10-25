@@ -64,4 +64,46 @@ public class DonorDao {
 			return false;
 		}
 	}
+
+	public List<Donor> search(String query, String bloodGroup) {
+		List<Donor> list = new ArrayList<>();
+		StringBuilder sql = new StringBuilder("SELECT id, name, email, phone, blood_group FROM donors WHERE 1=1");
+		
+		if (query != null && !query.isEmpty()) {
+			sql.append(" AND (name LIKE ? OR email LIKE ? OR phone LIKE ?)");
+		}
+		
+		if (bloodGroup != null && !bloodGroup.isEmpty()) {
+			sql.append(" AND blood_group = ?");
+		}
+		
+		sql.append(" ORDER BY name");
+		
+		try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+			int paramIndex = 1;
+			if (query != null && !query.isEmpty()) {
+				ps.setString(paramIndex++, "%" + query + "%");
+				ps.setString(paramIndex++, "%" + query + "%");
+				ps.setString(paramIndex++, "%" + query + "%");
+			}
+			if (bloodGroup != null && !bloodGroup.isEmpty()) {
+				ps.setString(paramIndex++, bloodGroup);
+			}
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Donor d = new Donor();
+					d.setId(rs.getString("id"));
+					d.setName(rs.getString("name"));
+					d.setEmail(rs.getString("email"));
+					d.setPhone(rs.getString("phone"));
+					d.setBloodGroup(rs.getString("blood_group"));
+					list.add(d);
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return list;
+	}
 }

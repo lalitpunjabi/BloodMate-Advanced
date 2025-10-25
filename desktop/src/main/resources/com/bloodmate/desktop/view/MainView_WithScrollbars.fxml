@@ -59,33 +59,11 @@
                     <Label text="🤖 AI Features" styleClass="nav-section-title"/>
                     <Button fx:id="aiPredictionBtn" text="🔮 AI Blood Prediction" styleClass="nav-button" 
                             onAction="#showAIPrediction" maxWidth="Infinity"/>
-                    <Button fx:id="gamificationBtn" text="🎮 Gamification Hub" styleClass="nav-button" 
-                            onAction="#showGamification" maxWidth="Infinity"/>
-                    <Button fx:id="iotMonitoringBtn" text="📡 IoT Monitoring" styleClass="nav-button" 
-                            onAction="#showIoTMonitoring" maxWidth="Infinity"/>
-                    <Button fx:id="blockchainBtn" text="⛓️ Blockchain Verify" styleClass="nav-button" 
-                            onAction="#showBlockchain" maxWidth="Infinity"/>
                     <Button fx:id="voiceCommandsBtn" text="🎤 Voice Commands" styleClass="nav-button" 
                             onAction="#showVoiceCommands" maxWidth="Infinity"/>
                                         
                     <!-- Revolutionary Technologies Section -->
                     <Label text="🚀 Revolutionary Tech" styleClass="nav-section-title"/>
-                    <Button fx:id="quantumMatchingBtn" text="⚛️ Quantum Matching" styleClass="nav-button" 
-                            onAction="#showQuantumMatching" maxWidth="Infinity"/>
-                    <Button fx:id="biometricAuthBtn" text="👁️ Biometric Auth" styleClass="nav-button" 
-                            onAction="#showBiometricAuth" maxWidth="Infinity"/>
-                    <Button fx:id="arVisualizationBtn" text="🥽 AR Visualization" styleClass="nav-button" 
-                            onAction="#showARVisualization" maxWidth="Infinity"/>
-                    <Button fx:id="neuralQualityBtn" text="🧠 Neural Quality" styleClass="nav-button" 
-                            onAction="#showNeuralQuality" maxWidth="Infinity"/>
-                    <Button fx:id="droneDeliveryBtn" text="🚁 Drone Delivery" styleClass="nav-button" 
-                            onAction="#showDroneDelivery" maxWidth="Infinity"/>
-                    <Button fx:id="digitalTwinBtn" text="👥 Digital Twin" styleClass="nav-button" 
-                            onAction="#showDigitalTwin" maxWidth="Infinity"/>
-                    <Button fx:id="satelliteCommBtn" text="🛰️ Satellite Comm" styleClass="nav-button" 
-                            onAction="#showSatelliteComm" maxWidth="Infinity"/>
-                    <Button fx:id="holographicBtn" text="🌐 Holographic UI" styleClass="nav-button" 
-                            onAction="#showHolographic" maxWidth="Infinity"/>
                     
                     <!-- Spacer -->
                     <Region VBox.vgrow="ALWAYS"/>
@@ -176,26 +154,8 @@
                 </VBox>
             </ScrollPane>
             
-            <ScrollPane fx:id="gamificationView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25">
-                    <Label text="🎮 Gamification Hub" styleClass="page-title"/>
-                    <Label text="✅ Scrollable Gamification - Level up with scrolling!" styleClass="section-title"/>
-                </VBox>
-            </ScrollPane>
             
-            <ScrollPane fx:id="iotMonitoringView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25">
-                    <Label text="📡 IoT Monitoring" styleClass="page-title"/>
-                    <Label text="✅ Scrollable IoT Dashboard - Smart scrolling enabled!" styleClass="section-title"/>
-                </VBox>
-            </ScrollPane>
             
-            <ScrollPane fx:id="blockchainView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25">
-                    <Label text="⛓️ Blockchain Verification" styleClass="page-title"/>
-                    <Label text="✅ Scrollable Blockchain - Immutable scrolling experience!" styleClass="section-title"/>
-                </VBox>
-            </ScrollPane>
             
             <ScrollPane fx:id="voiceCommandsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
                 <VBox spacing="25">
@@ -204,12 +164,6 @@
                 </VBox>
             </ScrollPane>
             
-            <ScrollPane fx:id="quantumMatchingView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25">
-                    <Label text="⚛️ Quantum Matching" styleClass="page-title"/>
-                    <Label text="✅ Scrollable Quantum Interface - Quantum scrolling technology!" styleClass="section-title"/>
-                </VBox>
-            </ScrollPane>
         </StackPane>
     </center>
 </BorderPane>
