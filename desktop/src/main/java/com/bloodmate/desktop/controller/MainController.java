@@ -1,8 +1,10 @@
 package com.bloodmate.desktop.controller;
 
-	import com.bloodmate.desktop.db.Db;
-import com.bloodmate.desktop.model.Donor;
-import com.bloodmate.desktop.repo.DonorDao;
+import com.bloodmate.desktop.db.Db;
+import com.bloodmate.desktop.model.*;
+import com.bloodmate.desktop.repo.*;
+import com.bloodmate.desktop.report.*;
+import com.bloodmate.desktop.service.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
@@ -23,7 +25,10 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.concurrent.Task;
@@ -49,7 +54,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import java.util.concurrent.CompletableFuture;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 public class MainController implements Initializable {
 	// Logo Button
@@ -171,8 +177,16 @@ public class MainController implements Initializable {
 	
 	// Data lists
 	private final ObservableList<Donor> donors = FXCollections.observableArrayList();
+	private final ObservableList<Recipient> recipients = FXCollections.observableArrayList();
 	private final ObservableList<String> alerts = FXCollections.observableArrayList();
-	private DonorDao donorDao;
+	private final ObservableList<DonorPoints> donorPointsList = FXCollections.observableArrayList();
+	private final ObservableList<BloodStatistics> statisticsList = FXCollections.observableArrayList();
+	private final ObservableList<EmergencyRequest> emergencyRequestsList = FXCollections.observableArrayList();
+	private final ObservableList<AIPrediction> aiPredictionsList = FXCollections.observableArrayList();
+	private final ObservableList<Campaign> campaignList = FXCollections.observableArrayList();
+	private final ObservableList<BloodInventory> bloodInventory = FXCollections.observableArrayList();
+	private final ObservableList<SensorData> sensorDataList = FXCollections.observableArrayList();
+	private final ObservableList<BloodUnitVerification> verificationList = FXCollections.observableArrayList();
 	private Timeline clockTimeline;
 	
 	// Current view tracking
@@ -435,15 +449,6 @@ public class MainController implements Initializable {
 			return container;
 	}
 	
-	private void loadRecipientManagementView() {
-		// Load recipient management interface dynamically
-		if (recipientsView != null) {
-			// Create recipient registration and management interface
-			VBox recipientContent = createRecipientManagementInterface();
-			recipientsView.setContent(recipientContent);
-		}
-	}
-	
 	private VBox createRecipientManagementInterface() {
 		VBox container = new VBox(20);
 		container.getStyleClass().add("content-padding");
@@ -648,210 +653,13 @@ public class MainController implements Initializable {
 		});
 	}
 	
-	private void loadCampaignManagementView() {
-		// Load campaign management interface dynamically
-		if (campaignsView != null) {
-			// Create campaign management interface
-			VBox campaignContent = createCampaignManagementInterface();
-			campaignsView.setContent(campaignContent);
-		}
-	}
-	
-	private void loadRewardsAndGamificationView() {
-		// Load rewards and gamification interface dynamically
-		if (rewardsView != null) {
-			// Create rewards and gamification interface
-			VBox rewardsContent = createRewardsInterface();
-			rewardsView.setContent(rewardsContent);
-		}
-	}
-	
-	private VBox createRewardsInterface() {
-		VBox container = new VBox(20);
-		container.getStyleClass().add("content-padding");
-		
-		// Page Header
-		HBox header = new HBox(20);
-		header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		
-		Label title = new Label("🏆 Rewards & Gamification");
-		title.getStyleClass().add("page-title");
-		
-		Region spacer = new Region();
-		HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-		
-		Button refreshBtn = new Button("🔄 Refresh Leaderboard");
-		refreshBtn.getStyleClass().addAll("modern-button", "primary");
-		refreshBtn.setOnAction(e -> loadDonorPointsData());
-		
-		header.getChildren().addAll(title, spacer, refreshBtn);
-		container.getChildren().add(header);
-		
-		// Statistics Cards
-		GridPane statsGrid = new GridPane();
-		statsGrid.getStyleClass().add("responsive-grid");
-		statsGrid.setHgap(20);
-		statsGrid.setVgap(20);
-		
-		// Create statistics cards
-		VBox totalDonorsCard = createStatCard("👥", String.valueOf(donors.size()), "Active Donors", "stat-card");
-		statsGrid.add(totalDonorsCard, 0, 0);
-		
-		VBox totalPointsCard = createStatCard("⭐", "0", "Total Points", "stat-card");
-		statsGrid.add(totalPointsCard, 1, 0);
-		
-		VBox topDonorCard = createStatCard("🥇", "None", "Top Donor", "stat-card");
-		statsGrid.add(topDonorCard, 2, 0);
-		
-		VBox badgesCard = createStatCard("🏅", "0", "Badges Awarded", "stat-card");
-		statsGrid.add(badgesCard, 3, 0);
-		
-		container.getChildren().add(statsGrid);
-		
-		// Leaderboard Table
-		VBox tableContainer = new VBox(15);
-		tableContainer.getStyleClass().add("dashboard-card");
-		
-		Label tableTitle = new Label("🏆 Donor Leaderboard");
-		tableTitle.getStyleClass().add("section-title");
-		
-		TableView<DonorPoints> leaderboardTable = createLeaderboardTable();
-		tableContainer.getChildren().addAll(tableTitle, leaderboardTable);
-		container.getChildren().add(tableContainer);
-		
-		// Badges Section
-		VBox badgesContainer = new VBox(15);
-		badgesContainer.getStyleClass().add("dashboard-card");
-		
-		Label badgesTitle = new Label("🏅 Donor Badges");
-		badgesTitle.getStyleClass().add("section-title");
-		
-		GridPane badgesGrid = new GridPane();
-		badgesGrid.setHgap(15);
-		badgesGrid.setVgap(15);
-		
-		// Create badge cards
-		VBox bronzeBadge = createBadgeCard("🥉", "Bronze Donor", "10+ donations");
-		VBox silverBadge = createBadgeCard("🥈", "Silver Donor", "25+ donations");
-		VBox goldBadge = createBadgeCard("🥇", "Gold Donor", "50+ donations");
-		VBox platinumBadge = createBadgeCard("💎", "Platinum Donor", "100+ donations");
-		
-		badgesGrid.add(bronzeBadge, 0, 0);
-		badgesGrid.add(silverBadge, 1, 0);
-		badgesGrid.add(goldBadge, 2, 0);
-		badgesGrid.add(platinumBadge, 3, 0);
-		
-		badgesContainer.getChildren().addAll(badgesTitle, badgesGrid);
-		container.getChildren().add(badgesContainer);
-		
-		return container;
-	}
-	
-	private TableView<DonorPoints> createLeaderboardTable() {
-		TableView<DonorPoints> table = new TableView<>();
-		table.getStyleClass().add("modern-table");
-		table.setItems(donorPointsList);
-		
-		TableColumn<DonorPoints, String> rankCol = new TableColumn<>("Rank");
-		rankCol.setCellValueFactory(cell -> {
-			int index = donorPointsList.indexOf(cell.getValue()) + 1;
-			return new SimpleStringProperty(String.valueOf(index));
-		});
-		rankCol.setPrefWidth(60);
-		
-		TableColumn<DonorPoints, String> nameCol = new TableColumn<>("Donor Name");
-		nameCol.setCellValueFactory(cell -> cell.getValue().donorNameProperty());
-		nameCol.setPrefWidth(200);
-		
-		TableColumn<DonorPoints, String> pointsCol = new TableColumn<>("Points");
-		pointsCol.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getPoints())));
-		pointsCol.setPrefWidth(100);
-		
-		TableColumn<DonorPoints, String> badgeCol = new TableColumn<>("Badge");
-		badgeCol.setCellValueFactory(cell -> cell.getValue().badgeProperty());
-		badgeCol.setPrefWidth(120);
-		
-		TableColumn<DonorPoints, String> activityCol = new TableColumn<>("Last Activity");
-		activityCol.setCellValueFactory(cell -> cell.getValue().lastActivityProperty());
-		activityCol.setPrefWidth(200);
-		
-		table.getColumns().addAll(rankCol, nameCol, pointsCol, badgeCol, activityCol);
-		return table;
-	}
-	
-	private VBox createBadgeCard(String icon, String title, String description) {
-		VBox card = new VBox(10);
-		card.getStyleClass().add("stat-card");
-		card.setAlignment(javafx.geometry.Pos.CENTER);
-		card.setPrefHeight(120);
-		
-		Label iconLabel = new Label(icon);
-		iconLabel.getStyleClass().add("stat-icon");
-		
-		Label titleLabel = new Label(title);
-		titleLabel.getStyleClass().add("stat-label");
-		
-		Label descLabel = new Label(description);
-		descLabel.getStyleClass().add("stat-number");
-		descLabel.setStyle("-fx-font-size: 12px;");
-		
-		card.getChildren().addAll(iconLabel, titleLabel, descLabel);
-		return card;
-	}
-	
-	private void loadStatisticsAndReportsView() {
-		// Load statistics and reports interface dynamically
-		if (statisticsView != null) {
-			// Create statistics and reports interface
-			VBox statisticsContent = createStatisticsInterface();
-			statisticsView.setContent(statisticsContent);
-		}
-	}
-	
-	/**
-	 * Show custom report generation dialog
-	 */
-	@FXML
-	private void showCustomReportDialog() {
-		CustomReportDialog dialog = new CustomReportDialog(contentArea.getScene().getWindow());
-		Optional<CustomReportDialog.ReportParameters> result = dialog.showAndWait();
-		result.ifPresent(this::generateCustomReport);
-	}
-	
-	/**
-	 * Show scheduled reports dialog
-	 */
-	@FXML
-	private void showScheduledReportsDialog() {
-		ScheduledReportDialog dialog = new ScheduledReportDialog(contentArea.getScene().getWindow(), scheduledReportManager);
-		Optional<ScheduledReportDialog.ScheduleParameters> result = dialog.showAndWait();
-		// In a real implementation, we would handle the result to configure scheduling
-		showAlert("Scheduled Reports", "Scheduled report configuration functionality will be implemented in the full version.");
-	}
-	
-	/**
-	 * Show advanced reporting dashboard
-	 */
-	@FXML
-	private void showAdvancedReportingDashboard() {
-		// In a real implementation, this would show a comprehensive reporting dashboard
-		showAlert("Advanced Reporting", "Advanced reporting dashboard functionality will be implemented in the full version.");
-	}
-	
-	/**
-	 * Generate custom report based on parameters
-	 */
-	private void generateCustomReport(CustomReportDialog.ReportParameters params) {
-		// In a real implementation, this would generate reports based on the parameters
-		// For now, we'll show a confirmation message
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("Report Generation");
-		alert.setHeaderText("Custom Report Requested");
-		alert.setContentText("Report type: " + params.getReportType() + "\n" +
-							"Format: " + params.getReportFormat() + "\n" +
-							"Date Range: " + params.getStartDate() + " to " + params.getEndDate());
-		alert.showAndWait();
-	}
+
+    
+
+    
+
+    
+
 	
 	private void loadGamificationView() {
 		// Load gamification interface dynamically
@@ -1014,6 +822,8 @@ public class MainController implements Initializable {
 		// Show dialog
 		dialog.showAndWait();
 	}
+	
+
 	
 	private VBox createStatisticsInterface() {
 		VBox container = new VBox(20);
@@ -1178,6 +988,32 @@ public class MainController implements Initializable {
 		return table;
 	}
 	
+    /**
+     * Show alert dialog
+     */
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    
+    /**
+     * Check for expiring units and show alert if any
+     */
+    private void checkForExpiringUnits() {
+        StringBuilder message = new StringBuilder();
+        for (DonorPoints donor : donorPointsList) {
+            if (donor.getPoints() < 100) {
+                message.append("Donor ").append(donor.getDonorName()).append(" is running low on points.\n");
+            }
+        }
+        if (message.length() > 0) {
+            showAlert("Expiring Units", message.toString());
+        }
+	}
+	
 	private VBox createChartCard(String title, String chartType) {
 		VBox card = new VBox(10);
 		card.getStyleClass().add("stat-card");
@@ -1240,7 +1076,6 @@ public class MainController implements Initializable {
 		// Find expiring units
 		List<BloodInventory> expiringUnits = bloodInventoryDao.findExpiringSoon(7);
 		stats.setExpiringSoon(expiringUnits.size());
-		
 		// Save the statistics
 		boolean success = bloodStatisticsDao.insert(stats);
 		if (success) {
@@ -2441,203 +2276,6 @@ public class MainController implements Initializable {
 		}
 	}
 	
-	private void loadRecipientManagementView() {
-		// Load recipient management interface dynamically
-		if (recipientsView != null) {
-			// Create recipient registration and management interface
-			VBox recipientContent = createRecipientManagementInterface();
-			recipientsView.setContent(recipientContent);
-		}
-	}
-	
-	private VBox createRecipientManagementInterface() {
-		VBox container = new VBox(20);
-		container.getStyleClass().add("content-padding");
-		
-		// Page Header
-		HBox header = new HBox(20);
-		header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		
-		Label title = new Label("🏥 Recipient Management & Blood Requests");
-		title.getStyleClass().add("page-title");
-		
-		Region spacer = new Region();
-		HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-		
-		Button addNewRecipientBtn = new Button("➕ Register New Recipient");
-		addNewRecipientBtn.getStyleClass().addAll("modern-button", "primary");
-		addNewRecipientBtn.setOnAction(e -> showRecipientRegistrationForm());
-		
-		header.getChildren().addAll(title, spacer, addNewRecipientBtn);
-		container.getChildren().add(header);
-		
-		// Statistics Cards
-		GridPane statsGrid = new GridPane();
-		statsGrid.getStyleClass().add("responsive-grid");
-		statsGrid.setHgap(20);
-		statsGrid.setVgap(20);
-		
-		// Create statistics cards
-		VBox totalRecipientsCard = createStatCard("🏥", "0", "Total Recipients", "stat-card");
-		statsGrid.add(totalRecipientsCard, 0, 0);
-		
-		VBox pendingRequestsCard = createStatCard("⏳", "0", "Pending Requests", "stat-card");
-		statsGrid.add(pendingRequestsCard, 1, 0);
-		
-		VBox criticalRequestsCard = createStatCard("🚨", "0", "Critical Cases", "stat-card");
-		statsGrid.add(criticalRequestsCard, 2, 0);
-		
-		VBox fulfilledRequestsCard = createStatCard("✅", "0", "Fulfilled Today", "stat-card");
-		statsGrid.add(fulfilledRequestsCard, 3, 0);
-		
-		container.getChildren().add(statsGrid);
-		
-		// Recipients Table
-		VBox tableContainer = new VBox(15);
-		tableContainer.getStyleClass().add("dashboard-card");
-		
-		Label tableTitle = new Label("Patient Blood Requests");
-		tableTitle.getStyleClass().add("section-title");
-		
-		TableView<?> recipientTable = createRecipientTable();
-		tableContainer.getChildren().addAll(tableTitle, recipientTable);
-		container.getChildren().add(tableContainer);
-		
-		return container;
-	}
-	
-	// Fix the createRecipientTable method to use proper column types
-	private TableView<?> createRecipientTable() {
-		TableView table = new TableView();
-		table.getStyleClass().add("modern-table");
-		
-		TableColumn patientNameCol = new TableColumn("Patient Name");
-		patientNameCol.setPrefWidth(150);
-		
-		TableColumn bloodGroupCol = new TableColumn("Blood Group");
-		bloodGroupCol.setPrefWidth(100);
-		
-		TableColumn urgencyCol = new TableColumn("Urgency");
-		urgencyCol.setPrefWidth(100);
-		
-		TableColumn hospitalCol = new TableColumn("Hospital");
-		hospitalCol.setPrefWidth(180);
-		
-		TableColumn statusCol = new TableColumn("Status");
-		statusCol.setPrefWidth(100);
-		
-		TableColumn actionsCol = new TableColumn("Actions");
-		actionsCol.setPrefWidth(150);
-		actionsCol.setCellFactory(new Callback() {
-			@Override
-			public Object call(Object param) {
-				return new TableCell() {
-					@Override
-					protected void updateItem(Object item, boolean empty) {
-						super.updateItem(item, empty);
-						if (empty) {
-							setGraphic(null);
-						} else {
-							HBox buttons = new HBox(5);
-							Button editBtn = new Button("✏️");
-							editBtn.getStyleClass().addAll("small-button", "primary");
-							Button fulfillBtn = new Button("✅");
-							fulfillBtn.getStyleClass().addAll("small-button", "success");
-							Button deleteBtn = new Button("🗑️");
-							deleteBtn.getStyleClass().addAll("small-button", "danger");
-							buttons.getChildren().addAll(editBtn, fulfillBtn, deleteBtn);
-							setGraphic(buttons);
-						}
-					}
-				};
-			}
-		});
-		
-		// Add columns individually
-		table.getColumns().add(patientNameCol);
-		table.getColumns().add(bloodGroupCol);
-		table.getColumns().add(urgencyCol);
-		table.getColumns().add(hospitalCol);
-		table.getColumns().add(statusCol);
-		table.getColumns().add(actionsCol);
-		return table;
-	}
-
-	private void showRecipientRegistrationForm() {
-		// Create and show recipient registration dialog
-		Dialog<?> dialog = new Dialog<>();
-		dialog.setTitle("Recipient Registration");
-		dialog.setHeaderText("Register New Blood Recipient");
-		
-		// Create form
-		GridPane form = new GridPane();
-		form.setHgap(10);
-		form.setVgap(10);
-		form.getStyleClass().add("dialog-form");
-		
-		// Form fields
-		TextField patientNameField = new TextField();
-		patientNameField.setPromptText("Patient Full Name");
-		ComboBox<String> bloodGroupCombo = new ComboBox<>();
-		bloodGroupCombo.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
-		bloodGroupCombo.setPromptText("Select Blood Group");
-		TextField hospitalField = new TextField();
-		hospitalField.setPromptText("Medical Facility");
-		TextField doctorField = new TextField();
-		doctorField.setPromptText("Doctor Name");
-		TextField contactField = new TextField();
-		contactField.setPromptText("Contact Number");
-		ComboBox<String> urgencyCombo = new ComboBox<>();
-		urgencyCombo.getItems().addAll("LOW", "MEDIUM", "HIGH", "CRITICAL");
-		urgencyCombo.setValue("MEDIUM");
-		Spinner<Integer> unitsSpinner = new Spinner<>(1, 10, 1);
-		TextArea reasonArea = new TextArea();
-		reasonArea.setPromptText("Reason for blood requirement");
-		reasonArea.setPrefRowCount(3);
-		
-		// Add fields to form
-		form.add(new Label("Patient Name:"), 0, 0);
-		form.add(patientNameField, 1, 0);
-		form.add(new Label("Blood Group:"), 0, 1);
-		form.add(bloodGroupCombo, 1, 1);
-		form.add(new Label("Hospital:"), 0, 2);
-		form.add(hospitalField, 1, 2);
-		form.add(new Label("Doctor:"), 0, 3);
-		form.add(doctorField, 1, 3);
-		form.add(new Label("Contact:"), 0, 4);
-		form.add(contactField, 1, 4);
-		form.add(new Label("Urgency:"), 0, 5);
-		form.add(urgencyCombo, 1, 5);
-		form.add(new Label("Units Required:"), 0, 6);
-		form.add(unitsSpinner, 1, 6);
-		form.add(new Label("Reason:"), 0, 7);
-		form.add(reasonArea, 1, 7);
-		
-		dialog.getDialogPane().setContent(form);
-		
-		// Add buttons
-		ButtonType registerButtonType = new ButtonType("Register", ButtonBar.ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(registerButtonType, ButtonType.CANCEL);
-		
-		// Convert result
-		dialog.setResultConverter(buttonType -> {
-			if (buttonType == registerButtonType) {
-				if (patientNameField.getText().trim().isEmpty() || bloodGroupCombo.getValue() == null ||
-					hospitalField.getText().trim().isEmpty() || doctorField.getText().trim().isEmpty()) {
-					showAlert("Validation Error", "Patient Name, Blood Group, Hospital, and Doctor are required!");
-					return null;
-				}
-				
-				showAlert("Information", "Recipient registration functionality will be implemented in the full version.");
-				return null; // Return null instead of string
-			}
-			return null;
-		});
-		
-		// Show dialog and handle result
-		dialog.showAndWait();
-	}
-	
 	private void loadCampaignManagementView() {
 		// Load campaign management interface dynamically
 		if (campaignsView != null) {
@@ -2789,60 +2427,41 @@ public class MainController implements Initializable {
 		return card;
 	}
 	
-	private void loadStatisticsAndReportsView() {
-		// Load statistics and reports interface dynamically
-		if (statisticsView != null) {
-			// Create statistics and reports interface
-			VBox statisticsContent = createStatisticsInterface();
-			statisticsView.setContent(statisticsContent);
-		}
-	}
+
 	
-	/**
-	 * Show custom report generation dialog
-	 */
-	@FXML
-	private void showCustomReportDialog() {
-        CustomReportDialog dialog = new CustomReportDialog(null);
-        // Since the dialog returns Void, we'll handle it differently
-        dialog.showAndWait();
-        showAlert("Custom Report", "Custom report dialog functionality will be implemented in the full version.");
-    }
+
+    
+
+    
+
+    
+
     
     /**
-     * Show scheduled reports dialog
+     * Show alert dialog
      */
-    @FXML
-    private void showScheduledReportsDialog() {
-        ScheduledReportDialog dialog = new ScheduledReportDialog(null, null);
-        // Since the dialog returns Void, we'll handle it differently
-        dialog.showAndWait();
-        showAlert("Scheduled Reports", "Scheduled report configuration functionality will be implemented in the full version.");
-    }
-    
-    /**
-     * Show advanced reporting dashboard
-     */
-    @FXML
-    private void showAdvancedReportingDashboard() {
-        // In a real implementation, this would show a comprehensive reporting dashboard
-        showAlert("Advanced Reporting", "Advanced reporting dashboard functionality will be implemented in the full version.");
-    }
-    
-    /**
-     * Generate custom report based on parameters
-     */
-    private void generateCustomReport(CustomReportDialog.ReportParameters params) {
-        // In a real implementation, this would generate reports based on the parameters
-        // For now, we'll show a confirmation message
+    private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Report Generation");
-        alert.setHeaderText("Custom Report Requested");
-        alert.setContentText("Report type: " + params.getReportType() + "\n" +
-                            "Format: " + params.getReportFormat() + "\n" +
-                            "Date Range: " + params.getStartDate() + " to " + params.getEndDate());
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
         alert.showAndWait();
     }
+    
+    /**
+     * Check for expiring units and show alert if any
+     */
+    private void checkForExpiringUnits() {
+        StringBuilder message = new StringBuilder();
+        for (DonorPoints donor : donorPointsList) {
+            if (donor.getPoints() < 100) {
+                message.append("Donor ").append(donor.getDonorName()).append(" is running low on points.\n");
+            }
+        }
+        if (message.length() > 0) {
+            showAlert("Expiring Units", message.toString());
+        }
+	}
 	
 
 	
@@ -3080,6 +2699,32 @@ public class MainController implements Initializable {
 		} else {
 			showAlert("Error", "Failed to generate statistics report.");
 		}
+	}
+	
+	/**
+	 * Show alert dialog
+	 */
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    
+    /**
+     * Check for expiring units and show alert if any
+     */
+    private void checkForExpiringUnits() {
+        StringBuilder message = new StringBuilder();
+        for (DonorPoints donor : donorPointsList) {
+            if (donor.getPoints() < 100) {
+                message.append("Donor ").append(donor.getDonorName()).append(" is running low on points.\n");
+            }
+        }
+        if (message.length() > 0) {
+            showAlert("Expiring Units", message.toString());
+        }
 	}
 	
 	/**
