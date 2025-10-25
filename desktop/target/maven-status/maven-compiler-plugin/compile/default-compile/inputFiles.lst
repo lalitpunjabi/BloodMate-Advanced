@@ -34,8 +34,13 @@ C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\de
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\report\ReportGenerator.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\report\ScheduledReportDialog.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\report\ScheduledReportManager.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\service\BloodInventoryService.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\service\CampaignService.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\service\DonorService.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\service\RecipientService.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\service\ReportService.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ConfigurationManager.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\CustomReportDialog.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\DatabaseManager.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ReportGenerator.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ScheduledReportDialog.java

@@ -62,7 +62,7 @@ public class SensorDataDao {
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        sensorData.setId(generatedKeys.getInt(1));
+                        sensorData.setId(String.valueOf(generatedKeys.getInt(1)));
                     }
                 }
                 return true;
@@ -90,7 +90,7 @@ public class SensorDataDao {
             stmt.setString(6, sensorData.getLocation());
             stmt.setString(7, sensorData.getStatus());
             stmt.setString(8, sensorData.getBloodBagId());
-            stmt.setInt(9, sensorData.getId());
+            stmt.setInt(9, Integer.parseInt(sensorData.getId()));
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -249,7 +249,7 @@ public class SensorDataDao {
 
     private SensorData mapResultSetToSensorData(ResultSet rs) throws SQLException {
         SensorData sensorData = new SensorData();
-        sensorData.setId(rs.getInt("id"));
+        sensorData.setId(String.valueOf(rs.getInt("id")));
         sensorData.setSensorId(rs.getString("sensor_id"));
         sensorData.setSensorType(rs.getString("sensor_type"));
         sensorData.setValue(rs.getDouble("value"));

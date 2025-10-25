@@ -51,7 +51,7 @@ public final class Db {
 			
 			// Get connection parameters
 			String url = dbProperties.getProperty("db.url", "jdbc:mysql://localhost:3306/bloodmate?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC");
-			String user = dbProperties.getProperty("db.user", "root");
+			String user = dbProperties.getProperty("db.username", "root");
 			String pass = dbProperties.getProperty("db.password", "");
 			
 			LOGGER.info("Connecting to MySQL database: " + url.replaceAll("password=[^&]*", "password=***"));

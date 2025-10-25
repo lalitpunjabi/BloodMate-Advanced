@@ -3,64 +3,13 @@ package com.bloodmate.desktop.repo;
 import com.bloodmate.desktop.model.Recipient;
 
 import java.sql.*;
-<<<<<<< HEAD
-=======
 import java.time.LocalDate;
 import java.time.LocalDateTime;
->>>>>>> 50398a20edd769a7b8bc38c41f4b04b35038c697
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class RecipientDao {
-<<<<<<< HEAD
-	private final Connection connection;
-
-	public RecipientDao(Connection connection) {
-		this.connection = connection;
-	}
-
-	public List<Recipient> findAll() {
-		List<Recipient> list = new ArrayList<>();
-		String sql = "SELECT id, name, email, phone, blood_group, hospital_name, urgency_level, status FROM recipients ORDER BY name";
-		try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-			while (rs.next()) {
-				Recipient r = new Recipient();
-				r.setId(rs.getString("id"));
-				r.setName(rs.getString("name"));
-				r.setEmail(rs.getString("email"));
-				r.setPhone(rs.getString("phone"));
-				r.setBloodGroup(rs.getString("blood_group"));
-				r.setHospitalName(rs.getString("hospital_name"));
-				r.setUrgencyLevel(rs.getString("urgency_level"));
-				r.setStatus(rs.getString("status"));
-				list.add(r);
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		return list;
-	}
-
-	public boolean insert(Recipient recipient) {
-		String id = recipient.getId() == null || recipient.getId().isEmpty() ? UUID.randomUUID().toString() : recipient.getId();
-		recipient.setId(id);
-		String sql = "INSERT INTO recipients (id, name, email, phone, blood_group, hospital_name, urgency_level, status) VALUES (?,?,?,?,?,?,?,?)";
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-			ps.setString(1, id);
-			ps.setString(2, recipient.getName());
-			ps.setString(3, recipient.getEmail());
-			ps.setString(4, recipient.getPhone());
-			ps.setString(5, recipient.getBloodGroup());
-			ps.setString(6, recipient.getHospitalName());
-			ps.setString(7, recipient.getUrgencyLevel());
-			ps.setString(8, recipient.getStatus());
-			return ps.executeUpdate() == 1;
-		} catch (SQLException e) {
-			return false;
-		}
-	}
-=======
     private final Connection connection;
 
     public RecipientDao(Connection connection) {
@@ -98,8 +47,7 @@ public class RecipientDao {
         String sql = "SELECT * FROM recipients ORDER BY request_date DESC";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                Recipient r = mapResultSetToRecipient(rs);
-                list.add(r);
+                list.add(mapResultSetToRecipient(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -114,8 +62,7 @@ public class RecipientDao {
             ps.setString(1, bloodGroup);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recipient r = mapResultSetToRecipient(rs);
-                list.add(r);
+                list.add(mapResultSetToRecipient(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -130,8 +77,7 @@ public class RecipientDao {
             ps.setString(1, urgencyLevel);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recipient r = mapResultSetToRecipient(rs);
-                list.add(r);
+                list.add(mapResultSetToRecipient(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -164,7 +110,6 @@ public class RecipientDao {
             ps.setTimestamp(12, recipient.getRequiredBy() != null ? Timestamp.valueOf(recipient.getRequiredBy()) : null);
             ps.setString(13, recipient.getReason());
             ps.setString(14, recipient.getLocation());
-            
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;
@@ -192,7 +137,6 @@ public class RecipientDao {
             ps.setString(12, recipient.getReason());
             ps.setString(13, recipient.getLocation());
             ps.setString(14, recipient.getId());
-            
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;
@@ -221,27 +165,19 @@ public class RecipientDao {
         r.setStatus(rs.getString("status"));
         
         Date dob = rs.getDate("date_of_birth");
-        if (dob != null) {
-            r.setDateOfBirth(dob.toLocalDate());
-        }
+        if (dob != null) r.setDateOfBirth(dob.toLocalDate());
         
         r.setMedicalHistory(rs.getString("medical_history"));
         r.setUnitsRequired(rs.getInt("units_required"));
         
         Timestamp requestDate = rs.getTimestamp("request_date");
-        if (requestDate != null) {
-            r.setRequestDate(requestDate.toLocalDateTime());
-        }
+        if (requestDate != null) r.setRequestDate(requestDate.toLocalDateTime());
         
         Timestamp requiredBy = rs.getTimestamp("required_by");
-        if (requiredBy != null) {
-            r.setRequiredBy(requiredBy.toLocalDateTime());
-        }
+        if (requiredBy != null) r.setRequiredBy(requiredBy.toLocalDateTime());
         
         r.setReason(rs.getString("reason"));
         r.setLocation(rs.getString("location"));
-        
         return r;
     }
->>>>>>> 50398a20edd769a7b8bc38c41f4b04b35038c697
 }

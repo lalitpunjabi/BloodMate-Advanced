@@ -3,83 +3,12 @@ package com.bloodmate.desktop.repo;
 import com.bloodmate.desktop.model.BloodInventory;
 
 import java.sql.*;
-<<<<<<< HEAD
-=======
 import java.time.LocalDate;
-import java.time.LocalDateTime;
->>>>>>> 50398a20edd769a7b8bc38c41f4b04b35038c697
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class BloodInventoryDao {
-<<<<<<< HEAD
-	private final Connection connection;
-
-	public BloodInventoryDao(Connection connection) {
-		this.connection = connection;
-	}
-
-	public List<BloodInventory> findAll() {
-		List<BloodInventory> list = new ArrayList<>();
-		String sql = "SELECT id, blood_group, status, storage_location FROM blood_inventory ORDER BY blood_group";
-		try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-			while (rs.next()) {
-				BloodInventory bi = new BloodInventory();
-				bi.setId(rs.getString("id"));
-				bi.setBloodGroup(rs.getString("blood_group"));
-				bi.setStatus(rs.getString("status"));
-				bi.setLocation(rs.getString("storage_location"));
-				list.add(bi);
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		return list;
-	}
-
-	public boolean insert(BloodInventory inventory) {
-		String id = inventory.getId() == null || inventory.getId().isEmpty() ? UUID.randomUUID().toString() : inventory.getId();
-		inventory.setId(id);
-		String sql = "INSERT INTO blood_inventory (id, blood_group, status, storage_location) VALUES (?,?,?,?)";
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-			ps.setString(1, id);
-			ps.setString(2, inventory.getBloodGroup());
-			ps.setString(3, inventory.getStatus());
-			ps.setString(4, inventory.getLocation());
-			return ps.executeUpdate() == 1;
-		} catch (SQLException e) {
-			return false;
-		}
-	}
-	
-	public List<BloodInventory> findExpiringSoon(int days) {
-		List<BloodInventory> list = new ArrayList<>();
-		// This is a mock implementation since we don't have actual expiry dates in the database
-		// In a real implementation, this would query for blood units expiring within the specified days
-		return list;
-	}
-	
-	public List<BloodInventory> findByBloodGroup(String bloodGroup) {
-		List<BloodInventory> list = new ArrayList<>();
-		String sql = "SELECT id, blood_group, status, storage_location FROM blood_inventory WHERE blood_group = ? ORDER BY blood_group";
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-			ps.setString(1, bloodGroup);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				BloodInventory bi = new BloodInventory();
-				bi.setId(rs.getString("id"));
-				bi.setBloodGroup(rs.getString("blood_group"));
-				bi.setStatus(rs.getString("status"));
-				bi.setLocation(rs.getString("storage_location"));
-				list.add(bi);
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		return list;
-	}
-=======
     private final Connection connection;
 
     public BloodInventoryDao(Connection connection) {
@@ -122,8 +51,7 @@ public class BloodInventoryDao {
         String sql = "SELECT * FROM blood_inventory ORDER BY expiry_date ASC, blood_group";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                BloodInventory inventory = mapResultSetToBloodInventory(rs);
-                list.add(inventory);
+                list.add(mapResultSetToBloodInventory(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -138,8 +66,7 @@ public class BloodInventoryDao {
             ps.setString(1, bloodGroup);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                BloodInventory inventory = mapResultSetToBloodInventory(rs);
-                list.add(inventory);
+                list.add(mapResultSetToBloodInventory(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -149,14 +76,12 @@ public class BloodInventoryDao {
 
     public List<BloodInventory> findExpiringSoon(int days) {
         List<BloodInventory> list = new ArrayList<>();
-        String sql = "SELECT * FROM blood_inventory WHERE expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY) " +
-                    "ORDER BY expiry_date ASC";
+        String sql = "SELECT * FROM blood_inventory WHERE expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY) ORDER BY expiry_date ASC";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, days);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                BloodInventory inventory = mapResultSetToBloodInventory(rs);
-                list.add(inventory);
+                list.add(mapResultSetToBloodInventory(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -171,8 +96,7 @@ public class BloodInventoryDao {
             ps.setString(1, location);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                BloodInventory inventory = mapResultSetToBloodInventory(rs);
-                list.add(inventory);
+                list.add(mapResultSetToBloodInventory(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -185,9 +109,7 @@ public class BloodInventoryDao {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, bloodGroup);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -195,25 +117,20 @@ public class BloodInventoryDao {
     }
 
     public boolean insert(BloodInventory inventory) {
-        String id = inventory.getId() == null || inventory.getId().isEmpty() ? 
-                   UUID.randomUUID().toString() : inventory.getId();
+        String id = (inventory.getId() == null || inventory.getId().isEmpty()) ? UUID.randomUUID().toString() : inventory.getId();
         inventory.setId(id);
-        
-        // Generate unique bag ID if not provided
+
         if (inventory.getBagId() == null || inventory.getBagId().isEmpty()) {
             inventory.setBagId("BAG-" + System.currentTimeMillis());
         }
-        
-        String sql = "INSERT INTO blood_inventory (id, blood_group, bag_id, donation_date, expiry_date, " +
-                    "status, volume, location, temperature, quality_score, donor_id, notes, " +
-                    "is_reserved, reserved_for, test_results) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        
+
+        String sql = "INSERT INTO blood_inventory (id, blood_group, bag_id, donation_date, expiry_date, status, volume, location, temperature, quality_score, donor_id, notes, is_reserved, reserved_for, test_results) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, id);
             ps.setString(2, inventory.getBloodGroup());
             ps.setString(3, inventory.getBagId());
-            ps.setDate(4, inventory.getDonationDate() != null ? Date.valueOf(inventory.getDonationDate()) : Date.valueOf(LocalDate.now()));
-            ps.setDate(5, inventory.getExpiryDate() != null ? Date.valueOf(inventory.getExpiryDate()) : Date.valueOf(LocalDate.now().plusDays(42)));
+            ps.setDate(4, Date.valueOf(inventory.getDonationDate() != null ? inventory.getDonationDate() : LocalDate.now()));
+            ps.setDate(5, Date.valueOf(inventory.getExpiryDate() != null ? inventory.getExpiryDate() : LocalDate.now().plusDays(42)));
             ps.setString(6, inventory.getStatus() != null ? inventory.getStatus() : "AVAILABLE");
             ps.setDouble(7, inventory.getVolume());
             ps.setString(8, inventory.getLocation() != null ? inventory.getLocation() : "Storage-A");
@@ -224,7 +141,6 @@ public class BloodInventoryDao {
             ps.setBoolean(13, inventory.getIsReserved());
             ps.setString(14, inventory.getReservedFor());
             ps.setString(15, inventory.getTestResults());
-            
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -233,10 +149,7 @@ public class BloodInventoryDao {
     }
 
     public boolean update(BloodInventory inventory) {
-        String sql = "UPDATE blood_inventory SET blood_group=?, bag_id=?, donation_date=?, expiry_date=?, " +
-                    "status=?, volume=?, location=?, temperature=?, quality_score=?, donor_id=?, " +
-                    "notes=?, is_reserved=?, reserved_for=?, test_results=? WHERE id=?";
-        
+        String sql = "UPDATE blood_inventory SET blood_group=?, bag_id=?, donation_date=?, expiry_date=?, status=?, volume=?, location=?, temperature=?, quality_score=?, donor_id=?, notes=?, is_reserved=?, reserved_for=?, test_results=? WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, inventory.getBloodGroup());
             ps.setString(2, inventory.getBagId());
@@ -253,7 +166,6 @@ public class BloodInventoryDao {
             ps.setString(13, inventory.getReservedFor());
             ps.setString(14, inventory.getTestResults());
             ps.setString(15, inventory.getId());
-            
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;
@@ -281,45 +193,27 @@ public class BloodInventoryDao {
         }
     }
 
-    public boolean markAsUsed(String id) {
-        // This method is kept for compatibility but does nothing since status column may not exist
-        return true;
-    }
-
     private BloodInventory mapResultSetToBloodInventory(ResultSet rs) throws SQLException {
         BloodInventory inventory = new BloodInventory();
         inventory.setId(rs.getString("id"));
         inventory.setBloodGroup(rs.getString("blood_group"));
         inventory.setBagId(rs.getString("bag_id"));
-        
-        Date donationDate = rs.getDate("donation_date");
-        if (donationDate != null) {
-            inventory.setDonationDate(donationDate.toLocalDate());
-        }
-        
-        Date expiryDate = rs.getDate("expiry_date");
-        if (expiryDate != null) {
-            inventory.setExpiryDate(expiryDate.toLocalDate());
-        }
-        
+        if (rs.getDate("donation_date") != null)
+            inventory.setDonationDate(rs.getDate("donation_date").toLocalDate());
+        if (rs.getDate("expiry_date") != null)
+            inventory.setExpiryDate(rs.getDate("expiry_date").toLocalDate());
         inventory.setStatus(rs.getString("status"));
         inventory.setVolume(rs.getDouble("volume"));
         inventory.setLocation(rs.getString("location"));
         inventory.setTemperature(rs.getDouble("temperature"));
         inventory.setQualityScore(rs.getInt("quality_score"));
         inventory.setDonorId(rs.getString("donor_id"));
-        
-        Timestamp lastUpdated = rs.getTimestamp("last_updated");
-        if (lastUpdated != null) {
-            inventory.setLastUpdated(lastUpdated.toLocalDateTime());
-        }
-        
         inventory.setNotes(rs.getString("notes"));
         inventory.setIsReserved(rs.getBoolean("is_reserved"));
         inventory.setReservedFor(rs.getString("reserved_for"));
         inventory.setTestResults(rs.getString("test_results"));
-        
+        if (rs.getTimestamp("last_updated") != null)
+            inventory.setLastUpdated(rs.getTimestamp("last_updated").toLocalDateTime());
         return inventory;
     }
->>>>>>> 50398a20edd769a7b8bc38c41f4b04b35038c697
 }
