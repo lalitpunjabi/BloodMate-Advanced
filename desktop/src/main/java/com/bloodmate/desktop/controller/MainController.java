@@ -5,6 +5,7 @@ import com.bloodmate.desktop.model.*;
 import com.bloodmate.desktop.repo.*;
 import com.bloodmate.desktop.report.*;
 import com.bloodmate.desktop.service.*;
+import com.bloodmate.desktop.util.SpeechRecognitionUtil;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
@@ -52,6 +53,27 @@ public class MainController implements Initializable {
     @FXML private Button reportsBtn;
     @FXML private Button settingsBtn;
     @FXML private Button themeToggleBtn;
+    @FXML private Button logoBtn;
+    @FXML private Button rewardsBtn;
+    @FXML private Button statisticsBtn;
+    @FXML private Button emergencyBtn;
+    @FXML private Button voiceCommandsBtn;
+    @FXML private Button logoutBtn;
+    
+    // Dashboard UI components
+    @FXML private Label totalDonorsLabel;
+    @FXML private Label bloodUnitsLabel;
+    @FXML private Label pendingRequestsLabel;
+    @FXML private Label emergencyAlertsLabel;
+    @FXML private ProgressBar opositiveProgress;
+    @FXML private ProgressBar apositiveProgress;
+    @FXML private ProgressBar bpositiveProgress;
+    @FXML private ProgressBar onegativeProgress;
+    @FXML private ProgressBar anegativeProgress;
+    @FXML private ProgressBar abpositiveProgress;
+    @FXML private ProgressBar bnegativeProgress;
+    @FXML private ProgressBar abnegativeProgress;
+    @FXML private Label currentDateTime;
     
     // Services and repositories
     private DonorService donorService;
@@ -59,6 +81,9 @@ public class MainController implements Initializable {
     private BloodInventoryService inventoryService;
     private CampaignService campaignService;
     private ReportService reportService;
+    private VoiceCommandService voiceCommandService;
+    private SpeechRecognitionUtil speechRecognitionUtil;
+    private EmergencyRequestService emergencyRequestService;
     
     // State variables
     private String currentView = "dashboard";
@@ -83,9 +108,13 @@ public class MainController implements Initializable {
             inventoryService = new BloodInventoryService();
             campaignService = new CampaignService();
             reportService = new ReportService(donorDao, recipientDao, inventoryDao, campaignDao, statisticsDao);
+            voiceCommandService = new VoiceCommandService();
+            speechRecognitionUtil = new SpeechRecognitionUtil(voiceCommandService);
+            emergencyRequestService = new EmergencyRequestService();
             
             // Set up initial view
             showDashboard();
+            updateDashboardData();
             
             System.out.println("MainController initialized successfully");
         } catch (Exception e) {
@@ -99,6 +128,8 @@ public class MainController implements Initializable {
     private void showDashboard() {
         hideAllViews();
         currentView = "dashboard";
+        updateActiveButton(dashboardBtn);
+        updateDashboardData();
         System.out.println("Dashboard view shown");
     }
     
@@ -106,6 +137,7 @@ public class MainController implements Initializable {
     private void showDonors() {
         hideAllViews();
         currentView = "donors";
+        updateActiveButton(donorsBtn);
         System.out.println("Donors view shown");
     }
     
@@ -113,6 +145,7 @@ public class MainController implements Initializable {
     private void showRecipients() {
         hideAllViews();
         currentView = "recipients";
+        updateActiveButton(recipientsBtn);
         System.out.println("Recipients view shown");
     }
     
@@ -120,6 +153,7 @@ public class MainController implements Initializable {
     private void showInventory() {
         hideAllViews();
         currentView = "inventory";
+        updateActiveButton(inventoryBtn);
         System.out.println("Inventory view shown");
     }
     
@@ -127,6 +161,7 @@ public class MainController implements Initializable {
     private void showCampaigns() {
         hideAllViews();
         currentView = "campaigns";
+        updateActiveButton(campaignsBtn);
         System.out.println("Campaigns view shown");
     }
     
@@ -134,6 +169,7 @@ public class MainController implements Initializable {
     private void showReports() {
         hideAllViews();
         currentView = "reports";
+        updateActiveButton(reportsBtn);
         System.out.println("Reports view shown");
     }
     
@@ -141,7 +177,134 @@ public class MainController implements Initializable {
     private void showSettings() {
         hideAllViews();
         currentView = "settings";
+        updateActiveButton(settingsBtn);
         System.out.println("Settings view shown");
+    }
+    
+    @FXML
+    private void showRewards() {
+        hideAllViews();
+        currentView = "rewards";
+        updateActiveButton(rewardsBtn);
+        System.out.println("Rewards view shown");
+        loadRewardsData();
+    }
+    
+    @FXML
+    private void showStatistics() {
+        hideAllViews();
+        currentView = "statistics";
+        updateActiveButton(statisticsBtn);
+        System.out.println("Statistics view shown");
+        loadStatisticsData();
+    }
+    
+    @FXML
+    private void showEmergency() {
+        hideAllViews();
+        currentView = "emergency";
+        updateActiveButton(emergencyBtn);
+        System.out.println("Emergency view shown");
+        loadEmergencyData();
+    }
+    
+    // Voice Commands method
+    @FXML
+    private void showVoiceCommands() {
+        hideAllViews();
+        currentView = "voice-commands";
+        updateActiveButton(voiceCommandsBtn);
+        System.out.println("Voice Commands view shown");
+        loadVoiceCommandsData();
+    }
+    
+    // Logout method
+    @FXML
+    private void logout() {
+        System.out.println("Logout requested");
+        showAlert("Logout", "You have been logged out successfully.");
+    }
+    
+    // Refresh dashboard method
+    @FXML
+    private void refreshDashboard() {
+        updateDashboardData();
+        showAlert("Refresh", "Dashboard data refreshed successfully.");
+    }
+    
+    private void updateDashboardData() {
+        // Update current date/time
+        if (currentDateTime != null) {
+            currentDateTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")));
+        }
+        
+        // Update statistics (simulated data)
+        if (totalDonorsLabel != null) {
+            totalDonorsLabel.setText("1,247");
+        }
+        if (bloodUnitsLabel != null) {
+            bloodUnitsLabel.setText("3,456");
+        }
+        if (pendingRequestsLabel != null) {
+            pendingRequestsLabel.setText("23");
+        }
+        if (emergencyAlertsLabel != null) {
+            emergencyAlertsLabel.setText("2");
+        }
+        
+        // Update progress bars (simulated data)
+        if (opositiveProgress != null) opositiveProgress.setProgress(0.38);
+        if (apositiveProgress != null) apositiveProgress.setProgress(0.34);
+        if (bpositiveProgress != null) bpositiveProgress.setProgress(0.09);
+        if (onegativeProgress != null) onegativeProgress.setProgress(0.07);
+        if (anegativeProgress != null) anegativeProgress.setProgress(0.06);
+        if (abpositiveProgress != null) abpositiveProgress.setProgress(0.04);
+        if (bnegativeProgress != null) bnegativeProgress.setProgress(0.02);
+        if (abnegativeProgress != null) abnegativeProgress.setProgress(0.01);
+    }
+    
+    private void loadRewardsData() {
+        Platform.runLater(() -> {
+            showAlert("Rewards & Leaderboard", "Rewards and leaderboard data would be displayed here.\n\nThis section shows donor achievements, points, and community rankings.");
+        });
+    }
+    
+    private void loadStatisticsData() {
+        Platform.runLater(() -> {
+            showAlert("Statistics & Reports", "Statistics and reports data would be displayed here.\n\nThis section shows comprehensive analytics, charts, and exportable reports.");
+        });
+    }
+    
+    private void loadEmergencyData() {
+        Platform.runLater(() -> {
+            showAlert("Emergency Response", "Emergency response data would be displayed here.\n\nThis section shows critical blood requests and emergency protocols.");
+        });
+    }
+    
+    private void loadVoiceCommandsData() {
+        Platform.runLater(() -> {
+            // Start voice recognition when the voice commands view is shown
+            speechRecognitionUtil.startListening();
+            
+            showAlert("Voice Commands", "Voice command interface activated! 🎤\n\nTry saying commands like:\n- Show dashboard\n- Find donor with blood type O+\n- Check emergency requests\n- Display inventory statistics\n\nIn a real implementation, this would connect to a speech recognition service.");
+        });
+    }
+    
+    // Simulate voice command execution
+    @FXML
+    private void simulateVoiceCommand() {
+        // Simulate recognizing a voice command
+        speechRecognitionUtil.recognizeSpeech(new byte[0]).thenAccept(recognizedText -> {
+            String action = speechRecognitionUtil.processCommand(recognizedText, "user-123");
+            speechRecognitionUtil.executeAction(action);
+            
+            Platform.runLater(() -> {
+                showAlert("Voice Command Recognized", 
+                    "Recognized: \"" + recognizedText + "\"\n" +
+                    "Action: " + action + "\n\n" +
+                    "In a real implementation, this would navigate to the appropriate view.");
+            });
+        });
     }
     
     // Helper methods
@@ -153,7 +316,8 @@ public class MainController implements Initializable {
         // Reset all buttons
         List<Button> buttons = Arrays.asList(
             dashboardBtn, donorsBtn, recipientsBtn, 
-            inventoryBtn, campaignsBtn, reportsBtn, settingsBtn
+            inventoryBtn, campaignsBtn, reportsBtn, settingsBtn,
+            rewardsBtn, statisticsBtn, emergencyBtn, voiceCommandsBtn
         );
         
         for (Button btn : buttons) {
@@ -200,118 +364,4 @@ public class MainController implements Initializable {
             showAlert("Theme Changed", "Light mode activated! ☀️");
         }
     }
-    
-    // Revolutionary Feature methods (simplified)
-    @FXML
-    private void showQuantumMatching() {
-        hideAllViews();
-        System.out.println("Quantum Matching view would be shown here");
-        currentView = "quantum-matching";
-        loadQuantumMatchingData();
-    }
-    
-    private void loadQuantumMatchingData() {
-        Platform.runLater(() -> {
-            showAlert("Quantum Algorithms", "Quantum entanglement network initialized! ⚛️");
-        });
-    }
-    
-    @FXML
-    private void showBiometricAuth() {
-        hideAllViews();
-        System.out.println("Biometric Auth view would be shown here");
-        currentView = "biometric-auth";
-        loadBiometricAuthData();
-    }
-    
-    private void loadBiometricAuthData() {
-        Platform.runLater(() -> {
-            showAlert("Biometric Systems", "Multi-factor authentication ready! 👁️");
-        });
-    }
-    
-    @FXML
-    private void showARVisualization() {
-        hideAllViews();
-        System.out.println("AR Visualization view would be shown here");
-        currentView = "ar-visualization";
-        loadARVisualizationData();
-    }
-    
-    private void loadARVisualizationData() {
-        Platform.runLater(() -> {
-            showAlert("AR Environment", "3D holographic space calibrated! 🥽");
-        });
-    }
-    
-    @FXML
-    private void showNeuralQuality() {
-        hideAllViews();
-        System.out.println("Neural Quality view would be shown here");
-        currentView = "neural-quality";
-        loadNeuralQualityData();
-    }
-    
-    private void loadNeuralQualityData() {
-        Platform.runLater(() -> {
-            showAlert("Neural Networks", "Blood quality neural network activated! 🧠");
-        });
-    }
-    
-    @FXML
-    private void showDroneDelivery() {
-        hideAllViews();
-        System.out.println("Drone Delivery view would be shown here");
-        currentView = "drone-delivery";
-        loadDroneDeliveryData();
-    }
-    
-    private void loadDroneDeliveryData() {
-        Platform.runLater(() -> {
-            showAlert("Drone Fleet", "Autonomous delivery drones online! 🚁");
-        });
-    }
-    
-    @FXML
-    private void showDigitalTwin() {
-        hideAllViews();
-        System.out.println("Digital Twin view would be shown here");
-        currentView = "digital-twin";
-        loadDigitalTwinData();
-    }
-    
-    private void loadDigitalTwinData() {
-        Platform.runLater(() -> {
-            showAlert("Digital Twin", "Blood supply digital twin synchronized! 🔄");
-        });
-    }
-    
-    @FXML
-    private void showSatelliteComm() {
-        hideAllViews();
-        System.out.println("Satellite Communication view would be shown here");
-        currentView = "satellite-comm";
-        loadSatelliteCommData();
-    }
-    
-    private void loadSatelliteCommData() {
-        Platform.runLater(() -> {
-            showAlert("Satellite Network", "Global blood tracking satellites connected! 🛰️");
-        });
-    }
-    
-    @FXML
-    private void showHolographic() {
-        hideAllViews();
-        System.out.println("Holographic view would be shown here");
-        currentView = "holographic";
-        loadHolographicData();
-    }
-    
-    private void loadHolographicData() {
-        Platform.runLater(() -> {
-            showAlert("Holographic Interface", "Interactive holographic controls ready! 👆");
-        });
-    }
 }
-

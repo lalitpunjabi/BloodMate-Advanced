@@ -41,13 +41,19 @@ public class BloodStatisticsDao {
                 o_positive_units INT DEFAULT 0,
                 o_negative_units INT DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             );
             """;
         try (Statement st = connection.createStatement()) {
             st.execute(sql);
             // Create index separately (for cross-DB compatibility)
-            st.execute("CREATE INDEX IF NOT EXISTS idx_report_date ON blood_statistics (report_date)");
+            // Check if index exists before creating it
+            try {
+                st.execute("CREATE INDEX idx_report_date ON blood_statistics (report_date)");
+            } catch (SQLException e) {
+                // Index might already exist, ignore the error
+                System.out.println("Index might already exist: " + e.getMessage());
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to ensure blood_statistics table", e);
         }
@@ -75,7 +81,7 @@ public class BloodStatisticsDao {
 
         // MySQL: DATE_SUB(CURDATE(), INTERVAL ? DAY)
         // SQLite: date('now', '-' || ? || ' days')
-        String sql = "SELECT * FROM blood_statistics WHERE report_date >= DATE('now', '-' || ? || ' days') ORDER BY report_date DESC";
+        String sql = "SELECT * FROM blood_statistics WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) ORDER BY report_date DESC";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, days);

@@ -20,33 +20,9 @@ public class ReportGenerator {
         // Implementation would go here
     }
     
-    public static void generateDonorPointsReport(ObservableList<DonorPoints> donorPoints) {
-        // Generate donor points report logic
-        System.out.println("Generating donor points report at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        // Implementation would go here
-    }
-    
-    public static void generateAIPredictionsReport(ObservableList<AIPrediction> predictions) {
-        // Generate AI predictions report logic
-        System.out.println("Generating AI predictions report at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        // Implementation would go here
-    }
-    
     public static void generateEmergencyRequestsReport(ObservableList<EmergencyRequest> requests) {
         // Generate emergency requests report logic
         System.out.println("Generating emergency requests report at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        // Implementation would go here
-    }
-    
-    public static void generateSensorDataReport(ObservableList<SensorData> sensorData) {
-        // Generate sensor data report logic
-        System.out.println("Generating sensor data report at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        // Implementation would go here
-    }
-    
-    public static void generateVerificationReport(ObservableList<BloodUnitVerification> verifications) {
-        // Generate verification report logic
-        System.out.println("Generating verification report at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         // Implementation would go here
     }
     

@@ -30,19 +30,44 @@ public class DonorService {
     }
     
     public Donor getDonorById(String id) {
-        // Placeholder implementation
-        return null;
+        return donorDao.findById(id);
     }
     
     public boolean addDonor(Donor donor) {
+        // Validate required fields
+        if (donor.getName() == null || donor.getName().isEmpty()) {
+            throw new IllegalArgumentException("Donor name is required");
+        }
+        if (donor.getBloodGroup() == null || donor.getBloodGroup().isEmpty()) {
+            throw new IllegalArgumentException("Blood group is required");
+        }
+        
         return donorDao.insert(donor);
     }
     
     public boolean updateDonor(Donor donor) {
-        return donorDao.insert(donor);
+        // Validate required fields
+        if (donor.getId() == null || donor.getId().isEmpty()) {
+            throw new IllegalArgumentException("Donor ID is required");
+        }
+        if (donor.getName() == null || donor.getName().isEmpty()) {
+            throw new IllegalArgumentException("Donor name is required");
+        }
+        if (donor.getBloodGroup() == null || donor.getBloodGroup().isEmpty()) {
+            throw new IllegalArgumentException("Blood group is required");
+        }
+        
+        return donorDao.update(donor);
     }
     
     public boolean deleteDonor(String id) {
-        return true; // Placeholder implementation
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("Donor ID is required");
+        }
+        return donorDao.delete(id);
+    }
+    
+    public List<Donor> searchDonors(String query, String bloodGroup) {
+        return donorDao.search(query, bloodGroup);
     }
 }

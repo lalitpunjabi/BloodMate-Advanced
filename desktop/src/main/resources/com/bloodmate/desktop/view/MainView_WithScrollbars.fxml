@@ -55,15 +55,8 @@
                     <Button fx:id="emergencyBtn" text="🚨 Emergency Response" styleClass="nav-button" 
                             onAction="#showEmergency" maxWidth="Infinity"/>
                     
-                    <!-- AI & Innovation Section -->
-                    <Label text="🤖 AI Features" styleClass="nav-section-title"/>
-                    <Button fx:id="aiPredictionBtn" text="🔮 AI Blood Prediction" styleClass="nav-button" 
-                            onAction="#showAIPrediction" maxWidth="Infinity"/>
                     <Button fx:id="voiceCommandsBtn" text="🎤 Voice Commands" styleClass="nav-button" 
                             onAction="#showVoiceCommands" maxWidth="Infinity"/>
-                                        
-                    <!-- Revolutionary Technologies Section -->
-                    <Label text="🚀 Revolutionary Tech" styleClass="nav-section-title"/>
                     
                     <!-- Spacer -->
                     <Region VBox.vgrow="ALWAYS"/>
@@ -145,17 +138,6 @@
                     <Label text="✅ Scrollable Emergency - All scrollbars functional!" styleClass="section-title"/>
                 </VBox>
             </ScrollPane>
-            
-            <!-- AI Views -->
-            <ScrollPane fx:id="aiPredictionView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25">
-                    <Label text="🔮 AI Blood Prediction" styleClass="page-title"/>
-                    <Label text="✅ Scrollable AI Interface - Revolutionary with scrollbars!" styleClass="section-title"/>
-                </VBox>
-            </ScrollPane>
-            
-            
-            
             
             <ScrollPane fx:id="voiceCommandsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
                 <VBox spacing="25">
