@@ -16,7 +16,7 @@
             <!-- Logo and Header -->
             <VBox styleClass="sidebar-header">
                 <!-- Clickable Logo Button -->
-                <Button fx:id="logoBtn" styleClass="logo-button" maxWidth="Infinity">
+                <Button fx:id="logoBtn" styleClass="logo-button" onAction="#showDashboard" maxWidth="Infinity">
                     <graphic>
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <!-- Blood Drop Icon -->
@@ -32,37 +32,38 @@
                     </graphic>
                 </Button>
                 <Button fx:id="themeToggleBtn" text="🌙 Dark Mode" styleClass="theme-toggle" 
-                        maxWidth="Infinity"/>
+                        onAction="#toggleTheme" maxWidth="Infinity"/>
             </VBox>
             
             <!-- Scrollable Navigation Menu -->
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
                 <VBox spacing="2">
                     <Button fx:id="dashboardBtn" text="📊 Dashboard" styleClass="nav-button,active" 
-                            maxWidth="Infinity"/>
+                            onAction="#showDashboard" maxWidth="Infinity"/>
                     <Button fx:id="donorsBtn" text="👥 Donor Management" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showDonors" maxWidth="Infinity"/>
                     <Button fx:id="recipientsBtn" text="🏥 Recipients" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showRecipients" maxWidth="Infinity"/>
                     <Button fx:id="inventoryBtn" text="📦 Blood Inventory" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showInventory" maxWidth="Infinity"/>
                     <Button fx:id="campaignsBtn" text="📅 Campaigns" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showCampaigns" maxWidth="Infinity"/>
                     <Button fx:id="rewardsBtn" text="🏆 Rewards &amp; Leaderboard" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showRewards" maxWidth="Infinity"/>
                     <Button fx:id="statisticsBtn" text="📈 Statistics &amp; Reports" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showStatistics" maxWidth="Infinity"/>
                     <Button fx:id="emergencyBtn" text="🚨 Emergency Response" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
-                    
+                            onAction="#showEmergency" maxWidth="Infinity"/>
+                    <Button fx:id="voiceCommandsBtn" text="🎤 Voice Commands" styleClass="nav-button" 
+                            onAction="#showVoiceCommands" maxWidth="Infinity"/>
                     
                     <!-- Spacer -->
                     <Region VBox.vgrow="ALWAYS"/>
                     
                     <Button fx:id="settingsBtn" text="⚙️ Settings" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#showSettings" maxWidth="Infinity"/>
                     <Button fx:id="logoutBtn" text="🚪 Logout" styleClass="nav-button" 
-                            maxWidth="Infinity"/>
+                            onAction="#logout" maxWidth="Infinity"/>
                 </VBox>
             </ScrollPane>
         </VBox>
@@ -79,7 +80,7 @@
                         <Label text="📊 Dashboard Overview" styleClass="page-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <Label fx:id="currentDateTime" styleClass="section-title"/>
-                        <Button text="🔄 Refresh" styleClass="modern-button"/>
+                        <Button text="🔄 Refresh" styleClass="modern-button" onAction="#refreshDashboard"/>
                     </HBox>
                     
                     <!-- Key Statistics Cards -->
@@ -299,7 +300,7 @@
                         <Label text="👥 Donor Management" styleClass="page-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <Button text="🔍 Search" styleClass="modern-button secondary"/>
-                        <Button text="➕ Register New Donor" styleClass="modern-button"/>
+                        <Button text="➕ Register New Donor" styleClass="modern-button" onAction="#addNewDonor"/>
                         <Button text="📊 Export Data" styleClass="modern-button secondary"/>
                     </HBox>
                     
@@ -404,791 +405,755 @@
                                 <TextField fx:id="emailField" promptText="Enter email address" styleClass="form-input"/>
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                <Label text="Gender *" styleClass="form-label"/>
+                                <Label text="Gender" styleClass="form-label"/>
                                 <ComboBox fx:id="genderField" promptText="Select gender" styleClass="form-combo" />
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                <Label text="Weight (kg) *" styleClass="form-label"/>
-                                <TextField fx:id="weightField" promptText="Enter weight" styleClass="form-input"/>
+                                <Label text="Location" styleClass="form-label"/>
+                                <TextField fx:id="locationField" promptText="Enter city/state" styleClass="form-input"/>
                             </VBox>
                             
                             <!-- Row 3 -->
                             <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
                                 <Label text="Address" styleClass="form-label"/>
-                                <TextArea fx:id="addressField" promptText="Enter complete address" prefRowCount="2" styleClass="form-textarea"/>
+                                <TextField fx:id="addressField" promptText="Enter full address" styleClass="form-input"/>
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                <Label text="Emergency Contact" styleClass="form-label"/>
-                                <TextField fx:id="emergencyContactField" promptText="Contact number" styleClass="form-input"/>
+                                <Label text="Last Donation Date" styleClass="form-label"/>
+                                <DatePicker fx:id="lastDonationField" promptText="Select date" styleClass="form-datepicker"/>
                             </VBox>
-                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="2" alignment="BOTTOM_CENTER">
-                                <Button text="💾 Register Donor" styleClass="register-button"/>
-                            </VBox>
-                        </GridPane>
-                    </VBox>
-                    
-                    <!-- Recent Donor Activities -->
-                    <VBox styleClass="activity-container">
-                        <Label text="📈 Recent Donor Activities" styleClass="activity-title"/>
-                        <HBox spacing="20">
-                            <VBox styleClass="activity-card" HBox.hgrow="ALWAYS">
-                                <Label text="Today's Registrations" styleClass="activity-card-title"/>
-                                <VBox spacing="8">
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="👤" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="John Smith - O+" styleClass="activity-text"/>
-                                            <Label text="9:30 AM • Mumbai" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="👤" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="Sarah Johnson - A-" styleClass="activity-text"/>
-                                            <Label text="11:15 AM • Delhi" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="👤" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="Mike Wilson - B+" styleClass="activity-text"/>
-                                            <Label text="2:45 PM • Bangalore" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                <Label text="Donation Frequency" styleClass="form-label"/>
+                                <ComboBox fx:id="frequencyField" promptText="Select frequency" styleClass="form-combo" />
                             </VBox>
                             
-                            <VBox styleClass="activity-card" HBox.hgrow="ALWAYS">
-                                <Label text="Upcoming Appointments" styleClass="activity-card-title"/>
-                                <VBox spacing="8">
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="📅" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="Emma Davis - O-" styleClass="activity-text"/>
-                                            <Label text="Tomorrow 10:00 AM" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="📅" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="Robert Chen - AB+" styleClass="activity-text"/>
-                                            <Label text="Tomorrow 2:30 PM" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" spacing="10">
-                                        <Label text="📅" styleClass="activity-icon"/>
-                                        <VBox>
-                                            <Label text="Lisa Anderson - A+" styleClass="activity-text"/>
-                                            <Label text="Friday 11:00 AM" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
-                            </VBox>
-                        </HBox>
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="4">
+                                <Button text="💾 Save Donor" styleClass="modern-button" onAction="#addNewDonor"/>
+                            </HBox>
+                        </GridPane>
                     </VBox>
                 </VBox>
             </ScrollPane>
             
-            <!-- Recipients Management Interface -->
+            <!-- Recipients Interface -->
             <ScrollPane fx:id="recipientsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
                 <VBox spacing="20" styleClass="content-padding">
-                    <!-- Page Header -->
+                    <!-- Page Header with Actions -->
                     <HBox alignment="CENTER_LEFT" spacing="20">
                         <Label text="🏥 Recipient Management" styleClass="page-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="🩸 Blood Matching" styleClass="modern-button"/>
-                        <Button text="➕ New Request" styleClass="modern-button secondary"/>
-                        <Button text="🚨 Emergency Request" styleClass="emergency-button"/>
+                        <Button text="🔍 Search" styleClass="modern-button secondary"/>
+                        <Button text="➕ Add New Request" styleClass="modern-button"/>
+                        <Button text="📊 Export Data" styleClass="modern-button secondary"/>
                     </HBox>
                     
-                    <!-- Blood Request Statistics -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="📋 Active Requests" styleClass="stat-title"/>
-                            <Label fx:id="activeRequestsLabel" text="23" styleClass="stat-number"/>
-                            <Label text="Priority: 3" styleClass="stat-change-negative"/>
+                    <!-- Search and Filter Section -->
+                    <HBox spacing="15" styleClass="filter-section">
+                        <VBox spacing="5">
+                            <Label text="Search by Name/Hospital" styleClass="filter-label"/>
+                            <TextField fx:id="recipientSearchField" promptText="Enter recipient name or hospital..." styleClass="search-field"/>
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="✅ Fulfilled Today" styleClass="stat-title"/>
-                            <Label fx:id="fulfilledTodayLabel" text="18" styleClass="stat-number"/>
-                            <Label text="98% success rate" styleClass="stat-change-positive"/>
+                        <VBox spacing="5">
+                            <Label text="Blood Type Required" styleClass="filter-label"/>
+                            <ComboBox fx:id="reqBloodTypeFilter" promptText="All Types" styleClass="filter-combo" />
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="⏰ Pending" styleClass="stat-title"/>
-                            <Label fx:id="pendingRequestsLabel" text="12" styleClass="stat-number"/>
-                            <Label text="Avg wait: 2.3h" styleClass="stat-change-neutral"/>
+                        <VBox spacing="5">
+                            <Label text="Urgency" styleClass="filter-label"/>
+                            <ComboBox fx:id="urgencyFilter" promptText="All Levels" styleClass="filter-combo" />
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="🚨 Urgent" styleClass="stat-title"/>
-                            <Label fx:id="urgentRequestsLabel" text="3" styleClass="stat-number"/>
-                            <Label text="Immediate action" styleClass="stat-change-negative"/>
+                        <VBox spacing="5">
+                            <Label text="Status" styleClass="filter-label"/>
+                            <ComboBox fx:id="requestStatusFilter" promptText="All Status" styleClass="filter-combo" />
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="4" GridPane.rowIndex="0">
-                            <Label text="🏥 Hospitals" styleClass="stat-title"/>
-                            <Label fx:id="hospitalCountLabel" text="47" styleClass="stat-number"/>
-                            <Label text="Connected" styleClass="stat-change-positive"/>
+                        <VBox alignment="BOTTOM_CENTER">
+                            <Button text="🔄 Reset" styleClass="filter-reset-button"/>
                         </VBox>
-                    </GridPane>
+                    </HBox>
                     
-                    <!-- Blood Compatibility Matcher -->
-                    <VBox styleClass="compatibility-section">
-                        <Label text="🩸 Blood Compatibility Matcher" styleClass="section-title"/>
-                        <HBox spacing="20">
-                            <VBox styleClass="matcher-input" HBox.hgrow="ALWAYS">
-                                <Label text="Required Blood Type" styleClass="matcher-label"/>
-                                <ComboBox fx:id="requiredBloodType" promptText="Select required type" styleClass="matcher-combo" />
-                            </VBox>
-                            <VBox styleClass="matcher-input" HBox.hgrow="ALWAYS">
-                                <Label text="Required Units" styleClass="matcher-label"/>
-                                <TextField fx:id="requiredUnits" promptText="Number of units" styleClass="matcher-field"/>
-                            </VBox>
-                            <VBox styleClass="matcher-input" HBox.hgrow="ALWAYS">
-                                <Label text="Priority Level" styleClass="matcher-label"/>
-                                <ComboBox fx:id="priorityLevel" promptText="Select priority" styleClass="matcher-combo" />
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER">
-                                <Button text="🔍 Find Matches" styleClass="find-matches-button"/>
-                            </VBox>
-                        </HBox>
-                        
-                        <!-- Compatibility Results -->
-                        <VBox fx:id="compatibilityResults" styleClass="compatibility-results">
-                            <Label text="Compatible Matches" styleClass="results-title"/>
-                            <GridPane hgap="15" vgap="10">
-                                <columnConstraints>
-                                    <ColumnConstraints percentWidth="33"/>
-                                    <ColumnConstraints percentWidth="33"/>
-                                    <ColumnConstraints percentWidth="34"/>
-                                </columnConstraints>
-                                
-                                <VBox styleClass="match-card perfect" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                    <Label text="🟢 Perfect Match" styleClass="match-type"/>
-                                    <Label text="O+ Blood Available" styleClass="match-blood-type"/>
-                                    <Label text="47 units in stock" styleClass="match-units"/>
-                                    <Label text="Compatible: 100%" styleClass="match-compatibility"/>
-                                    <Button text="✅ Select" styleClass="match-select-button"/>
-                                </VBox>
-                                
-                                <VBox styleClass="match-card good" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                    <Label text="🟡 Good Match" styleClass="match-type"/>
-                                    <Label text="O- Blood Available" styleClass="match-blood-type"/>
-                                    <Label text="12 units in stock" styleClass="match-units"/>
-                                    <Label text="Compatible: 85%" styleClass="match-compatibility"/>
-                                    <Button text="⚠️ Consider" styleClass="match-consider-button"/>
-                                </VBox>
-                                
-                                <VBox styleClass="match-card alternative" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                                    <Label text="🟠 Alternative" styleClass="match-type"/>
-                                    <Label text="A+ Blood Available" styleClass="match-blood-type"/>
-                                    <Label text="89 units in stock" styleClass="match-units"/>
-                                    <Label text="Cross-match required" styleClass="match-compatibility"/>
-                                    <Button text="🧪 Test" styleClass="match-test-button"/>
-                                </VBox>
-                            </GridPane>
+                    <!-- Recipient Statistics Summary -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Active Requests" styleClass="mini-stat-title"/>
+                            <Label fx:id="activeRequestsCount" text="23" styleClass="mini-stat-number"/>
                         </VBox>
-                    </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Urgent Requests" styleClass="mini-stat-title"/>
+                            <Label fx:id="urgentRequestsCount" text="3" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Fulfilled Today" styleClass="mini-stat-title"/>
+                            <Label fx:id="fulfilledTodayCount" text="7" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Pending Allocation" styleClass="mini-stat-title"/>
+                            <Label fx:id="pendingAllocationCount" text="16" styleClass="mini-stat-number"/>
+                        </VBox>
+                    </HBox>
                     
-                    <!-- Active Requests Table -->
+                    <!-- Recipients Table -->
                     <VBox styleClass="table-container">
-                        <Label text="Active Blood Requests" styleClass="table-title"/>
-                        <TableView fx:id="requestsTable" styleClass="modern-table">
+                        <Label text="Blood Requests" styleClass="table-title"/>
+                        <TableView fx:id="recipientsTable" styleClass="modern-table">
                             <columns>
                                 <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="100"/>
-                                <TableColumn fx:id="hospitalColumn" text="Hospital" prefWidth="150"/>
-                                <TableColumn fx:id="patientNameColumn" text="Patient" prefWidth="120"/>
-                                <TableColumn fx:id="bloodTypeNeededColumn" text="Blood Type" prefWidth="100"/>
-                                <TableColumn fx:id="unitsNeededColumn" text="Units" prefWidth="80"/>
-                                <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="100"/>
-                                <TableColumn fx:id="requestTimeColumn" text="Requested" prefWidth="120"/>
-                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                                <TableColumn fx:id="recipientNameColumn" text="Recipient/Hospital" prefWidth="180"/>
+                                <TableColumn fx:id="reqBloodTypeColumn" text="Blood Type" prefWidth="100"/>
+                                <TableColumn fx:id="unitsRequiredColumn" text="Units" prefWidth="80"/>
+                                <TableColumn fx:id="requestDateColumn" text="Request Date" prefWidth="120"/>
+                                <TableColumn fx:id="urgencyColumn" text="Urgency" prefWidth="100"/>
+                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
                                 <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
                             </columns>
                         </TableView>
                     </VBox>
                     
-                    <!-- Emergency Request Form -->
-                    <VBox styleClass="emergency-form">
-                        <Label text="🚨 Emergency Blood Request" styleClass="emergency-form-title"/>
+                    <!-- Quick Request Form -->
+                    <VBox styleClass="form-container">
+                        <Label text="⚡ Quick Blood Request" styleClass="form-title"/>
                         <GridPane hgap="15" vgap="15">
                             <columnConstraints>
-                                <ColumnConstraints percentWidth="25"/>
-                                <ColumnConstraints percentWidth="25"/>
-                                <ColumnConstraints percentWidth="25"/>
-                                <ColumnConstraints percentWidth="25"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
                             </columnConstraints>
                             
+                            <!-- Row 1 -->
                             <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <Label text="Hospital Name *" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyHospital" promptText="Enter hospital name" styleClass="emergency-input"/>
+                                <Label text="Recipient Name *" styleClass="form-label"/>
+                                <TextField fx:id="recipientNameField" promptText="Enter recipient name" styleClass="form-input"/>
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                <Label text="Patient Name *" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyPatient" promptText="Enter patient name" styleClass="emergency-input"/>
+                                <Label text="Hospital/Clinic *" styleClass="form-label"/>
+                                <TextField fx:id="hospitalField" promptText="Enter hospital name" styleClass="form-input"/>
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                                <Label text="Blood Type *" styleClass="emergency-label"/>
-                                <ComboBox fx:id="emergencyBloodType" promptText="Select type" styleClass="emergency-combo" />
-                            </VBox>
-                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                                <Label text="Units Required *" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyUnits" promptText="Number of units" styleClass="emergency-input"/>
+                                <Label text="Blood Type Required *" styleClass="form-label"/>
+                                <ComboBox fx:id="reqBloodTypeField" promptText="Select blood type" styleClass="form-combo" />
                             </VBox>
                             
+                            <!-- Row 2 -->
                             <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                <Label text="Contact Person *" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyContact" promptText="Doctor/Contact name" styleClass="emergency-input"/>
+                                <Label text="Units Required *" styleClass="form-label"/>
+                                <TextField fx:id="unitsRequiredField" promptText="Enter number of units" styleClass="form-input"/>
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <Label text="Phone Number *" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyPhone" promptText="Contact number" styleClass="emergency-input"/>
+                                <Label text="Urgency Level *" styleClass="form-label"/>
+                                <ComboBox fx:id="urgencyField" promptText="Select urgency" styleClass="form-combo" />
                             </VBox>
                             <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                <Label text="Expected Time" styleClass="emergency-label"/>
-                                <TextField fx:id="emergencyTime" promptText="When needed" styleClass="emergency-input"/>
+                                <Label text="Contact Number *" styleClass="form-label"/>
+                                <TextField fx:id="contactField" promptText="Enter contact number" styleClass="form-input"/>
                             </VBox>
-                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="1" alignment="BOTTOM_CENTER">
-                                <Button text="🚨 Submit Emergency" styleClass="emergency-submit-button"/>
+                            
+                            <!-- Row 3 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                                <Label text="Medical Condition/Reason" styleClass="form-label"/>
+                                <TextField fx:id="reasonField" promptText="Enter medical condition or reason for request" styleClass="form-input"/>
                             </VBox>
+                            
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3">
+                                <Button text="📤 Submit Request" styleClass="modern-button"/>
+                            </HBox>
                         </GridPane>
                     </VBox>
-                    
-                    <!-- Recent Fulfillments -->
-                    <HBox spacing="20">
-                        <VBox styleClass="fulfillment-card" HBox.hgrow="ALWAYS">
-                            <Label text="✅ Recently Fulfilled" styleClass="fulfillment-title"/>
-                            <VBox spacing="8">
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🏥" styleClass="fulfillment-icon"/>
-                                    <VBox>
-                                        <Label text="City Hospital - O+ (3 units)" styleClass="fulfillment-text"/>
-                                        <Label text="Delivered 15 minutes ago" styleClass="fulfillment-time"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🏥" styleClass="fulfillment-icon"/>
-                                    <VBox>
-                                        <Label text="Metro Medical - A- (2 units)" styleClass="fulfillment-text"/>
-                                        <Label text="Delivered 1 hour ago" styleClass="fulfillment-time"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🏥" styleClass="fulfillment-icon"/>
-                                    <VBox>
-                                        <Label text="General Hospital - B+ (1 unit)" styleClass="fulfillment-text"/>
-                                        <Label text="Delivered 2 hours ago" styleClass="fulfillment-time"/>
-                                    </VBox>
-                                </HBox>
-                            </VBox>
-                        </VBox>
-                        
-                        <VBox styleClass="notification-card" HBox.hgrow="ALWAYS">
-                            <Label text="🔔 Notifications" styleClass="notification-title"/>
-                            <VBox spacing="8">
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="⚠️" styleClass="notification-icon warning"/>
-                                    <VBox>
-                                        <Label text="Low O- stock alert" styleClass="notification-text"/>
-                                        <Label text="Only 12 units remaining" styleClass="notification-details"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="💬" styleClass="notification-icon info"/>
-                                    <VBox>
-                                        <Label text="New hospital registered" styleClass="notification-text"/>
-                                        <Label text="Sunshine Medical Center" styleClass="notification-details"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🔍" styleClass="notification-icon success"/>
-                                    <VBox>
-                                        <Label text="Cross-match completed" styleClass="notification-text"/>
-                                        <Label text="Patient ID: P-2024-0891" styleClass="notification-details"/>
-                                    </VBox>
-                                </HBox>
-                            </VBox>
-                        </VBox>
-                    </HBox>
                 </VBox>
             </ScrollPane>
             
-            <!-- Blood Inventory Management Interface -->
+            <!-- Blood Inventory Interface -->
             <ScrollPane fx:id="inventoryView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
                 <VBox spacing="20" styleClass="content-padding">
-                    <!-- Page Header -->
+                    <!-- Page Header with Actions -->
                     <HBox alignment="CENTER_LEFT" spacing="20">
                         <Label text="📦 Blood Inventory Management" styleClass="page-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="🩸 Add Donation" styleClass="modern-button"/>
-                        <Button text="📄 Generate Report" styleClass="modern-button secondary"/>
-                        <Button text="⚠️ Alerts" styleClass="alert-button"/>
+                        <Button text="🔍 Search" styleClass="modern-button secondary"/>
+                        <Button text="➕ Add Blood Unit" styleClass="modern-button"/>
+                        <Button text="📊 Export Data" styleClass="modern-button secondary"/>
                     </HBox>
                     
-                    <!-- Inventory Statistics -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                            <ColumnConstraints percentWidth="20"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="🩸 Total Units" styleClass="stat-title"/>
-                            <Label fx:id="totalUnitsLabel" text="3,456" styleClass="stat-number"/>
-                            <Label text="All blood types" styleClass="stat-details"/>
+                    <!-- Inventory Statistics Summary -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Total Units" styleClass="mini-stat-title"/>
+                            <Label fx:id="totalUnitsCount" text="3,456" styleClass="mini-stat-number"/>
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="🟢 Available" styleClass="stat-title"/>
-                            <Label fx:id="availableUnitsLabel" text="2,987" styleClass="stat-number"/>
-                            <Label text="Ready for use" styleClass="stat-change-positive"/>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Critical Stock" styleClass="mini-stat-title"/>
+                            <Label fx:id="criticalStockCount" text="2" styleClass="mini-stat-number"/>
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="⚠️ Expiring Soon" styleClass="stat-title"/>
-                            <Label fx:id="expiringSoonLabel" text="47" styleClass="stat-number"/>
-                            <Label text="Within 5 days" styleClass="stat-change-negative"/>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Expiring Soon" styleClass="mini-stat-title"/>
+                            <Label fx:id="expiringSoonCount" text="47" styleClass="mini-stat-number"/>
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="🟡 Low Stock" styleClass="stat-title"/>
-                            <Label fx:id="lowStockLabel" text="3" styleClass="stat-number"/>
-                            <Label text="Types below threshold" styleClass="stat-change-negative"/>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Avg. Turnover" styleClass="mini-stat-title"/>
+                            <Label fx:id="avgTurnoverCount" text="89%" styleClass="mini-stat-number"/>
                         </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="4" GridPane.rowIndex="0">
-                            <Label text="🔄 Daily Usage" styleClass="stat-title"/>
-                            <Label fx:id="dailyUsageLabel" text="89" styleClass="stat-number"/>
-                            <Label text="Units dispensed today" styleClass="stat-change-neutral"/>
-                        </VBox>
-                    </GridPane>
+                    </HBox>
                     
-                    <!-- Blood Type Inventory Chart -->
-                    <VBox styleClass="inventory-chart-section">
-                        <Label text="📊 Blood Type Inventory Levels" styleClass="section-title"/>
+                    <!-- Blood Type Inventory -->
+                    <VBox styleClass="table-container">
+                        <Label text="Blood Type Inventory" styleClass="table-title"/>
+                        <TableView fx:id="inventoryTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="bloodTypeColumn" text="Blood Type" prefWidth="100"/>
+                                <TableColumn fx:id="totalUnitsColumn" text="Total Units" prefWidth="120"/>
+                                <TableColumn fx:id="availableColumn" text="Available" prefWidth="120"/>
+                                <TableColumn fx:id="reservedColumn" text="Reserved" prefWidth="120"/>
+                                <TableColumn fx:id="expiringSoonColumn" text="Expiring Soon" prefWidth="150"/>
+                                <TableColumn fx:id="criticalLevelColumn" text="Critical Level" prefWidth="150"/>
+                                <TableColumn fx:id="actionsColumn2" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Storage Units -->
+                    <VBox styleClass="table-container">
+                        <Label text="Storage Units" styleClass="table-title"/>
+                        <TableView fx:id="storageTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="storageIdColumn" text="Storage ID" prefWidth="120"/>
+                                <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
+                                <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="120"/>
+                                <TableColumn fx:id="usedSpaceColumn" text="Used Space" prefWidth="120"/>
+                                <TableColumn fx:id="temperatureColumn" text="Temperature" prefWidth="120"/>
+                                <TableColumn fx:id="statusColumn2" text="Status" prefWidth="120"/>
+                                <TableColumn fx:id="actionsColumn3" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Add Blood Unit Form -->
+                    <VBox styleClass="form-container">
+                        <Label text="➕ Add New Blood Unit" styleClass="form-title"/>
                         <GridPane hgap="15" vgap="15">
                             <columnConstraints>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
-                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="25"/>
+                                <ColumnConstraints percentWidth="25"/>
+                                <ColumnConstraints percentWidth="25"/>
+                                <ColumnConstraints percentWidth="25"/>
                             </columnConstraints>
                             
-                            <VBox styleClass="blood-type-card high-stock" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <Label text="O+" styleClass="blood-type-label"/>
-                                <Label text="847" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.85" styleClass="stock-progress high"/>
-                                <Label text="85% Full" styleClass="stock-percentage"/>
+                            <!-- Row 1 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Donor ID *" styleClass="form-label"/>
+                                <TextField fx:id="donorIdField" promptText="Enter donor ID" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Blood Type *" styleClass="form-label"/>
+                                <ComboBox fx:id="unitBloodTypeField" promptText="Select blood type" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Collection Date *" styleClass="form-label"/>
+                                <DatePicker fx:id="collectionDateField" promptText="Select date" styleClass="form-datepicker"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <Label text="Expiry Date *" styleClass="form-label"/>
+                                <DatePicker fx:id="expiryDateField" promptText="Select date" styleClass="form-datepicker"/>
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card high-stock" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                <Label text="A+" styleClass="blood-type-label"/>
-                                <Label text="623" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.78" styleClass="stock-progress high"/>
-                                <Label text="78% Full" styleClass="stock-percentage"/>
+                            <!-- Row 2 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Volume (ml) *" styleClass="form-label"/>
+                                <TextField fx:id="volumeField" promptText="Enter volume" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Storage Unit *" styleClass="form-label"/>
+                                <ComboBox fx:id="storageUnitField" promptText="Select storage unit" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label text="Quality Status *" styleClass="form-label"/>
+                                <ComboBox fx:id="qualityStatusField" promptText="Select quality" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                <Label text="Donation Type *" styleClass="form-label"/>
+                                <ComboBox fx:id="donationTypeField" promptText="Select type" styleClass="form-combo" />
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card medium-stock" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                                <Label text="B+" styleClass="blood-type-label"/>
-                                <Label text="234" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.45" styleClass="stock-progress medium"/>
-                                <Label text="45% Full" styleClass="stock-percentage"/>
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="4">
+                                <Button text="📥 Add Blood Unit" styleClass="modern-button"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Campaigns Interface -->
+            <ScrollPane fx:id="campaignsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="20" styleClass="content-padding">
+                    <!-- Page Header with Actions -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="📅 Campaign Management" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔍 Search" styleClass="modern-button secondary"/>
+                        <Button text="➕ Create Campaign" styleClass="modern-button"/>
+                        <Button text="📊 Export Data" styleClass="modern-button secondary"/>
+                    </HBox>
+                    
+                    <!-- Campaign Statistics Summary -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Active Campaigns" styleClass="mini-stat-title"/>
+                            <Label fx:id="activeCampaignsCount" text="5" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Upcoming Events" styleClass="mini-stat-title"/>
+                            <Label fx:id="upcomingEventsCount" text="3" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Registered Donors" styleClass="mini-stat-title"/>
+                            <Label fx:id="registeredDonorsCount" text="1,247" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Expected Collection" styleClass="mini-stat-title"/>
+                            <Label fx:id="expectedCollectionCount" text="890 units" styleClass="mini-stat-number"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <!-- Campaigns Table -->
+                    <VBox styleClass="table-container">
+                        <Label text="Campaigns &amp; Events" styleClass="table-title"/>
+                        <TableView fx:id="campaignsTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="campaignIdColumn" text="Campaign ID" prefWidth="120"/>
+                                <TableColumn fx:id="campaignNameColumn" text="Campaign Name" prefWidth="200"/>
+                                <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="120"/>
+                                <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="120"/>
+                                <TableColumn fx:id="locationColumn2" text="Location" prefWidth="150"/>
+                                <TableColumn fx:id="targetDonorsColumn" text="Target Donors" prefWidth="120"/>
+                                <TableColumn fx:id="registeredDonorsColumn" text="Registered" prefWidth="120"/>
+                                <TableColumn fx:id="statusColumn3" text="Status" prefWidth="120"/>
+                                <TableColumn fx:id="actionsColumn4" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Create Campaign Form -->
+                    <VBox styleClass="form-container">
+                        <Label text="➕ Create New Campaign" styleClass="form-title"/>
+                        <GridPane hgap="15" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                            </columnConstraints>
+                            
+                            <!-- Row 1 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Campaign Name *" styleClass="form-label"/>
+                                <TextField fx:id="campaignNameField" promptText="Enter campaign name" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Location *" styleClass="form-label"/>
+                                <TextField fx:id="campaignLocationField" promptText="Enter location" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Target Donors *" styleClass="form-label"/>
+                                <TextField fx:id="targetDonorsField" promptText="Enter target donors" styleClass="form-input"/>
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card low-stock" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                                <Label text="O-" styleClass="blood-type-label"/>
-                                <Label text="67" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.12" styleClass="stock-progress low"/>
-                                <Label text="12% Full" styleClass="stock-percentage"/>
+                            <!-- Row 2 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Start Date *" styleClass="form-label"/>
+                                <DatePicker fx:id="startDateField" promptText="Select start date" styleClass="form-datepicker"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="End Date *" styleClass="form-label"/>
+                                <DatePicker fx:id="endDateField" promptText="Select end date" styleClass="form-datepicker"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label text="Organizer *" styleClass="form-label"/>
+                                <TextField fx:id="organizerField" promptText="Enter organizer name" styleClass="form-input"/>
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card medium-stock" GridPane.columnIndex="4" GridPane.rowIndex="0">
-                                <Label text="A-" styleClass="blood-type-label"/>
-                                <Label text="156" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.34" styleClass="stock-progress medium"/>
-                                <Label text="34% Full" styleClass="stock-percentage"/>
+                            <!-- Row 3 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                                <Label text="Description" styleClass="form-label"/>
+                                <TextField fx:id="descriptionField" promptText="Enter campaign description" styleClass="form-input"/>
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card high-stock" GridPane.columnIndex="5" GridPane.rowIndex="0">
-                                <Label text="AB+" styleClass="blood-type-label"/>
-                                <Label text="189" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.67" styleClass="stock-progress high"/>
-                                <Label text="67% Full" styleClass="stock-percentage"/>
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3">
+                                <Button text="📅 Create Campaign" styleClass="modern-button"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Rewards Interface -->
+            <ScrollPane fx:id="rewardsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="20" styleClass="content-padding">
+                    <!-- Page Header with Actions -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="🏆 Rewards &amp; Leaderboard" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="📊 Export Data" styleClass="modern-button secondary"/>
+                    </HBox>
+                    
+                    <!-- Rewards Statistics Summary -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Total Points" styleClass="mini-stat-title"/>
+                            <Label fx:id="totalPointsCount" text="45,678" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Active Donors" styleClass="mini-stat-title"/>
+                            <Label fx:id="activeRewardsDonorsCount" text="892" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Top Donor" styleClass="mini-stat-title"/>
+                            <Label fx:id="topDonorName" text="John Smith" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="This Month" styleClass="mini-stat-title"/>
+                            <Label fx:id="monthlyPointsCount" text="3,456 pts" styleClass="mini-stat-number"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <!-- Leaderboard Table -->
+                    <VBox styleClass="table-container">
+                        <Label text="🏆 Donor Leaderboard" styleClass="table-title"/>
+                        <TableView fx:id="leaderboardTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="rankColumn" text="Rank" prefWidth="80"/>
+                                <TableColumn fx:id="donorNameColumn2" text="Donor Name" prefWidth="200"/>
+                                <TableColumn fx:id="donationCountColumn" text="Donations" prefWidth="120"/>
+                                <TableColumn fx:id="pointsColumn" text="Points" prefWidth="120"/>
+                                <TableColumn fx:id="badgesColumn" text="Badges" prefWidth="150"/>
+                                <TableColumn fx:id="lastDonationColumn2" text="Last Donation" prefWidth="150"/>
+                                <TableColumn fx:id="actionsColumn5" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Achievements Section -->
+                    <VBox styleClass="table-container">
+                        <Label text="🏅 Achievements &amp; Badges" styleClass="table-title"/>
+                        <TableView fx:id="achievementsTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="badgeNameColumn" text="Badge Name" prefWidth="200"/>
+                                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300"/>
+                                <TableColumn fx:id="criteriaColumn" text="Criteria" prefWidth="200"/>
+                                <TableColumn fx:id="earnedColumn" text="Earned" prefWidth="120"/>
+                                <TableColumn fx:id="actionsColumn6" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Statistics Interface -->
+            <ScrollPane fx:id="statisticsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="20" styleClass="content-padding">
+                    <!-- Page Header with Actions -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="📈 Statistics &amp; Reports" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="📅 Date Range" styleClass="modern-button secondary"/>
+                        <Button text="📊 Export Report" styleClass="modern-button"/>
+                        <Button text="🖨️ Print Report" styleClass="modern-button secondary"/>
+                    </HBox>
+                    
+                    <!-- Statistics Charts -->
+                    <HBox spacing="20">
+                        <!-- Donations Over Time -->
+                        <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                            <Label text="📊 Donations Over Time" styleClass="card-title"/>
+                            <VBox spacing="10">
+                                <!-- Chart would go here in a real implementation -->
+                                <Label text="📈 Chart Placeholder - Donations trend over selected period" styleClass="chart-placeholder"/>
+                            </VBox>
+                        </VBox>
+                        
+                        <!-- Blood Type Distribution -->
+                        <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                            <Label text="🩸 Blood Type Distribution" styleClass="card-title"/>
+                            <VBox spacing="10">
+                                <!-- Chart would go here in a real implementation -->
+                                <Label text="📊 Chart Placeholder - Distribution of blood types in inventory" styleClass="chart-placeholder"/>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                    
+                    <!-- Reports Section -->
+                    <VBox styleClass="table-container">
+                        <Label text="📋 Generated Reports" styleClass="table-title"/>
+                        <TableView fx:id="reportsTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="reportIdColumn" text="Report ID" prefWidth="120"/>
+                                <TableColumn fx:id="reportNameColumn" text="Report Name" prefWidth="250"/>
+                                <TableColumn fx:id="generatedDateColumn" text="Generated Date" prefWidth="150"/>
+                                <TableColumn fx:id="reportTypeColumn" text="Type" prefWidth="120"/>
+                                <TableColumn fx:id="generatedByColumn" text="Generated By" prefWidth="150"/>
+                                <TableColumn fx:id="actionsColumn7" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Generate Custom Report -->
+                    <VBox styleClass="form-container">
+                        <Label text="⚙️ Generate Custom Report" styleClass="form-title"/>
+                        <GridPane hgap="15" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                            </columnConstraints>
+                            
+                            <!-- Row 1 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Report Type *" styleClass="form-label"/>
+                                <ComboBox fx:id="reportTypeField" promptText="Select report type" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Date Range *" styleClass="form-label"/>
+                                <HBox spacing="5">
+                                    <DatePicker fx:id="startDateField2" promptText="Start date" styleClass="form-datepicker" HBox.hgrow="ALWAYS"/>
+                                    <Label text="to" styleClass="form-label"/>
+                                    <DatePicker fx:id="endDateField2" promptText="End date" styleClass="form-datepicker" HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Format *" styleClass="form-label"/>
+                                <ComboBox fx:id="formatField" promptText="Select format" styleClass="form-combo" />
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card low-stock" GridPane.columnIndex="6" GridPane.rowIndex="0">
-                                <Label text="B-" styleClass="blood-type-label"/>
-                                <Label text="45" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.18" styleClass="stock-progress low"/>
-                                <Label text="18% Full" styleClass="stock-percentage"/>
+                            <!-- Row 2 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="3">
+                                <Label text="Additional Filters" styleClass="form-label"/>
+                                <TextField fx:id="filtersField" promptText="Enter additional filters (optional)" styleClass="form-input"/>
                             </VBox>
                             
-                            <VBox styleClass="blood-type-card critical-stock" GridPane.columnIndex="7" GridPane.rowIndex="0">
-                                <Label text="AB-" styleClass="blood-type-label"/>
-                                <Label text="23" styleClass="blood-type-count"/>
-                                <ProgressBar progress="0.08" styleClass="stock-progress critical"/>
-                                <Label text="8% Full" styleClass="stock-percentage"/>
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                                <Button text="📊 Generate Report" styleClass="modern-button"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Emergency Interface -->
+            <ScrollPane fx:id="emergencyView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="20" styleClass="content-padding">
+                    <!-- Page Header with Actions -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="🚨 Emergency Response" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔔 Raise Alert" styleClass="modern-button"/>
+                        <Button text="📊 Export Data" styleClass="modern-button secondary"/>
+                    </HBox>
+                    
+                    <!-- Emergency Statistics Summary -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Active Alerts" styleClass="mini-stat-title"/>
+                            <Label fx:id="activeAlertsCount" text="2" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Critical Requests" styleClass="mini-stat-title"/>
+                            <Label fx:id="criticalRequestsCount" text="1" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Response Time" styleClass="mini-stat-title"/>
+                            <Label fx:id="avgResponseTime" text="12 min" styleClass="mini-stat-number"/>
+                        </VBox>
+                        <VBox styleClass="stat-mini-card" HBox.hgrow="ALWAYS">
+                            <Label text="Resolved Today" styleClass="mini-stat-title"/>
+                            <Label fx:id="resolvedTodayCount" text="3" styleClass="mini-stat-number"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <!-- Active Alerts Table -->
+                    <VBox styleClass="table-container">
+                        <Label text="🚨 Active Emergency Alerts" styleClass="table-title"/>
+                        <TableView fx:id="alertsTable" styleClass="modern-table">
+                            <columns>
+                                <TableColumn fx:id="alertIdColumn" text="Alert ID" prefWidth="100"/>
+                                <TableColumn fx:id="alertTypeColumn" text="Type" prefWidth="120"/>
+                                <TableColumn fx:id="bloodTypeColumn2" text="Blood Type" prefWidth="120"/>
+                                <TableColumn fx:id="unitsRequiredColumn2" text="Units Required" prefWidth="120"/>
+                                <TableColumn fx:id="hospitalColumn" text="Hospital" prefWidth="150"/>
+                                <TableColumn fx:id="requestTimeColumn" text="Request Time" prefWidth="150"/>
+                                <TableColumn fx:id="statusColumn4" text="Status" prefWidth="120"/>
+                                <TableColumn fx:id="actionsColumn8" text="Actions" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                    
+                    <!-- Raise Emergency Alert Form -->
+                    <VBox styleClass="form-container">
+                        <Label text="🔔 Raise Emergency Alert" styleClass="form-title"/>
+                        <GridPane hgap="15" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                            </columnConstraints>
+                            
+                            <!-- Row 1 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Alert Type *" styleClass="form-label"/>
+                                <ComboBox fx:id="alertTypeField" promptText="Select alert type" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Blood Type Required *" styleClass="form-label"/>
+                                <ComboBox fx:id="emergencyBloodTypeField" promptText="Select blood type" styleClass="form-combo" />
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Units Required *" styleClass="form-label"/>
+                                <TextField fx:id="emergencyUnitsField" promptText="Enter units required" styleClass="form-input"/>
+                            </VBox>
+                            
+                            <!-- Row 2 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Hospital/Clinic *" styleClass="form-label"/>
+                                <TextField fx:id="emergencyHospitalField" promptText="Enter hospital name" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Contact Person *" styleClass="form-label"/>
+                                <TextField fx:id="contactPersonField" promptText="Enter contact person" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Label text="Contact Number *" styleClass="form-label"/>
+                                <TextField fx:id="emergencyContactField" promptText="Enter contact number" styleClass="form-input"/>
+                            </VBox>
+                            
+                            <!-- Row 3 -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                                <Label text="Additional Information" styleClass="form-label"/>
+                                <TextField fx:id="additionalInfoField" promptText="Enter additional information about the emergency" styleClass="form-input"/>
+                            </VBox>
+                            
+                            <!-- Submit Button -->
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="3">
+                                <Button text="🔔 Raise Emergency Alert" styleClass="modern-button"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Voice Commands Interface -->
+            <ScrollPane fx:id="voiceCommandsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="25" styleClass="content-padding">
+                    <!-- Page Header -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="🎤 Voice Commands Interface" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔊 Start Listening" styleClass="modern-button" onAction="#simulateVoiceCommand"/>
+                        <Button text="⏹️ Stop Listening" styleClass="modern-button secondary"/>
+                    </HBox>
+                    
+                    <!-- Voice Command Status -->
+                    <VBox styleClass="dashboard-card">
+                        <Label text="🎙️ Voice Command Status" styleClass="card-title"/>
+                        <HBox alignment="CENTER_LEFT" spacing="20">
+                            <Label text="Status:" styleClass="voice-status-label"/>
+                            <Label fx:id="voiceStatusIndicator" text="🔴 Not Listening" styleClass="voice-status-inactive"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Last Command:" styleClass="voice-status-label"/>
+                            <Label fx:id="lastCommandLabel" text="None" styleClass="voice-status-text"/>
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Voice Command Examples -->
+                    <VBox styleClass="dashboard-card">
+                        <Label text="💡 Voice Command Examples" styleClass="card-title"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="📋 Navigation Commands" styleClass="voice-section-title"/>
+                                <Label text="• Show dashboard" styleClass="voice-command-example"/>
+                                <Label text="• Go to donors page" styleClass="voice-command-example"/>
+                                <Label text="• Open inventory" styleClass="voice-command-example"/>
+                                <Label text="• Show campaigns" styleClass="voice-command-example"/>
+                                <Label text="• Emergency response" styleClass="voice-command-example"/>
+                            </VBox>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="🔍 Search Commands" styleClass="voice-section-title"/>
+                                <Label text="• Find donor John Smith" styleClass="voice-command-example"/>
+                                <Label text="• Search for O+ blood" styleClass="voice-command-example"/>
+                                <Label text="• Locate donor with ID 123" styleClass="voice-command-example"/>
+                                <Label text="• Show donors in New York" styleClass="voice-command-example"/>
+                            </VBox>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="📊 Report Commands" styleClass="voice-section-title"/>
+                                <Label text="• Generate monthly report" styleClass="voice-command-example"/>
+                                <Label text="• Show statistics" styleClass="voice-command-example"/>
+                                <Label text="• Export donor data" styleClass="voice-command-example"/>
+                                <Label text="• Print inventory report" styleClass="voice-command-example"/>
+                            </VBox>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="⚙️ System Commands" styleClass="voice-section-title"/>
+                                <Label text="• Toggle dark mode" styleClass="voice-command-example"/>
+                                <Label text="• Refresh dashboard" styleClass="voice-command-example"/>
+                                <Label text="• Logout system" styleClass="voice-command-example"/>
+                                <Label text="• Show help" styleClass="voice-command-example"/>
                             </VBox>
                         </GridPane>
                     </VBox>
                     
-                    <!-- Inventory Table -->
+                    <!-- Voice Command History -->
                     <VBox styleClass="table-container">
-                        <Label text="Blood Unit Details" styleClass="table-title"/>
-                        <TableView fx:id="inventoryTable" styleClass="modern-table">
+                        <Label text="📜 Voice Command History" styleClass="table-title"/>
+                        <TableView fx:id="voiceHistoryTable" styleClass="modern-table">
                             <columns>
-                                <TableColumn fx:id="unitIdColumn" text="Unit ID" prefWidth="100"/>
-                                <TableColumn fx:id="bloodTypeColumn" text="Blood Type" prefWidth="100"/>
-                                <TableColumn fx:id="donorIdColumn" text="Donor ID" prefWidth="100"/>
-                                <TableColumn fx:id="collectionDateColumn" text="Collection Date" prefWidth="120"/>
-                                <TableColumn fx:id="expiryDateColumn" text="Expiry Date" prefWidth="120"/>
-                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
-                                <TableColumn fx:id="locationColumn" text="Storage Location" prefWidth="150"/>
-                                <TableColumn fx:id="testingStatusColumn" text="Testing" prefWidth="100"/>
-                                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="120"/>
+                                <TableColumn fx:id="timestampColumn" text="Timestamp" prefWidth="200"/>
+                                <TableColumn fx:id="commandColumn" text="Recognized Command" prefWidth="300"/>
+                                <TableColumn fx:id="actionColumn" text="Executed Action" prefWidth="250"/>
+                                <TableColumn fx:id="statusColumn5" text="Status" prefWidth="150"/>
                             </columns>
                         </TableView>
                     </VBox>
                     
-                    <!-- Alerts and Notifications -->
-                    <HBox spacing="20">
-                        <VBox styleClass="alert-panel critical" HBox.hgrow="ALWAYS">
-                            <Label text="🚨 Critical Alerts" styleClass="alert-panel-title"/>
-                            <VBox spacing="8">
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🔴" styleClass="alert-icon"/>
-                                    <VBox>
-                                        <Label text="AB- Blood Critical Low" styleClass="alert-text"/>
-                                        <Label text="Only 23 units remaining" styleClass="alert-details"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🔴" styleClass="alert-icon"/>
-                                    <VBox>
-                                        <Label text="O- Below Emergency Level" styleClass="alert-text"/>
-                                        <Label text="67 units - Emergency threshold: 100" styleClass="alert-details"/>
-                                    </VBox>
-                                </HBox>
+                    <!-- Voice Command Settings -->
+                    <VBox styleClass="form-container">
+                        <Label text="⚙️ Voice Command Settings" styleClass="form-title"/>
+                        <GridPane hgap="15" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                                <ColumnConstraints percentWidth="33.33"/>
+                            </columnConstraints>
+                            
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Voice Recognition Engine" styleClass="form-label"/>
+                                <ComboBox fx:id="voiceEngineField" promptText="Select engine" styleClass="form-combo" />
                             </VBox>
-                        </VBox>
-                        
-                        <VBox styleClass="alert-panel warning" HBox.hgrow="ALWAYS">
-                            <Label text="⚠️ Expiry Warnings" styleClass="alert-panel-title"/>
-                            <VBox spacing="8">
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🟡" styleClass="alert-icon"/>
-                                    <VBox>
-                                        <Label text="47 units expiring in 5 days" styleClass="alert-text"/>
-                                        <Label text="Mixed blood types - Action needed" styleClass="alert-details"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <Label text="🟡" styleClass="alert-icon"/>
-                                    <VBox>
-                                        <Label text="Temperature alert - Storage B" styleClass="alert-text"/>
-                                        <Label text="Temperature: 6.2°C (Normal: 2-6°C)" styleClass="alert-details"/>
-                                    </VBox>
-                                </HBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Language" styleClass="form-label"/>
+                                <ComboBox fx:id="languageField" promptText="Select language" styleClass="form-combo" />
                             </VBox>
-                        </VBox>
-                    </HBox>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- Campaign Management Interface -->
-            <ScrollPane fx:id="campaignsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="20" styleClass="content-padding">
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label text="📅 Campaign Management" styleClass="page-title"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="➕ New Campaign" styleClass="modern-button"/>
-                        <Button text="📈 Analytics" styleClass="modern-button secondary"/>
-                    </HBox>
-                    
-                    <!-- Campaign Statistics -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="🎯 Active Campaigns" styleClass="stat-title"/>
-                            <Label text="8" styleClass="stat-number"/>
-                            <Label text="3 urgent" styleClass="stat-change-negative"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="👥 Total Participants" styleClass="stat-title"/>
-                            <Label text="2,847" styleClass="stat-number"/>
-                            <Label text="+156 this week" styleClass="stat-change-positive"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="🩸 Units Collected" styleClass="stat-title"/>
-                            <Label text="1,523" styleClass="stat-number"/>
-                            <Label text="98% of target" styleClass="stat-change-positive"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="📅 Scheduled Events" styleClass="stat-title"/>
-                            <Label text="12" styleClass="stat-number"/>
-                            <Label text="Next 30 days" styleClass="stat-change-neutral"/>
-                        </VBox>
-                    </GridPane>
-                    
-                    <!-- Active Campaigns List -->
-                    <VBox styleClass="table-container">
-                        <Label text="Active Blood Donation Campaigns" styleClass="table-title"/>
-                        <TableView fx:id="campaignsTable" styleClass="modern-table">
-                            <columns>
-                                <TableColumn text="Campaign Name" prefWidth="200"/>
-                                <TableColumn text="Location" prefWidth="150"/>
-                                <TableColumn text="Start Date" prefWidth="120"/>
-                                <TableColumn text="End Date" prefWidth="120"/>
-                                <TableColumn text="Target" prefWidth="100"/>
-                                <TableColumn text="Collected" prefWidth="100"/>
-                                <TableColumn text="Progress" prefWidth="120"/>
-                                <TableColumn text="Status" prefWidth="100"/>
-                                <TableColumn text="Actions" prefWidth="120"/>
-                            </columns>
-                        </TableView>
-                    </VBox>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- Rewards & Leaderboard Interface -->
-            <ScrollPane fx:id="rewardsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="20" styleClass="content-padding">
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label text="Rewards and Leaderboard" styleClass="page-title"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="🏅 Award Points" styleClass="modern-button"/>
-                        <Button text="🎁 Manage Rewards" styleClass="modern-button secondary"/>
-                    </HBox>
-                    
-                    <!-- Leaderboard -->
-                    <VBox styleClass="leaderboard-section">
-                        <Label text="🏆 Top Donors This Month" styleClass="section-title"/>
-                        <VBox spacing="10">
-                            <HBox styleClass="leaderboard-item gold" alignment="CENTER_LEFT" spacing="15">
-                                <Label text="🥇" styleClass="leaderboard-medal"/>
-                                <Label text="John Smith" styleClass="leaderboard-name"/>
-                                <Region HBox.hgrow="ALWAYS"/>
-                                <Label text="15 Donations" styleClass="leaderboard-count"/>
-                                <Label text="1,500 Points" styleClass="leaderboard-points"/>
-                            </HBox>
-                            <HBox styleClass="leaderboard-item silver" alignment="CENTER_LEFT" spacing="15">
-                                <Label text="🥈" styleClass="leaderboard-medal"/>
-                                <Label text="Sarah Johnson" styleClass="leaderboard-name"/>
-                                <Region HBox.hgrow="ALWAYS"/>
-                                <Label text="12 Donations" styleClass="leaderboard-count"/>
-                                <Label text="1,250 Points" styleClass="leaderboard-points"/>
-                            </HBox>
-                            <HBox styleClass="leaderboard-item bronze" alignment="CENTER_LEFT" spacing="15">
-                                <Label text="🥉" styleClass="leaderboard-medal"/>
-                                <Label text="Mike Wilson" styleClass="leaderboard-name"/>
-                                <Region HBox.hgrow="ALWAYS"/>
-                                <Label text="10 Donations" styleClass="leaderboard-count"/>
-                                <Label text="1,100 Points" styleClass="leaderboard-points"/>
-                            </HBox>
-                        </VBox>
-                    </VBox>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- Statistics & Reports Interface -->
-            <ScrollPane fx:id="statisticsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="20" styleClass="content-padding">
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label text="📈 Statistics and Reports" styleClass="page-title"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="📄 Generate Report" styleClass="modern-button"/>
-                        <Button text="📥 Export Data" styleClass="modern-button secondary"/>
-                    </HBox>
-                    
-                    <!-- Statistics Overview -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="📊 Total Collections" styleClass="stat-title"/>
-                            <Label text="45,678" styleClass="stat-number"/>
-                            <Label text="All time" styleClass="stat-details"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="🏥 Hospitals Served" styleClass="stat-title"/>
-                            <Label text="89" styleClass="stat-number"/>
-                            <Label text="Active partnerships" styleClass="stat-details"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="❤️ Lives Saved" styleClass="stat-title"/>
-                            <Label text="12,456" styleClass="stat-number"/>
-                            <Label text="Estimated impact" styleClass="stat-details"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="🔄 Success Rate" styleClass="stat-title"/>
-                            <Label text="98.7%" styleClass="stat-number"/>
-                            <Label text="Request fulfillment" styleClass="stat-details"/>
-                        </VBox>
-                    </GridPane>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- Emergency Response Interface -->
-            <ScrollPane fx:id="emergencyView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="20" styleClass="content-padding">
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label text="🚨 Emergency Response" styleClass="page-title"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="🚨 Activate Protocol" styleClass="emergency-button"/>
-                        <Button text="📞 Contact Network" styleClass="modern-button"/>
-                    </HBox>
-                    
-                    <!-- Emergency Status Dashboard -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="stat-card emergency" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="🚨 Active Emergencies" styleClass="stat-title"/>
-                            <Label text="2" styleClass="stat-number"/>
-                            <Label text="Immediate response" styleClass="stat-change-negative"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="🚑 Response Time" styleClass="stat-title"/>
-                            <Label text="12 min" styleClass="stat-number"/>
-                            <Label text="Average today" styleClass="stat-change-positive"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="🏥 Network Status" styleClass="stat-title"/>
-                            <Label text="Online" styleClass="stat-number"/>
-                            <Label text="47/47 hospitals" styleClass="stat-change-positive"/>
-                        </VBox>
-                        
-                        <VBox styleClass="stat-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="🚚 Mobile Units" styleClass="stat-title"/>
-                            <Label text="8" styleClass="stat-number"/>
-                            <Label text="Available for dispatch" styleClass="stat-change-positive"/>
-                        </VBox>
-                    </GridPane>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- AI Blood Prediction Interface -->
-            <ScrollPane fx:id="aiPredictionView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
-                <VBox spacing="25" styleClass="content-padding">
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <Label text="🔮 AI Blood Prediction" styleClass="page-title"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="🔄 Refresh Predictions" styleClass="modern-button"/>
-                        <Button text="🤖 Train Model" styleClass="modern-button secondary"/>
-                    </HBox>
-                    
-                    <!-- AI Prediction Dashboard -->
-                    <GridPane hgap="20" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                            <ColumnConstraints percentWidth="25"/>
-                        </columnConstraints>
-                        
-                        <VBox styleClass="ai-card prediction" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <Label text="📈 Demand Forecast" styleClass="ai-title"/>
-                            <Label text="Next 7 Days" styleClass="ai-number"/>
-                            <Label text="High: O+, A+" styleClass="ai-details high"/>
-                            <Label text="Low: AB-, B-" styleClass="ai-details low"/>
-                        </VBox>
-                        
-                        <VBox styleClass="ai-card accuracy" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="🎯 Model Accuracy" styleClass="ai-title"/>
-                            <Label text="94.7%" styleClass="ai-number"/>
-                            <Label text="Last updated: 2h ago" styleClass="ai-details"/>
-                        </VBox>
-                        
-                        <VBox styleClass="ai-card prediction" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                            <Label text="💊 Shortage Risk" styleClass="ai-title"/>
-                            <Label text="Medium" styleClass="ai-number warning"/>
-                            <Label text="O- within 3 days" styleClass="ai-details"/>
-                        </VBox>
-                        
-                        <VBox styleClass="ai-card optimization" GridPane.columnIndex="3" GridPane.rowIndex="0">
-                            <Label text="⚙️ Optimization" styleClass="ai-title"/>
-                            <Label text="87%" styleClass="ai-number"/>
-                            <Label text="Resource efficiency" styleClass="ai-details"/>
-                        </VBox>
-                    </GridPane>
-                    
-                    <!-- AI Recommendations -->
-                    <VBox styleClass="ai-recommendations">
-                        <Label text="🤖 AI Recommendations" styleClass="section-title"/>
-                        <VBox spacing="12">
-                            <HBox styleClass="recommendation-card priority-high" spacing="15">
-                                <Label text="🟥" styleClass="priority-indicator"/>
-                                <VBox HBox.hgrow="ALWAYS">
-                                    <Label text="Schedule O- Blood Drive" styleClass="recommendation-title"/>
-                                    <Label text="Predicted shortage in 3 days. Recommend emergency campaign." styleClass="recommendation-description"/>
-                                </VBox>
-                                <Button text="Act Now" styleClass="recommendation-action high"/>
+                            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                <Label text="Sensitivity" styleClass="form-label"/>
+                                <Slider fx:id="sensitivitySlider" min="0" max="100" value="75" styleClass="form-slider"/>
+                            </VBox>
+                            
+                            <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="3">
+                                <CheckBox fx:id="continuousListeningCheckbox" text="Continuous Listening" styleClass="form-checkbox"/>
+                                <CheckBox fx:id="voiceFeedbackCheckbox" text="Voice Feedback" styleClass="form-checkbox"/>
+                                <CheckBox fx:id="commandHistoryCheckbox" text="Save Command History" styleClass="form-checkbox"/>
                             </HBox>
                             
-                            <HBox styleClass="recommendation-card priority-medium" spacing="15">
-                                <Label text="🟡" styleClass="priority-indicator"/>
-                                <VBox HBox.hgrow="ALWAYS">
-                                    <Label text="Contact A+ Donors" styleClass="recommendation-title"/>
-                                    <Label text="High demand predicted. Contact top 50 A+ donors for appointments." styleClass="recommendation-description"/>
-                                </VBox>
-                                <Button text="Contact" styleClass="recommendation-action medium"/>
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+                                <Button text="💾 Save Settings" styleClass="modern-button"/>
                             </HBox>
-                            
-                            <HBox styleClass="recommendation-card priority-low" spacing="15">
-                                <Label text="🟢" styleClass="priority-indicator"/>
-                                <VBox HBox.hgrow="ALWAYS">
-                                    <Label text="Optimize AB+ Storage" styleClass="recommendation-title"/>
-                                    <Label text="Surplus predicted. Consider redistribution to partner facilities." styleClass="recommendation-description"/>
-                                </VBox>
-                                <Button text="Plan" styleClass="recommendation-action low"/>
-                            </HBox>
-                        </VBox>
+                        </GridPane>
                     </VBox>
                 </VBox>
             </ScrollPane>
-            
-
         </StackPane>
     </center>
 </BorderPane>
