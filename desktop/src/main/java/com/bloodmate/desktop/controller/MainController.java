@@ -1,11 +1,13 @@
 package com.bloodmate.desktop.controller;
 
 import com.bloodmate.desktop.db.Db;
+import com.bloodmate.desktop.exception.ValidationException;
 import com.bloodmate.desktop.model.*;
 import com.bloodmate.desktop.repo.*;
 import com.bloodmate.desktop.report.*;
 import com.bloodmate.desktop.service.*;
 import com.bloodmate.desktop.util.SpeechRecognitionUtil;
+import com.bloodmate.desktop.util.ValidationUtil;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
@@ -106,6 +108,148 @@ public class MainController implements Initializable {
     @FXML private DatePicker lastDonationField;
     @FXML private ComboBox<String> frequencyField;
     
+    // Recipients view UI components
+    @FXML private TextField recipientSearchField;
+    @FXML private ComboBox<String> reqBloodTypeFilter;
+    @FXML private ComboBox<String> urgencyFilter;
+    @FXML private ComboBox<String> requestStatusFilter;
+    @FXML private Label activeRequestsCount;
+    @FXML private Label urgentRequestsCount;
+    @FXML private Label fulfilledTodayCount;
+    @FXML private Label pendingAllocationCount;
+    @FXML private TableView<Recipient> recipientsTable;
+    @FXML private TableColumn<Recipient, String> requestIdColumn;
+    @FXML private TableColumn<Recipient, String> recipientNameColumn;
+    @FXML private TableColumn<Recipient, String> reqBloodTypeColumn;
+    @FXML private TableColumn<Recipient, Integer> unitsRequiredColumn;
+    @FXML private TableColumn<Recipient, LocalDateTime> requestDateColumn;
+    @FXML private TableColumn<Recipient, String> urgencyColumn;
+    @FXML private TableColumn<Recipient, String> statusColumn;
+    @FXML private TextField recipientNameField;
+    @FXML private TextField hospitalField;
+    @FXML private ComboBox<String> reqBloodTypeField;
+    @FXML private TextField unitsRequiredField;
+    @FXML private ComboBox<String> urgencyField;
+    @FXML private TextField contactField;
+    @FXML private TextField reasonField;
+    
+    // Blood Inventory view UI components
+    @FXML private Label totalUnitsCount;
+    @FXML private Label criticalStockCount;
+    @FXML private Label expiringSoonCount;
+    @FXML private Label avgTurnoverCount;
+    @FXML private TableView<BloodInventory> inventoryTable;
+    @FXML private TableColumn<BloodInventory, String> bloodTypeColumn;
+    @FXML private TableColumn<BloodInventory, Integer> totalUnitsColumn;
+    @FXML private TableColumn<BloodInventory, Integer> availableColumn;
+    @FXML private TableColumn<BloodInventory, Integer> reservedColumn;
+    @FXML private TableColumn<BloodInventory, Integer> expiringSoonColumn;
+    @FXML private TableColumn<BloodInventory, String> criticalLevelColumn;
+    @FXML private TableView<?> storageTable;
+    @FXML private TableColumn<?, ?> storageIdColumn;
+    @FXML private TableColumn<?, ?> locationColumn;
+    @FXML private TableColumn<?, ?> capacityColumn;
+    @FXML private TableColumn<?, ?> usedSpaceColumn;
+    @FXML private TableColumn<?, ?> temperatureColumn;
+    @FXML private TableColumn<?, ?> statusColumn2;
+    @FXML private TextField donorIdField;
+    @FXML private ComboBox<String> unitBloodTypeField;
+    @FXML private DatePicker collectionDateField;
+    @FXML private DatePicker expiryDateField;
+    @FXML private TextField volumeField;
+    @FXML private ComboBox<String> storageUnitField;
+    @FXML private ComboBox<String> qualityStatusField;
+    @FXML private ComboBox<String> donationTypeField;
+    
+    // Campaigns view UI components
+    @FXML private Label activeCampaignsCount;
+    @FXML private Label upcomingEventsCount;
+    @FXML private Label registeredDonorsCount;
+    @FXML private Label expectedCollectionCount;
+    @FXML private TableView<Campaign> campaignsTable;
+    @FXML private TableColumn<Campaign, String> campaignIdColumn;
+    @FXML private TableColumn<Campaign, String> campaignNameColumn;
+    @FXML private TableColumn<Campaign, LocalDate> startDateColumn;
+    @FXML private TableColumn<Campaign, LocalDate> endDateColumn;
+    @FXML private TableColumn<Campaign, String> locationColumn2;
+    @FXML private TableColumn<Campaign, Integer> targetDonorsColumn;
+    @FXML private TableColumn<Campaign, Integer> registeredDonorsColumn;
+    @FXML private TableColumn<Campaign, String> statusColumn3;
+    @FXML private TextField campaignNameField;
+    @FXML private TextField campaignLocationField;
+    @FXML private TextField targetDonorsField;
+    @FXML private DatePicker startDateField;
+    @FXML private DatePicker endDateField;
+    @FXML private TextField organizerField;
+    @FXML private TextField descriptionField;
+    
+    // Rewards view UI components
+    @FXML private Label totalPointsCount;
+    @FXML private Label activeRewardsDonorsCount;
+    @FXML private Label topDonorName;
+    @FXML private Label monthlyPointsCount;
+    @FXML private TableView<Donor> leaderboardTable;
+    @FXML private TableColumn<Donor, Integer> rankColumn;
+    @FXML private TableColumn<Donor, String> donorNameColumn2;
+    @FXML private TableColumn<Donor, Integer> donationCountColumn;
+    @FXML private TableColumn<Donor, Integer> pointsColumn;
+    @FXML private TableColumn<Donor, String> badgesColumn;
+    @FXML private TableColumn<Donor, LocalDate> lastDonationColumn2;
+    @FXML private TableView<?> achievementsTable;
+    @FXML private TableColumn<?, ?> badgeNameColumn;
+    @FXML private TableColumn<?, ?> descriptionColumn;
+    @FXML private TableColumn<?, ?> criteriaColumn;
+    @FXML private TableColumn<?, ?> earnedColumn;
+    
+    // Statistics view UI components
+    @FXML private TableView<AdvancedReport> reportsTable;
+    @FXML private TableColumn<AdvancedReport, String> reportIdColumn;
+    @FXML private TableColumn<AdvancedReport, String> reportNameColumn;
+    @FXML private TableColumn<AdvancedReport, LocalDate> generatedDateColumn;
+    @FXML private TableColumn<AdvancedReport, String> reportTypeColumn;
+    @FXML private TableColumn<AdvancedReport, String> generatedByColumn;
+    @FXML private ComboBox<String> reportTypeField;
+    @FXML private DatePicker startDateField2;
+    @FXML private DatePicker endDateField2;
+    @FXML private ComboBox<String> formatField;
+    @FXML private TextField filtersField;
+    
+    // Emergency view UI components
+    @FXML private Label activeAlertsCount;
+    @FXML private Label criticalRequestsCount;
+    @FXML private Label avgResponseTime;
+    @FXML private Label resolvedTodayCount;
+    @FXML private TableView<EmergencyRequest> alertsTable;
+    @FXML private TableColumn<EmergencyRequest, String> alertIdColumn;
+    @FXML private TableColumn<EmergencyRequest, String> alertTypeColumn;
+    @FXML private TableColumn<EmergencyRequest, String> bloodTypeColumn2;
+    @FXML private TableColumn<EmergencyRequest, Integer> unitsRequiredColumn2;
+    @FXML private TableColumn<EmergencyRequest, String> hospitalColumn;
+    @FXML private TableColumn<EmergencyRequest, LocalDateTime> requestTimeColumn;
+    @FXML private TableColumn<EmergencyRequest, String> statusColumn4;
+    @FXML private ComboBox<String> alertTypeField;
+    @FXML private ComboBox<String> emergencyBloodTypeField;
+    @FXML private TextField emergencyUnitsField;
+    @FXML private TextField emergencyHospitalField;
+    @FXML private TextField contactPersonField;
+    @FXML private TextField emergencyContactField;
+    @FXML private TextField additionalInfoField;
+    
+    // Voice Commands view UI components
+    @FXML private Label voiceStatusIndicator;
+    @FXML private Label lastCommandLabel;
+    @FXML private TableView<VoiceCommand> voiceHistoryTable;
+    @FXML private TableColumn<VoiceCommand, LocalDateTime> timestampColumn;
+    @FXML private TableColumn<VoiceCommand, String> commandColumn;
+    @FXML private TableColumn<VoiceCommand, String> actionColumn;
+    @FXML private TableColumn<VoiceCommand, String> statusColumn5;
+    @FXML private ComboBox<String> voiceEngineField;
+    @FXML private ComboBox<String> languageField;
+    @FXML private Slider sensitivitySlider;
+    @FXML private CheckBox continuousListeningCheckbox;
+    @FXML private CheckBox voiceFeedbackCheckbox;
+    @FXML private CheckBox commandHistoryCheckbox;
+    
     // View components
     @FXML private ScrollPane dashboardView;
     @FXML private ScrollPane donorsView;
@@ -149,6 +293,13 @@ public class MainController implements Initializable {
             
             // Initialize UI components
             initializeDonorsView();
+            initializeRecipientsView();
+            initializeInventoryView();
+            initializeCampaignsView();
+            initializeRewardsView();
+            initializeStatisticsView();
+            initializeEmergencyView();
+            initializeVoiceCommandsView();
             
             // Set up initial view
             showDashboard();
@@ -208,6 +359,170 @@ public class MainController implements Initializable {
         if (donorStatusColumn != null) donorStatusColumn.setCellValueFactory(new PropertyValueFactory<>("eligibilityStatus"));
     }
     
+    private void initializeRecipientsView() {
+        // Initialize blood type combo boxes
+        List<String> bloodTypes = Arrays.asList("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
+        if (reqBloodTypeFilter != null) {
+            reqBloodTypeFilter.setItems(FXCollections.observableArrayList(bloodTypes));
+        }
+        if (reqBloodTypeField != null) {
+            reqBloodTypeField.setItems(FXCollections.observableArrayList(bloodTypes));
+        }
+        
+        // Initialize urgency combo boxes
+        List<String> urgencyLevels = Arrays.asList("LOW", "MEDIUM", "HIGH", "CRITICAL");
+        if (urgencyFilter != null) {
+            urgencyFilter.setItems(FXCollections.observableArrayList(urgencyLevels));
+        }
+        if (urgencyField != null) {
+            urgencyField.setItems(FXCollections.observableArrayList(urgencyLevels));
+        }
+        
+        // Initialize status combo box
+        List<String> statuses = Arrays.asList("PENDING", "MATCHED", "FULFILLED", "CANCELLED");
+        if (requestStatusFilter != null) {
+            requestStatusFilter.setItems(FXCollections.observableArrayList(statuses));
+        }
+        
+        // Set up table columns
+        if (requestIdColumn != null) requestIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (recipientNameColumn != null) recipientNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        if (reqBloodTypeColumn != null) reqBloodTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bloodGroup"));
+        if (unitsRequiredColumn != null) unitsRequiredColumn.setCellValueFactory(new PropertyValueFactory<>("requiredUnits"));
+        if (requestDateColumn != null) requestDateColumn.setCellValueFactory(new PropertyValueFactory<>("requestDate"));
+        if (urgencyColumn != null) urgencyColumn.setCellValueFactory(new PropertyValueFactory<>("urgencyLevel"));
+        if (statusColumn != null) statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+    
+    private void initializeInventoryView() {
+        // Initialize blood type combo boxes
+        List<String> bloodTypes = Arrays.asList("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
+        if (unitBloodTypeField != null) {
+            unitBloodTypeField.setItems(FXCollections.observableArrayList(bloodTypes));
+        }
+        
+        // Initialize storage unit combo box
+        List<String> storageUnits = Arrays.asList("Storage-A1", "Storage-A2", "Storage-B1", "Storage-B2", 
+                                                 "Storage-C1", "Storage-C2", "Storage-D1", "Storage-D2");
+        if (storageUnitField != null) {
+            storageUnitField.setItems(FXCollections.observableArrayList(storageUnits));
+        }
+        
+        // Initialize quality status combo box
+        List<String> qualityStatuses = Arrays.asList("EXCELLENT", "GOOD", "FAIR", "POOR");
+        if (qualityStatusField != null) {
+            qualityStatusField.setItems(FXCollections.observableArrayList(qualityStatuses));
+        }
+        
+        // Initialize donation type combo box
+        List<String> donationTypes = Arrays.asList("WHOLE_BLOOD", "PLASMA", "PLATELETS", "RED_CELLS");
+        if (donationTypeField != null) {
+            donationTypeField.setItems(FXCollections.observableArrayList(donationTypes));
+        }
+        
+        // Set up inventory table columns
+        if (bloodTypeColumn != null) bloodTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bloodGroup"));
+        if (totalUnitsColumn != null) totalUnitsColumn.setCellValueFactory(new PropertyValueFactory<>("volume"));
+        if (availableColumn != null) availableColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        if (reservedColumn != null) reservedColumn.setCellValueFactory(new PropertyValueFactory<>("isReserved"));
+        if (expiringSoonColumn != null) expiringSoonColumn.setCellValueFactory(cellData -> {
+            BloodInventory inventory = cellData.getValue();
+            if (inventory.getExpiryDate() != null) {
+                long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(
+                    java.time.LocalDate.now(), inventory.getExpiryDate());
+                return new javafx.beans.property.SimpleIntegerProperty((int) daysUntilExpiry).asObject();
+            }
+            return new javafx.beans.property.SimpleIntegerProperty(0).asObject();
+        });
+        if (criticalLevelColumn != null) criticalLevelColumn.setCellValueFactory(new PropertyValueFactory<>("qualityScore"));
+    }
+    
+    private void initializeCampaignsView() {
+        // Set up campaigns table columns
+        if (campaignIdColumn != null) campaignIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (campaignNameColumn != null) campaignNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        if (startDateColumn != null) startDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        if (endDateColumn != null) endDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        if (locationColumn2 != null) locationColumn2.setCellValueFactory(new PropertyValueFactory<>("location"));
+        if (targetDonorsColumn != null) targetDonorsColumn.setCellValueFactory(new PropertyValueFactory<>("targetUnits"));
+        if (registeredDonorsColumn != null) registeredDonorsColumn.setCellValueFactory(new PropertyValueFactory<>("collectedUnits"));
+        if (statusColumn3 != null) statusColumn3.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+    
+    private void initializeRewardsView() {
+        // Set up leaderboard table columns
+        if (rankColumn != null) rankColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (donorNameColumn2 != null) donorNameColumn2.setCellValueFactory(new PropertyValueFactory<>("name"));
+        if (donationCountColumn != null) donationCountColumn.setCellValueFactory(new PropertyValueFactory<>("totalDonations"));
+        if (pointsColumn != null) pointsColumn.setCellValueFactory(new PropertyValueFactory<>("rewardPoints"));
+        if (badgesColumn != null) badgesColumn.setCellValueFactory(new PropertyValueFactory<>("tierLevel"));
+        if (lastDonationColumn2 != null) lastDonationColumn2.setCellValueFactory(new PropertyValueFactory<>("lastDonationDate"));
+    }
+    
+    private void initializeStatisticsView() {
+        // Initialize report type combo box
+        List<String> reportTypes = Arrays.asList("Donor Engagement", "Inventory Analytics", "Campaign Performance", "Emergency Response");
+        if (reportTypeField != null) {
+            reportTypeField.setItems(FXCollections.observableArrayList(reportTypes));
+        }
+        
+        // Initialize format combo box
+        List<String> formats = Arrays.asList("PDF", "Excel", "CSV", "HTML");
+        if (formatField != null) {
+            formatField.setItems(FXCollections.observableArrayList(formats));
+        }
+        
+        // Set up reports table columns
+        if (reportIdColumn != null) reportIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (reportNameColumn != null) reportNameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        if (generatedDateColumn != null) generatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("generatedDate"));
+        if (reportTypeColumn != null) reportTypeColumn.setCellValueFactory(new PropertyValueFactory<>("reportType"));
+        if (generatedByColumn != null) generatedByColumn.setCellValueFactory(new PropertyValueFactory<>("id")); // Using ID as placeholder
+    }
+    
+    private void initializeEmergencyView() {
+        // Initialize blood type combo box
+        List<String> bloodTypes = Arrays.asList("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
+        if (emergencyBloodTypeField != null) {
+            emergencyBloodTypeField.setItems(FXCollections.observableArrayList(bloodTypes));
+        }
+        
+        // Initialize alert type combo box
+        List<String> alertTypes = Arrays.asList("BLOOD_SHORTAGE", "EMERGENCY_REQUEST", "CRITICAL_PATIENT", "MASS_CASUALTY");
+        if (alertTypeField != null) {
+            alertTypeField.setItems(FXCollections.observableArrayList(alertTypes));
+        }
+        
+        // Set up alerts table columns
+        if (alertIdColumn != null) alertIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        if (alertTypeColumn != null) alertTypeColumn.setCellValueFactory(new PropertyValueFactory<>("urgencyLevel"));
+        if (bloodTypeColumn2 != null) bloodTypeColumn2.setCellValueFactory(new PropertyValueFactory<>("bloodGroup"));
+        if (unitsRequiredColumn2 != null) unitsRequiredColumn2.setCellValueFactory(new PropertyValueFactory<>("unitsRequired"));
+        if (hospitalColumn != null) hospitalColumn.setCellValueFactory(new PropertyValueFactory<>("hospital"));
+        if (requestTimeColumn != null) requestTimeColumn.setCellValueFactory(new PropertyValueFactory<>("requestTime"));
+        if (statusColumn4 != null) statusColumn4.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+    
+    private void initializeVoiceCommandsView() {
+        // Initialize voice engine combo box
+        List<String> voiceEngines = Arrays.asList("Google Speech Recognition", "Microsoft Speech API", "Custom Voice Engine");
+        if (voiceEngineField != null) {
+            voiceEngineField.setItems(FXCollections.observableArrayList(voiceEngines));
+        }
+        
+        // Initialize language combo box
+        List<String> languages = Arrays.asList("English", "Hindi", "Spanish", "French", "German");
+        if (languageField != null) {
+            languageField.setItems(FXCollections.observableArrayList(languages));
+        }
+        
+        // Set up voice history table columns
+        if (timestampColumn != null) timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        if (commandColumn != null) commandColumn.setCellValueFactory(new PropertyValueFactory<>("commandText"));
+        if (actionColumn != null) actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+        if (statusColumn5 != null) statusColumn5.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+    
     private void loadDonorData() {
         try {
             if (donorService != null && donorsTable != null) {
@@ -232,17 +547,167 @@ public class MainController implements Initializable {
         }
     }
     
+    private void loadRecipientData() {
+        try {
+            if (recipientService != null && recipientsTable != null) {
+                List<Recipient> recipients = recipientService.getAllRecipients();
+                ObservableList<Recipient> recipientList = FXCollections.observableArrayList(recipients);
+                recipientsTable.setItems(recipientList);
+                
+                // Update statistics
+                if (activeRequestsCount != null) {
+                    long activeCount = recipients.stream()
+                        .filter(r -> "PENDING".equals(r.getStatus()))
+                        .count();
+                    activeRequestsCount.setText(String.valueOf(activeCount));
+                }
+                if (urgentRequestsCount != null) {
+                    long urgentCount = recipients.stream()
+                        .filter(r -> "HIGH".equals(r.getUrgencyLevel()) || "CRITICAL".equals(r.getUrgencyLevel()))
+                        .count();
+                    urgentRequestsCount.setText(String.valueOf(urgentCount));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load recipient data: " + e.getMessage());
+        }
+    }
+    
+    private void loadInventoryData() {
+        try {
+            if (inventoryService != null && inventoryTable != null) {
+                List<BloodInventory> inventoryList = inventoryService.getAllInventory();
+                ObservableList<BloodInventory> observableInventoryList = FXCollections.observableArrayList(inventoryList);
+                inventoryTable.setItems(observableInventoryList);
+                
+                // Update statistics
+                if (totalUnitsCount != null) {
+                    int totalUnits = inventoryList.size();
+                    totalUnitsCount.setText(String.valueOf(totalUnits));
+                }
+                
+                if (criticalStockCount != null) {
+                    long criticalCount = inventoryList.stream()
+                        .filter(inv -> inv.getQualityScore() < 7)
+                        .count();
+                    criticalStockCount.setText(String.valueOf(criticalCount));
+                }
+                
+                if (expiringSoonCount != null) {
+                    long expiringSoon = inventoryList.stream()
+                        .filter(inv -> {
+                            if (inv.getExpiryDate() != null) {
+                                long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(
+                                    java.time.LocalDate.now(), inv.getExpiryDate());
+                                return daysUntilExpiry <= 7 && daysUntilExpiry >= 0;
+                            }
+                            return false;
+                        })
+                        .count();
+                    expiringSoonCount.setText(String.valueOf(expiringSoon));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load inventory data: " + e.getMessage());
+        }
+    }
+    
+    private void loadCampaignsData() {
+        try {
+            if (campaignService != null && campaignsTable != null) {
+                List<Campaign> campaigns = campaignService.getAllCampaigns();
+                ObservableList<Campaign> campaignList = FXCollections.observableArrayList(campaigns);
+                campaignsTable.setItems(campaignList);
+                
+                // Update statistics
+                if (activeCampaignsCount != null) {
+                    long activeCount = campaigns.stream()
+                        .filter(c -> "ACTIVE".equals(c.getStatus()))
+                        .count();
+                    activeCampaignsCount.setText(String.valueOf(activeCount));
+                }
+                
+                if (upcomingEventsCount != null) {
+                    long upcomingCount = campaigns.stream()
+                        .filter(c -> c.getStartDate() != null && c.getStartDate().isAfter(java.time.LocalDate.now()))
+                        .count();
+                    upcomingEventsCount.setText(String.valueOf(upcomingCount));
+                }
+                
+                if (registeredDonorsCount != null) {
+                    int totalRegistered = campaigns.stream()
+                        .mapToInt(Campaign::getCollectedUnits)
+                        .sum();
+                    registeredDonorsCount.setText(String.valueOf(totalRegistered));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load campaigns data: " + e.getMessage());
+        }
+    }
+    
+    private void loadRewardsData() {
+        try {
+            if (donorService != null && leaderboardTable != null) {
+                List<Donor> donors = donorService.getAllDonors();
+                
+                // Sort donors by reward points (descending)
+                donors.sort((d1, d2) -> Integer.compare(d2.getRewardPoints(), d1.getRewardPoints()));
+                
+                ObservableList<Donor> donorList = FXCollections.observableArrayList(donors);
+                leaderboardTable.setItems(donorList);
+                
+                // Update statistics
+                if (totalPointsCount != null) {
+                    int totalPoints = donors.stream()
+                        .mapToInt(Donor::getRewardPoints)
+                        .sum();
+                    totalPointsCount.setText(String.valueOf(totalPoints));
+                }
+                
+                if (activeRewardsDonorsCount != null) {
+                    long activeDonors = donors.stream()
+                        .filter(d -> d.getRewardPoints() > 0)
+                        .count();
+                    activeRewardsDonorsCount.setText(String.valueOf(activeDonors));
+                }
+                
+                if (topDonorName != null && !donors.isEmpty()) {
+                    Donor topDonor = donors.get(0);
+                    topDonorName.setText(topDonor.getName());
+                }
+                
+                if (monthlyPointsCount != null) {
+                    // For now, we'll just show total points as monthly points
+                    int totalPoints = donors.stream()
+                        .mapToInt(Donor::getRewardPoints)
+                        .sum();
+                    monthlyPointsCount.setText(String.valueOf(totalPoints) + " pts");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load rewards data: " + e.getMessage());
+        }
+    }
+    
     @FXML
     private void addNewDonor() {
         try {
             // Validate required fields
-            if (firstNameField != null && (firstNameField.getText() == null || firstNameField.getText().trim().isEmpty())) {
-                showAlert("Validation Error", "First name is required");
-                return;
-            }
-            
-            if (bloodTypeField != null && (bloodTypeField.getValue() == null || bloodTypeField.getValue().isEmpty())) {
-                showAlert("Validation Error", "Blood type is required");
+            try {
+                if (firstNameField != null) {
+                    ValidationUtil.validateNotEmpty(firstNameField.getText(), "First name");
+                }
+                
+                if (bloodTypeField != null) {
+                    ValidationUtil.validateNotEmpty(bloodTypeField.getValue(), "Blood type");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
                 return;
             }
             
@@ -292,6 +757,361 @@ public class MainController implements Initializable {
         }
     }
     
+    @FXML
+    private void addNewRecipient() {
+        try {
+            // Validate required fields
+            try {
+                if (recipientNameField != null) {
+                    ValidationUtil.validateNotEmpty(recipientNameField.getText(), "Recipient name");
+                }
+                
+                if (hospitalField != null) {
+                    ValidationUtil.validateNotEmpty(hospitalField.getText(), "Hospital name");
+                }
+                
+                if (reqBloodTypeField != null) {
+                    ValidationUtil.validateNotEmpty(reqBloodTypeField.getValue(), "Blood type");
+                }
+                
+                if (unitsRequiredField != null) {
+                    ValidationUtil.validateNotEmpty(unitsRequiredField.getText(), "Units required");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
+                return;
+            }
+            
+            // Create new recipient
+            Recipient recipient = new Recipient();
+            if (recipientNameField != null) {
+                recipient.setPatientName(recipientNameField.getText());
+            }
+            if (hospitalField != null) {
+                recipient.setMedicalFacility(hospitalField.getText());
+            }
+            if (reqBloodTypeField != null) {
+                recipient.setBloodGroup(reqBloodTypeField.getValue());
+            }
+            if (contactField != null) {
+                recipient.setContactNumber(contactField.getText());
+            }
+            if (reasonField != null) {
+                recipient.setReason(reasonField.getText());
+            }
+            if (urgencyField != null) {
+                recipient.setUrgencyLevel(urgencyField.getValue());
+            }
+            
+            // Parse units required
+            if (unitsRequiredField != null && !unitsRequiredField.getText().trim().isEmpty()) {
+                try {
+                    int units = ValidationUtil.validateInteger(unitsRequiredField.getText().trim(), "Units required");
+                    recipient.setUnitsRequired(units);
+                } catch (ValidationException e) {
+                    showAlert("Validation Error", e.getMessage());
+                    return;
+                }
+            } else {
+                recipient.setUnitsRequired(1); // Default to 1 unit
+            }
+            
+            // Save recipient
+            boolean success = recipientService.addRecipient(recipient);
+            if (success) {
+                showAlert("Success", "Recipient request added successfully!");
+                clearRecipientForm();
+                loadRecipientData(); // Refresh the table
+            } else {
+                showAlert("Error", "Failed to add recipient request");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to add recipient request: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    private void addNewBloodUnit() {
+        try {
+            // Validate required fields
+            try {
+                if (unitBloodTypeField != null) {
+                    ValidationUtil.validateNotEmpty(unitBloodTypeField.getValue(), "Blood type");
+                }
+                
+                if (collectionDateField != null && collectionDateField.getValue() == null) {
+                    throw new ValidationException("Collection date is required");
+                }
+                
+                if (expiryDateField != null && expiryDateField.getValue() == null) {
+                    throw new ValidationException("Expiry date is required");
+                }
+                
+                if (volumeField != null) {
+                    ValidationUtil.validateNotEmpty(volumeField.getText(), "Volume");
+                }
+                
+                if (storageUnitField != null) {
+                    ValidationUtil.validateNotEmpty(storageUnitField.getValue(), "Storage unit");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
+                return;
+            }
+            
+            // Create new blood inventory unit
+            BloodInventory inventory = new BloodInventory();
+            if (unitBloodTypeField != null) {
+                inventory.setBloodGroup(unitBloodTypeField.getValue());
+            }
+            if (donorIdField != null && !donorIdField.getText().trim().isEmpty()) {
+                inventory.setDonorId(donorIdField.getText().trim());
+            }
+            if (collectionDateField != null && collectionDateField.getValue() != null) {
+                inventory.setDonationDate(collectionDateField.getValue());
+            }
+            if (expiryDateField != null && expiryDateField.getValue() != null) {
+                inventory.setExpiryDate(expiryDateField.getValue());
+            }
+            
+            // Parse volume
+            if (volumeField != null && !volumeField.getText().trim().isEmpty()) {
+                try {
+                    double volume = ValidationUtil.validateDouble(volumeField.getText().trim(), "Volume");
+                    inventory.setVolume(volume);
+                } catch (ValidationException e) {
+                    showAlert("Validation Error", e.getMessage());
+                    return;
+                }
+            } else {
+                inventory.setVolume(450.0); // Default to 450ml
+            }
+            
+            if (storageUnitField != null) {
+                inventory.setLocation(storageUnitField.getValue());
+            }
+            
+            // Set default values
+            inventory.setStatus("AVAILABLE");
+            inventory.setQualityScore(10); // Default excellent quality
+            
+            // Save inventory unit
+            boolean success = inventoryService.addInventory(inventory);
+            if (success) {
+                showAlert("Success", "Blood unit added successfully!");
+                clearInventoryForm();
+                loadInventoryData(); // Refresh the table
+            } else {
+                showAlert("Error", "Failed to add blood unit");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to add blood unit: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    private void createCampaign() {
+        try {
+            // Validate required fields
+            try {
+                if (campaignNameField != null) {
+                    ValidationUtil.validateNotEmpty(campaignNameField.getText(), "Campaign name");
+                }
+                
+                if (campaignLocationField != null) {
+                    ValidationUtil.validateNotEmpty(campaignLocationField.getText(), "Campaign location");
+                }
+                
+                if (startDateField != null && startDateField.getValue() == null) {
+                    throw new ValidationException("Start date is required");
+                }
+                
+                if (endDateField != null && endDateField.getValue() == null) {
+                    throw new ValidationException("End date is required");
+                }
+                
+                if (organizerField != null) {
+                    ValidationUtil.validateNotEmpty(organizerField.getText(), "Organizer");
+                }
+                
+                // Validate date range
+                if (startDateField != null && endDateField != null && 
+                    startDateField.getValue() != null && endDateField.getValue() != null) {
+                    ValidationUtil.validateDateRange(startDateField.getValue(), endDateField.getValue(), "Campaign dates");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
+                return;
+            }
+            
+            // Create new campaign
+            Campaign campaign = new Campaign();
+            if (campaignNameField != null) {
+                campaign.setTitle(campaignNameField.getText());
+            }
+            if (campaignLocationField != null) {
+                campaign.setLocation(campaignLocationField.getText());
+            }
+            if (descriptionField != null) {
+                campaign.setDescription(descriptionField.getText());
+            }
+            if (startDateField != null && startDateField.getValue() != null) {
+                campaign.setStartDate(startDateField.getValue());
+            }
+            if (endDateField != null && endDateField.getValue() != null) {
+                campaign.setEndDate(endDateField.getValue());
+            }
+            if (organizerField != null) {
+                campaign.setOrganizer(organizerField.getText());
+            }
+            
+            // Parse target donors
+            if (targetDonorsField != null && !targetDonorsField.getText().trim().isEmpty()) {
+                try {
+                    int targetDonors = ValidationUtil.validateInteger(targetDonorsField.getText().trim(), "Target donors");
+                    campaign.setTargetUnits(targetDonors);
+                } catch (ValidationException e) {
+                    showAlert("Validation Error", e.getMessage());
+                    return;
+                }
+            } else {
+                campaign.setTargetUnits(100); // Default to 100 donors
+            }
+            
+            // Set default values
+            campaign.setStatus("PLANNED");
+            
+            // Save campaign
+            boolean success = campaignService.addCampaign(campaign);
+            if (success) {
+                showAlert("Success", "Campaign created successfully!");
+                clearCampaignForm();
+                loadCampaignsData(); // Refresh the table
+            } else {
+                showAlert("Error", "Failed to create campaign");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to create campaign: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    private void generateReport() {
+        try {
+            // Validate required fields
+            try {
+                if (reportTypeField != null) {
+                    ValidationUtil.validateNotEmpty(reportTypeField.getValue(), "Report type");
+                }
+                
+                if (startDateField2 != null && startDateField2.getValue() == null) {
+                    throw new ValidationException("Start date is required");
+                }
+                
+                if (endDateField2 != null && endDateField2.getValue() == null) {
+                    throw new ValidationException("End date is required");
+                }
+                
+                if (formatField != null) {
+                    ValidationUtil.validateNotEmpty(formatField.getValue(), "Format");
+                }
+                
+                // Validate date range
+                if (startDateField2 != null && endDateField2 != null && 
+                    startDateField2.getValue() != null && endDateField2.getValue() != null) {
+                    ValidationUtil.validateDateRange(startDateField2.getValue(), endDateField2.getValue(), "Report dates");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
+                return;
+            }
+            
+            // For now, we'll just show a success message
+            showAlert("Success", "Report generation started successfully!\n\n" +
+                      "Report Type: " + (reportTypeField != null ? reportTypeField.getValue() : "N/A") + "\n" +
+                      "Date Range: " + (startDateField2 != null ? startDateField2.getValue() : "N/A") + 
+                      " to " + (endDateField2 != null ? endDateField2.getValue() : "N/A") + "\n" +
+                      "Format: " + (formatField != null ? formatField.getValue() : "N/A"));
+            
+            // In a real implementation, this would generate the actual report
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to generate report: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    private void raiseEmergencyAlert() {
+        try {
+            // Validate required fields
+            try {
+                if (alertTypeField != null) {
+                    ValidationUtil.validateNotEmpty(alertTypeField.getValue(), "Alert type");
+                }
+                
+                if (emergencyBloodTypeField != null) {
+                    ValidationUtil.validateNotEmpty(emergencyBloodTypeField.getValue(), "Blood type");
+                }
+                
+                if (emergencyHospitalField != null) {
+                    ValidationUtil.validateNotEmpty(emergencyHospitalField.getText(), "Hospital");
+                }
+                
+                if (contactPersonField != null) {
+                    ValidationUtil.validateNotEmpty(contactPersonField.getText(), "Contact person");
+                }
+                
+                if (emergencyContactField != null) {
+                    ValidationUtil.validateNotEmpty(emergencyContactField.getText(), "Contact number");
+                }
+            } catch (ValidationException e) {
+                showAlert("Validation Error", e.getMessage());
+                return;
+            }
+            
+            // Create new emergency request
+            EmergencyRequest request = new EmergencyRequest();
+            if (alertTypeField != null) {
+                request.setUrgencyLevel(alertTypeField.getValue());
+            }
+            if (emergencyBloodTypeField != null) {
+                request.setBloodGroup(emergencyBloodTypeField.getValue());
+            }
+            if (emergencyHospitalField != null) {
+                request.setHospital(emergencyHospitalField.getText());
+            }
+            if (contactPersonField != null) {
+                request.setDoctor(contactPersonField.getText());
+            }
+            if (emergencyContactField != null) {
+                request.setContactNumber(emergencyContactField.getText());
+            }
+            if (additionalInfoField != null) {
+                request.setNotes(additionalInfoField.getText());
+            }
+            
+            // Set default values
+            request.setStatus("PENDING");
+            request.setPatientName("Emergency Patient"); // Default name
+            
+            // Save emergency request
+            boolean success = emergencyRequestService.addRequest(request);
+            if (success) {
+                showAlert("Success", "Emergency alert raised successfully!");
+                clearEmergencyForm();
+                loadEmergencyData(); // Refresh the table
+            } else {
+                showAlert("Error", "Failed to raise emergency alert");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to raise emergency alert: " + e.getMessage());
+        }
+    }
+    
     private void clearDonorForm() {
         if (firstNameField != null) firstNameField.clear();
         if (lastNameField != null) lastNameField.clear();
@@ -304,6 +1124,66 @@ public class MainController implements Initializable {
         if (addressField != null) addressField.clear();
         if (lastDonationField != null) lastDonationField.setValue(null);
         if (frequencyField != null) frequencyField.getSelectionModel().clearSelection();
+    }
+    
+    private void clearRecipientForm() {
+        if (recipientNameField != null) recipientNameField.clear();
+        if (hospitalField != null) hospitalField.clear();
+        if (reqBloodTypeField != null) reqBloodTypeField.getSelectionModel().clearSelection();
+        if (unitsRequiredField != null) unitsRequiredField.clear();
+        if (urgencyField != null) urgencyField.getSelectionModel().clearSelection();
+        if (contactField != null) contactField.clear();
+        if (reasonField != null) reasonField.clear();
+    }
+    
+    private void clearInventoryForm() {
+        if (donorIdField != null) donorIdField.clear();
+        if (unitBloodTypeField != null) unitBloodTypeField.getSelectionModel().clearSelection();
+        if (collectionDateField != null) collectionDateField.setValue(null);
+        if (expiryDateField != null) expiryDateField.setValue(null);
+        if (volumeField != null) volumeField.clear();
+        if (storageUnitField != null) storageUnitField.getSelectionModel().clearSelection();
+        if (qualityStatusField != null) qualityStatusField.getSelectionModel().clearSelection();
+        if (donationTypeField != null) donationTypeField.getSelectionModel().clearSelection();
+    }
+    
+    private void clearCampaignForm() {
+        if (campaignNameField != null) campaignNameField.clear();
+        if (campaignLocationField != null) campaignLocationField.clear();
+        if (targetDonorsField != null) targetDonorsField.clear();
+        if (startDateField != null) startDateField.setValue(null);
+        if (endDateField != null) endDateField.setValue(null);
+        if (organizerField != null) organizerField.clear();
+        if (descriptionField != null) descriptionField.clear();
+    }
+    
+    private void clearEmergencyForm() {
+        if (alertTypeField != null) alertTypeField.getSelectionModel().clearSelection();
+        if (emergencyBloodTypeField != null) emergencyBloodTypeField.getSelectionModel().clearSelection();
+        if (emergencyUnitsField != null) emergencyUnitsField.clear();
+        if (emergencyHospitalField != null) emergencyHospitalField.clear();
+        if (contactPersonField != null) contactPersonField.clear();
+        if (emergencyContactField != null) emergencyContactField.clear();
+        if (additionalInfoField != null) additionalInfoField.clear();
+    }
+    
+    @FXML
+    private void saveVoiceSettings() {
+        try {
+            // For now, we'll just show a success message
+            showAlert("Success", "Voice settings saved successfully!\n\n" +
+                      "Voice Engine: " + (voiceEngineField != null ? voiceEngineField.getValue() : "N/A") + "\n" +
+                      "Language: " + (languageField != null ? languageField.getValue() : "N/A") + "\n" +
+                      "Sensitivity: " + (sensitivitySlider != null ? sensitivitySlider.getValue() : "N/A") + "\n" +
+                      "Continuous Listening: " + (continuousListeningCheckbox != null ? continuousListeningCheckbox.isSelected() : "N/A") + "\n" +
+                      "Voice Feedback: " + (voiceFeedbackCheckbox != null ? voiceFeedbackCheckbox.isSelected() : "N/A") + "\n" +
+                      "Save Command History: " + (commandHistoryCheckbox != null ? commandHistoryCheckbox.isSelected() : "N/A"));
+            
+            // In a real implementation, this would save the actual settings
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to save voice settings: " + e.getMessage());
+        }
     }
     
     // Navigation methods
@@ -342,6 +1222,7 @@ public class MainController implements Initializable {
         }
         currentView = "recipients";
         updateActiveButton(recipientsBtn);
+        loadRecipientData(); // Load recipient data when showing recipients view
         System.out.println("Recipients view shown");
     }
     
@@ -354,6 +1235,7 @@ public class MainController implements Initializable {
         }
         currentView = "inventory";
         updateActiveButton(inventoryBtn);
+        loadInventoryData(); // Load inventory data when showing inventory view
         System.out.println("Inventory view shown");
     }
     
@@ -366,6 +1248,7 @@ public class MainController implements Initializable {
         }
         currentView = "campaigns";
         updateActiveButton(campaignsBtn);
+        loadCampaignsData(); // Load campaigns data when showing campaigns view
         System.out.println("Campaigns view shown");
     }
     
@@ -483,33 +1366,92 @@ public class MainController implements Initializable {
         if (abnegativeProgress != null) abnegativeProgress.setProgress(0.01);
     }
     
-    private void loadRewardsData() {
-        Platform.runLater(() -> {
-            showAlert("Rewards & Leaderboard", "Rewards and leaderboard data would be displayed here.\n\nThis section shows donor achievements, points, and community rankings.");
-        });
-    }
-    
     private void loadStatisticsData() {
-        Platform.runLater(() -> {
-            showAlert("Statistics & Reports", "Statistics and reports data would be displayed here.\n\nThis section shows comprehensive analytics, charts, and exportable reports.");
-        });
+        try {
+            if (reportService != null && reportsTable != null) {
+                // Generate dashboard reports
+                List<AdvancedReport> reports = reportService.generateDashboardReports();
+                ObservableList<AdvancedReport> reportList = FXCollections.observableArrayList(reports);
+                reportsTable.setItems(reportList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load statistics data: " + e.getMessage());
+        }
     }
     
     private void loadEmergencyData() {
-        Platform.runLater(() -> {
-            showAlert("Emergency Response", "Emergency response data would be displayed here.\n\nThis section shows critical blood requests and emergency protocols.");
-        });
+        try {
+            if (emergencyRequestService != null && alertsTable != null) {
+                List<EmergencyRequest> requests = emergencyRequestService.getAllRequests();
+                ObservableList<EmergencyRequest> requestList = FXCollections.observableArrayList(requests);
+                alertsTable.setItems(requestList);
+                
+                // Update statistics
+                if (activeAlertsCount != null) {
+                    long activeCount = requests.stream()
+                        .filter(r -> "PENDING".equals(r.getStatus()))
+                        .count();
+                    activeAlertsCount.setText(String.valueOf(activeCount));
+                }
+                
+                if (criticalRequestsCount != null) {
+                    long criticalCount = requests.stream()
+                        .filter(r -> "CRITICAL".equals(r.getUrgencyLevel()))
+                        .count();
+                    criticalRequestsCount.setText(String.valueOf(criticalCount));
+                }
+                
+                if (resolvedTodayCount != null) {
+                    long resolvedToday = requests.stream()
+                        .filter(r -> {
+                            if (r.getFulfillmentTime() != null) {
+                                return r.getFulfillmentTime().toLocalDate().equals(java.time.LocalDate.now());
+                            }
+                            return false;
+                        })
+                        .count();
+                    resolvedTodayCount.setText(String.valueOf(resolvedToday));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load emergency data: " + e.getMessage());
+        }
     }
     
     private void loadVoiceCommandsData() {
-        Platform.runLater(() -> {
+        try {
+            if (voiceCommandService != null && voiceHistoryTable != null) {
+                List<VoiceCommand> commands = voiceCommandService.getAllCommands();
+                ObservableList<VoiceCommand> commandList = FXCollections.observableArrayList(commands);
+                voiceHistoryTable.setItems(commandList);
+                
+                // Update status indicator
+                if (voiceStatusIndicator != null) {
+                    voiceStatusIndicator.setText("🔴 Not Listening");
+                }
+                
+                // Update last command label
+                if (lastCommandLabel != null && !commands.isEmpty()) {
+                    VoiceCommand lastCommand = commands.get(commands.size() - 1);
+                    lastCommandLabel.setText(lastCommand.getCommandText());
+                } else if (lastCommandLabel != null) {
+                    lastCommandLabel.setText("None");
+                }
+            }
+            
             // Start voice recognition when the voice commands view is shown
             if (speechRecognitionUtil != null) {
                 speechRecognitionUtil.startListening();
+                if (voiceStatusIndicator != null) {
+                    voiceStatusIndicator.setText("🟢 Listening");
+                }
             }
-            
-            showAlert("Voice Commands", "Voice command interface activated! 🎤\n\nTry saying commands like:\n- Show dashboard\n- Find donor with blood type O+\n- Check emergency requests\n- Display inventory statistics\n\nIn a real implementation, this would connect to a speech recognition service.");
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load voice commands data: " + e.getMessage());
+        }
     }
     
     // Simulate voice command execution

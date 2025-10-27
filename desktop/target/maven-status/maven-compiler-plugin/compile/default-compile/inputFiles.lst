@@ -2,6 +2,8 @@ C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\de
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\dao\BloodStatisticsDao.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\dao\EmergencyRequestDao.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\db\Db.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\exception\ServiceException.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\exception\ValidationException.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\MainApp.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\model\AdvancedReport.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\model\BloodInventory.java
@@ -37,3 +39,4 @@ C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\de
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ReportGenerator.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ScheduledReportDialog.java
 C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\SpeechRecognitionUtil.java
+C:\Users\Lalit Punjabi\BloodMate-Advanced\desktop\src\main\java\com\bloodmate\desktop\util\ValidationUtil.java

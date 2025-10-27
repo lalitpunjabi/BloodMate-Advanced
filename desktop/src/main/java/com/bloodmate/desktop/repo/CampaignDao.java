@@ -29,12 +29,11 @@ public class CampaignDao {
             "target_units INT DEFAULT 50," +
             "collected_units INT DEFAULT 0," +
             "status ENUM('PLANNED', 'ACTIVE', 'COMPLETED', 'CANCELLED') DEFAULT 'PLANNED'," +
-            "organizer VARCHAR(100) NOT NULL," +
-            "contact_number VARCHAR(50)," +
-            "created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-            "participant_count INT DEFAULT 0," +
-            "requirements TEXT," +
-            "incentives TEXT," +
+            "organizer_name VARCHAR(100) NOT NULL," +
+            "organizer_contact VARCHAR(50)," +
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+            "registered_donors INT DEFAULT 0," +
+            "special_requirements TEXT," +
             "INDEX idx_status (status)," +
             "INDEX idx_dates (start_date, end_date)," +
             "INDEX idx_city (city)" +
@@ -48,7 +47,7 @@ public class CampaignDao {
 
     public List<Campaign> findAll() {
         List<Campaign> list = new ArrayList<>();
-        String sql = "SELECT * FROM campaigns ORDER BY start_date DESC, created_date DESC";
+        String sql = "SELECT * FROM campaigns ORDER BY start_date DESC, created_at DESC";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 list.add(mapResultSetToCampaign(rs));
@@ -109,8 +108,8 @@ public class CampaignDao {
         campaign.setId(id);
 
         String sql = "INSERT INTO campaigns (id, title, description, start_date, end_date, location, " +
-                "city, state, target_units, collected_units, status, organizer, contact_number, " +
-                "participant_count, requirements, incentives) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "city, state, target_units, collected_units, status, organizer_name, organizer_contact, " +
+                "registered_donors, special_requirements) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, id);
             ps.setString(2, campaign.getTitle());
@@ -127,7 +126,6 @@ public class CampaignDao {
             ps.setString(13, campaign.getContactNumber());
             ps.setInt(14, campaign.getParticipantCount());
             ps.setString(15, campaign.getRequirements());
-            ps.setString(16, campaign.getIncentives());
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,8 +135,8 @@ public class CampaignDao {
 
     public boolean update(Campaign campaign) {
         String sql = "UPDATE campaigns SET title=?, description=?, start_date=?, end_date=?, location=?, " +
-                "city=?, state=?, target_units=?, collected_units=?, status=?, organizer=?, " +
-                "contact_number=?, participant_count=?, requirements=?, incentives=? WHERE id=?";
+                "city=?, state=?, target_units=?, collected_units=?, status=?, organizer_name=?, " +
+                "organizer_contact=?, registered_donors=?, special_requirements=? WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, campaign.getTitle());
             ps.setString(2, campaign.getDescription());
@@ -154,8 +152,7 @@ public class CampaignDao {
             ps.setString(12, campaign.getContactNumber());
             ps.setInt(13, campaign.getParticipantCount());
             ps.setString(14, campaign.getRequirements());
-            ps.setString(15, campaign.getIncentives());
-            ps.setString(16, campaign.getId());
+            ps.setString(15, campaign.getId());
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -213,13 +210,13 @@ public class CampaignDao {
         campaign.setTargetUnits(rs.getInt("target_units"));
         campaign.setCollectedUnits(rs.getInt("collected_units"));
         campaign.setStatus(rs.getString("status"));
-        campaign.setOrganizer(rs.getString("organizer"));
-        campaign.setContactNumber(rs.getString("contact_number"));
-        Timestamp createdDate = rs.getTimestamp("created_date");
-        if (createdDate != null) campaign.setCreatedDate(createdDate.toLocalDateTime());
-        campaign.setParticipantCount(rs.getInt("participant_count"));
-        campaign.setRequirements(rs.getString("requirements"));
-        campaign.setIncentives(rs.getString("incentives"));
+        campaign.setOrganizer(rs.getString("organizer_name"));
+        campaign.setContactNumber(rs.getString("organizer_contact"));
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) campaign.setCreatedDate(createdAt.toLocalDateTime());
+        campaign.setParticipantCount(rs.getInt("registered_donors"));
+        campaign.setRequirements(rs.getString("special_requirements"));
+        // The incentives field doesn't exist in the database schema, so we'll leave it as default
         return campaign;
     }
 }
