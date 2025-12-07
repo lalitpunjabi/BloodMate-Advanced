@@ -1,6 +1,7 @@
 com\bloodmate\desktop\report\CustomReportDialog$ReportParameters.class
 com\bloodmate\desktop\util\CustomReportDialog.class
 com\bloodmate\desktop\util\ScheduledReportDialog.class
+com\bloodmate\desktop\controller\SignUpController.class
 com\bloodmate\desktop\service\VoiceCommandService.class
 com\bloodmate\desktop\repo\BloodStatisticsDao.class
 com\bloodmate\desktop\repo\EmergencyRequestDao.class
@@ -12,6 +13,7 @@ com\bloodmate\desktop\repo\RecipientDao.class
 com\bloodmate\desktop\report\CustomReportDialog$1.class
 com\bloodmate\desktop\service\BloodInventoryService.class
 com\bloodmate\desktop\dao\BloodStatisticsDao.class
+com\bloodmate\desktop\util\ImageGenerator.class
 com\bloodmate\desktop\model\BloodInventory.class
 com\bloodmate\desktop\report\ScheduledReportDialog.class
 com\bloodmate\desktop\report\CustomReportDialog.class
@@ -38,11 +40,13 @@ com\bloodmate\desktop\report\ScheduledReportDialog$ScheduleParameters.class
 com\bloodmate\desktop\model\RecipientRequest.class
 com\bloodmate\desktop\model\Donor.class
 com\bloodmate\desktop\model\EmergencyRequest.class
+com\bloodmate\desktop\TestSignUp.class
 com\bloodmate\desktop\service\EmergencyRequestService.class
 com\bloodmate\desktop\model\AdvancedReport.class
 com\bloodmate\desktop\repo\DonorDao.class
 com\bloodmate\desktop\repo\VoiceCommandDao.class
 com\bloodmate\desktop\service\DonorService.class
+com\bloodmate\desktop\controller\LoginController.class
 com\bloodmate\desktop\model\BloodUnit.class
 com\bloodmate\desktop\service\CampaignService.class
 com\bloodmate\desktop\model\VoiceCommand.class

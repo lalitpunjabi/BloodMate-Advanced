@@ -21,7 +21,11 @@
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <!-- Blood Drop Icon -->
                             <VBox styleClass="blood-drop-logo" alignment="CENTER">
-                                <Label text="🩸" styleClass="blood-drop-icon"/>
+                                <ImageView fx:id="bloodDropIcon" fitWidth="45" fitHeight="50" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../images/blood_drop_small.png" />
+                                    </image>
+                                </ImageView>
                             </VBox>
                             <!-- Logo Text -->
                             <VBox alignment="CENTER_LEFT">
@@ -101,7 +105,16 @@
                         
                         <!-- Available Blood Units Card -->
                         <VBox styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Label text="🩸 Available Units" styleClass="stat-title"/>
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox styleClass="blood-drop-logo" alignment="CENTER">
+                                    <ImageView fitWidth="24" fitHeight="26" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../images/blood_drop_small.png" />
+                                        </image>
+                                    </ImageView>
+                                </VBox>
+                                <Label text="Available Units" styleClass="stat-title"/>
+                            </HBox>
                             <Label fx:id="bloodUnitsLabel" text="3,456" styleClass="stat-number"/>
                             <Label text="89% capacity" styleClass="stat-change-neutral"/>
                         </VBox>
@@ -125,7 +138,16 @@
                     <HBox spacing="20">
                         <!-- Blood Type Distribution Chart -->
                         <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                            <Label text="🩸 Blood Type Distribution" styleClass="card-title"/>
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox styleClass="blood-drop-logo" alignment="CENTER">
+                                    <ImageView fitWidth="24" fitHeight="26" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../images/blood_drop_small.png" />
+                                        </image>
+                                    </ImageView>
+                                </VBox>
+                                <Label text="Blood Type Distribution" styleClass="card-title"/>
+                            </HBox>
                             <VBox spacing="10">
                                 <HBox alignment="CENTER_LEFT" spacing="10">
                                     <Label text="O+:" styleClass="blood-type-label"/>
@@ -175,7 +197,13 @@
                             <Label text="📈 Recent Activity" styleClass="card-title"/>
                             <VBox spacing="8">
                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="activity-item">
-                                    <Label text="🩸" styleClass="activity-icon"/>
+                                    <VBox styleClass="blood-drop-logo" alignment="CENTER">
+                                        <ImageView fitWidth="24" fitHeight="26" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../images/blood_drop_small.png" />
+                                            </image>
+                                        </ImageView>
+                                    </VBox>
                                     <VBox>
                                         <Label text="New donation from John Doe" styleClass="activity-text"/>
                                         <Label text="A+ • 450ml • 2 minutes ago" styleClass="activity-details"/>
@@ -224,7 +252,17 @@
                                     <ColumnConstraints percentWidth="50"/>
                                 </columnConstraints>
                                 <Button text="👥 Register Donor" styleClass="action-button" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                                <Button text="🩸 Record Donation" styleClass="action-button" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Button text="Record Donation" styleClass="action-button" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <graphic>
+                                        <VBox styleClass="blood-drop-logo" alignment="CENTER">
+                                            <ImageView fitWidth="16" fitHeight="18" preserveRatio="true">
+                                                <image>
+                                                    <Image url="@../../images/blood_drop_small.png" />
+                                                </image>
+                                            </ImageView>
+                                        </VBox>
+                                    </graphic>
+                                </Button>
                                 <Button text="🏥 Blood Request" styleClass="action-button" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                                 <Button text="📊 Generate Report" styleClass="action-button" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                             </GridPane>
@@ -871,7 +909,16 @@
                         
                         <!-- Blood Type Distribution -->
                         <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                            <Label text="🩸 Blood Type Distribution" styleClass="card-title"/>
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox styleClass="blood-drop-logo" alignment="CENTER">
+                                    <ImageView fitWidth="24" fitHeight="26" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../images/blood_drop_small.png" />
+                                        </image>
+                                    </ImageView>
+                                </VBox>
+                                <Label text="Blood Type Distribution" styleClass="card-title"/>
+                            </HBox>
                             <VBox spacing="10">
                                 <!-- Chart would go here in a real implementation -->
                                 <Label text="📊 Chart Placeholder - Distribution of blood types in inventory" styleClass="chart-placeholder"/>
@@ -1148,9 +1195,189 @@
                             </HBox>
                             
                             <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
-                                <Button text="💾 Save Settings" styleClass="modern-button"/>
+                                <Button text="💾 Save Settings" styleClass="modern-button" onAction="#saveVoiceSettings"/>
                             </HBox>
                         </GridPane>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+            
+            <!-- Settings Interface -->
+            <ScrollPane fx:id="settingsView" visible="false" managed="false" fitToWidth="true" fitToHeight="true">
+                <VBox spacing="25" styleClass="content-padding">
+                    <!-- Page Header -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="⚙️ Settings &amp; Preferences" styleClass="page-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔄 Reset Defaults" styleClass="modern-button secondary" onAction="#resetSettings"/>
+                    </HBox>
+                    
+                    <!-- Account Settings -->
+                    <VBox styleClass="form-container">
+                        <Label text="👤 Account Settings" styleClass="form-title"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Full Name" styleClass="form-label"/>
+                                <TextField fx:id="fullNameField" promptText="Enter your full name" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Email Address" styleClass="form-label"/>
+                                <TextField fx:id="emailField" promptText="Enter your email" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Username" styleClass="form-label"/>
+                                <TextField fx:id="usernameField" promptText="Enter username" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Role" styleClass="form-label"/>
+                                <ComboBox fx:id="roleComboBox" promptText="Select role" styleClass="form-combo"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Current Password" styleClass="form-label"/>
+                                <PasswordField fx:id="currentPasswordField" promptText="Enter current password" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="New Password" styleClass="form-label"/>
+                                <PasswordField fx:id="newPasswordField" promptText="Enter new password" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                <Label text="Confirm Password" styleClass="form-label"/>
+                                <PasswordField fx:id="confirmPasswordField" promptText="Confirm new password" styleClass="form-input"/>
+                            </VBox>
+                            
+                            <HBox alignment="CENTER_RIGHT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                                <Button text="📷 Change Profile Picture" styleClass="modern-button secondary"/>
+                                <Button text="💾 Save Account Changes" styleClass="modern-button" onAction="#saveAccountSettings"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                    
+                    <!-- Application Preferences -->
+                    <VBox styleClass="form-container">
+                        <Label text="🎨 Application Preferences" styleClass="form-title"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Theme" styleClass="form-label"/>
+                                <HBox spacing="15">
+                                    <RadioButton fx:id="lightThemeRadio" text="Light Theme" styleClass="form-radio"/>
+                                    <RadioButton fx:id="darkThemeRadio" text="Dark Theme" styleClass="form-radio"/>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Language" styleClass="form-label"/>
+                                <ComboBox fx:id="languageComboBox" promptText="Select language" styleClass="form-combo"/>
+                            </VBox>
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Startup View" styleClass="form-label"/>
+                                <ComboBox fx:id="startupViewComboBox" promptText="Select default view" styleClass="form-combo"/>
+                            </VBox>
+                            <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Auto Refresh Interval" styleClass="form-label"/>
+                                <ComboBox fx:id="refreshIntervalComboBox" promptText="Select interval" styleClass="form-combo"/>
+                            </VBox>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                                <Label text="Notifications" styleClass="form-label"/>
+                                <VBox spacing="8">
+                                    <CheckBox fx:id="emailNotificationsCheckbox" text="Email Notifications" styleClass="form-checkbox"/>
+                                    <CheckBox fx:id="desktopNotificationsCheckbox" text="Desktop Notifications" styleClass="form-checkbox"/>
+                                    <CheckBox fx:id="soundNotificationsCheckbox" text="Sound Notifications" styleClass="form-checkbox"/>
+                                    <CheckBox fx:id="emergencyAlertsCheckbox" text="Emergency Alerts" styleClass="form-checkbox"/>
+                                </VBox>
+                            </VBox>
+                            
+                            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                                <Button text="💾 Save Preferences" styleClass="modern-button" onAction="#savePreferences"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                    
+                    <!-- System Configuration -->
+                    <VBox styleClass="form-container">
+                        <Label text="🔧 System Configuration" styleClass="form-title"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Database Host" styleClass="form-label"/>
+                                <TextField fx:id="dbHostField" promptText="Enter database host" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Database Port" styleClass="form-label"/>
+                                <TextField fx:id="dbPortField" promptText="Enter database port" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Database Name" styleClass="form-label"/>
+                                <TextField fx:id="dbNameField" promptText="Enter database name" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Database Username" styleClass="form-label"/>
+                                <TextField fx:id="dbUsernameField" promptText="Enter database username" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Database Password" styleClass="form-label"/>
+                                <PasswordField fx:id="dbPasswordField" promptText="Enter database password" styleClass="form-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Connection Pool Size" styleClass="form-label"/>
+                                <TextField fx:id="poolSizeField" promptText="Enter pool size" styleClass="form-input"/>
+                            </VBox>
+                            
+                            <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                                <Label text="Performance Settings" styleClass="form-label"/>
+                                <VBox spacing="8">
+                                    <CheckBox fx:id="cacheEnabledCheckbox" text="Enable Caching" styleClass="form-checkbox"/>
+                                    <CheckBox fx:id="debugModeCheckbox" text="Debug Mode" styleClass="form-checkbox"/>
+                                    <CheckBox fx:id="autoBackupCheckbox" text="Automatic Backups" styleClass="form-checkbox"/>
+                                </VBox>
+                            </VBox>
+                            
+                            <HBox alignment="CENTER_RIGHT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                                <Button text="🧪 Test Connection" styleClass="modern-button secondary" onAction="#testDatabaseConnection"/>
+                                <Button text="💾 Save Configuration" styleClass="modern-button" onAction="#saveConfiguration"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                    
+                    <!-- About Section -->
+                    <VBox styleClass="form-container">
+                        <Label text="ℹ️ About BloodMate" styleClass="form-title"/>
+                        <VBox spacing="15">
+                            <HBox alignment="CENTER_LEFT" spacing="20">
+                                <VBox styleClass="blood-drop-logo" alignment="CENTER" prefWidth="80" prefHeight="90">
+                                    <ImageView fx:id="bloodDropIconLarge" fitWidth="80" fitHeight="90" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../images/blood_drop_large.png" />
+                                        </image>
+                                    </ImageView>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <Label text="BloodMate - Advanced Blood Bank Management System" styleClass="about-title"/>
+                                    <Label text="Version 2.5.0 | © 2025 BloodMate Inc." styleClass="about-version"/>
+                                    <Label text="A comprehensive solution for blood bank management with advanced features" styleClass="about-description"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <HBox spacing="15">
+                                <Button text="🌐 Visit Website" styleClass="modern-button secondary"/>
+                                <Button text="📄 Documentation" styleClass="modern-button secondary"/>
+                                <Button text="🐛 Report Issue" styleClass="modern-button secondary"/>
+                                <Button text="⭐ Check for Updates" styleClass="modern-button"/>
+                            </HBox>
+                        </VBox>
                     </VBox>
                 </VBox>
             </ScrollPane>

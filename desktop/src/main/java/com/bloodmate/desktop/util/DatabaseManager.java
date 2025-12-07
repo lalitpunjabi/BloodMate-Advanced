@@ -2,14 +2,10 @@ package com.bloodmate.desktop.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.Properties;
-
 /**
  * Utility class for managing database connections
  */
@@ -28,12 +24,13 @@ public class DatabaseManager {
                 connection = DriverManager.getConnection(url, username, password);
             } catch (SQLException e) {
                 System.err.println("Error connecting to database: " + e.getMessage());
-                e.printStackTrace();
+                System.err.println("Database functionality will be limited until MySQL is properly configured.");
+                // Return null to indicate database is not available
+                return null;
             }
         }
         return connection;
-    }
-    
+    }    
     private static void loadProperties() {
         if (dbProperties == null) {
             dbProperties = new Properties();

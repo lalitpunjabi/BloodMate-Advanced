@@ -59,6 +59,8 @@
     
     <!-- Application Properties -->
     <main.class>com.bloodmate.desktop.MainApp</main.class>
+    <test.scrollbars.class>com.bloodmate.desktop.TestScrollbars</test.scrollbars.class>
+    <test.signup.class>com.bloodmate.desktop.TestSignUp</test.signup.class>
     <application.name>BloodMate</application.name>
   </properties>
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.bloodmate.desktop.controller.LoginController" 
+            styleClass="login-container">
+    
+    <!-- Background decoration -->
+    <center>
+        <VBox alignment="CENTER" spacing="30" styleClass="login-form-container">
+            <!-- Logo and Title -->
+            <VBox alignment="CENTER" spacing="15">
+                <VBox styleClass="blood-drop-logo" alignment="CENTER" prefWidth="100" prefHeight="110">
+                    <ImageView fx:id="bloodDropIconLogin" fitWidth="100" fitHeight="110" preserveRatio="true">
+                        <image>
+                            <Image url="@../../images/blood_drop_large.png" />
+                        </image>
+                    </ImageView>
+                </VBox>
+                <Label text="BloodMate" styleClass="login-title"/>
+                <Label text="Advanced Blood Bank Management System" styleClass="login-subtitle"/>
+            </VBox>
+            
+            <!-- Login Form -->
+            <VBox spacing="20" styleClass="login-form">
+                <VBox spacing="5">
+                    <Label text="Username" styleClass="login-label"/>
+                    <TextField fx:id="usernameField" promptText="Enter your username" styleClass="login-input"/>
+                </VBox>
+                
+                <VBox spacing="5">
+                    <Label text="Password" styleClass="login-label"/>
+                    <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="login-input"/>
+                </VBox>
+                
+                <HBox alignment="CENTER_LEFT">
+                    <CheckBox fx:id="rememberMeCheckbox" text="Remember me" styleClass="login-checkbox"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Hyperlink text="Forgot Password?" styleClass="login-link"/>
+                </HBox>
+                
+                <Button fx:id="loginButton" text="🔐 Login" styleClass="login-button" onAction="#handleLogin" maxWidth="Infinity"/>
+                
+                <HBox alignment="CENTER">
+                    <Label text="Don't have an account?" styleClass="login-text"/>
+                    <Hyperlink fx:id="signUpLink" text="Sign Up" styleClass="login-link" onAction="#handleSignUpLink"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Footer -->
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="© 2025 BloodMate Inc. All rights reserved." styleClass="login-footer"/>
+                <HBox alignment="CENTER" spacing="15">
+                    <Hyperlink text="Privacy Policy" styleClass="login-footer-link"/>
+                    <Hyperlink text="Terms of Service" styleClass="login-footer-link"/>
+                    <Hyperlink text="Help Center" styleClass="login-footer-link"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

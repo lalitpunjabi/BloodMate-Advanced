@@ -1,4 +1,4 @@
-# 🩸 BloodMate - Revolutionary Blood Bank Management System
+# 🩸 BloodMate - Blood Bank Management System
 
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=flat&logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![JavaFX](https://img.shields.io/badge/JavaFX-21.0.4-blue?style=flat&logo=java&logoColor=white)](https://openjfx.io/)
@@ -6,7 +6,7 @@
 [![Maven](https://img.shields.io/badge/Maven-3.8+-C71A36?style=flat&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **A next-generation blood bank management system featuring cutting-edge technologies including AI predictions, IoT monitoring, blockchain verification, quantum-inspired algorithms, and revolutionary biometric authentication.**
+> **A comprehensive blood bank management system built with JavaFX and powered by MySQL, providing essential functionality for managing donors, recipients, blood inventory, campaigns, and emergency responses.**
 
 ## 🆕 Recent Updates
 
@@ -22,10 +22,6 @@
 - 🗄️ **Database Integration**: Fully functional MySQL connection with automated schema setup
 - 🎮 **Interactive UI**: All buttons and features now respond correctly to user interactions
 - 🎨 **Visual Feedback**: Active button states and smooth view transitions implemented
-- 🤖 **AI Prediction System**: Machine learning algorithms for blood demand forecasting
-- 📡 **IoT Monitoring**: Real-time sensor data tracking for blood storage conditions
-- 🔗 **Blockchain Verification**: Immutable blood unit traceability and authenticity verification
-- 🧠 **Advanced Features**: Quantum-inspired algorithms, AR visualization, and revolutionary technologies
 
 ## ✅ Application Status
 
@@ -41,11 +37,7 @@
 - ✅ **Rewards & Leaderboard**: Gamification and donor engagement
 - ✅ **Statistics & Reports**: Comprehensive data visualization, analytics, and export capabilities
 - ✅ **Emergency Response**: Critical blood request handling
-- ✅ **AI Prediction**: Machine learning algorithms for demand forecasting
-- ✅ **IoT Monitoring**: Real-time sensor data tracking
-- ✅ **Blockchain Verification**: Blood unit traceability and authenticity
 - ✅ **Voice Commands**: Hands-free operation with natural language processing
-- ✅ **Revolutionary Tech**: Quantum computing, AR/VR, biometric authentication, and more
 
 #### 🔧 System Status - ✅ OPERATIONAL
 - ✅ **Database Connection**: MySQL integration working perfectly
@@ -54,16 +46,13 @@
 - ✅ **Event Handling**: Programmatic navigation handlers implemented
 - ✅ **View Transitions**: Smooth fade animations between sections
 - ✅ **CSS Styling**: Professional red/white/black theme applied
-- ✅ **AI Prediction System**: Blood demand forecasting and trend analysis
-- ✅ **IoT Monitoring**: Real-time sensor data tracking
-- ✅ **Blockchain Verification**: Immutable blood unit traceability
 
 #### 🚀 Ready to Use
 The BloodMate application is now fully functional and ready for production use! All reported navigation issues have been resolved.
 
 ## 🌟 Overview
 
-BloodMate is an innovative desktop application that revolutionizes blood bank management through the integration of advanced technologies. Built with JavaFX and powered by MySQL, it provides a comprehensive solution for managing donors, recipients, blood inventory, campaigns, and emergency responses while incorporating revolutionary features like AI predictions, quantum computing algorithms, and AR visualization.
+BloodMate is a desktop application for blood bank management. Built with JavaFX and powered by MySQL, it provides a comprehensive solution for managing donors, recipients, blood inventory, campaigns, and emergency responses.
 
 ## ✨ Key Features
 
@@ -80,57 +69,16 @@ BloodMate is an innovative desktop application that revolutionizes blood bank ma
 - **🔄 Real-time Updates**: Live data synchronization with MySQL database
 - **🎯 Interactive Elements**: All buttons, forms, and controls fully responsive
 
-### 🚀 Revolutionary Technology Features
-
-#### 🤖 AI-Powered Intelligence
-- **Machine Learning Predictions**: AI-driven blood demand forecasting with predictive analytics
-- **Neural Network Quality Assessment**: Advanced blood quality prediction using microscopic image analysis
-- **Predictive Analytics**: Donor behavior analysis and personalized engagement
-- **AI Chatbot**: Automated donor health screening and appointment scheduling
-- **Demand Forecasting**: Blood unit requirement predictions based on historical data and trends
-
-#### 🔬 Quantum-Inspired Computing
-- **Quantum Blood Compatibility Algorithm**: Ultra-fast compatibility matching using quantum-inspired algorithms
-- **Superposition State Analysis**: Advanced blood type compatibility calculations
-- **Entanglement Network Optimization**: Optimized donor-recipient matching networks
-
-#### 🔐 Advanced Security & Authentication
-- **Biometric Integration**: Fingerprint and facial recognition for donor authentication
-- **Blockchain Verification**: Immutable blood traceability and authenticity verification with cryptographic hashing
-- **Smart Contracts**: Automated blood unit verification and chain of custody
-
-#### 📡 IoT & Connectivity
-- **Smart Blood Bag Monitoring**: Real-time temperature and RFID tracking
-- **GPS Delivery Tracking**: Live tracking of blood deliveries with route optimization
-- **Satellite Communication**: Global connectivity for remote areas and disaster response
-- **Edge Computing**: Real-time processing capabilities for mobile blood drives
-- **Sensor Data Monitoring**: Real-time tracking of storage conditions (temperature, humidity, pressure)
-- **Blood Bag Location Tracking**: GPS-enabled tracking of blood units
-
-#### 🥽 Immersive Technologies
-- **Augmented Reality (AR)**: 3D blood type visualization and inventory mapping
-- **Virtual Reality (VR)**: Immersive training environments for medical staff
-- **Holographic Data Visualization**: 3D holographic displays for complex data analysis
-- **Digital Twin Technology**: Virtual blood bank simulation and optimization
-
-#### 🎮 Gamification & Engagement
+### 🎮 Gamification & Engagement
 - **Donation Streaks**: Track and reward consecutive donations
 - **Achievement Badges**: Unlock badges for various milestones
 - **Community Leaderboards**: Foster healthy competition among donors
 - **Points & Rewards System**: Earn points redeemable for rewards
-- **Social Media Integration**: Share achievements and promote donation campaigns
 
-#### 🎤 Accessibility & Voice Commands
-- **Voice Recognition**: Hands-free operation with natural language processing
+### 🎤 Accessibility & Voice Commands
+- **Voice Recognition**: Hands-free operation with natural language processing (simulated)
 - **Voice-Activated Navigation**: Navigate through the application using voice commands
 - **Quick Voice Actions**: Instant access to statistics, emergency alerts, and donor searches
-- **Multilingual Support**: Voice commands in multiple languages
-- **Voice-Controlled Features**: Control all application features through voice commands
-
-#### 🚁 Emergency & Logistics
-- **Drone Integration**: Automated blood delivery for emergency situations
-- **Emergency Response Coordination**: Real-time emergency blood request handling
-- **Disaster Response**: Specialized protocols for natural disasters and mass casualties
 
 #### 📜 Enhanced User Experience
 - **Comprehensive Scrolling System**: Vertical and horizontal scrolling wherever necessary
@@ -182,11 +130,7 @@ BloodMate is an innovative desktop application that revolutionizes blood bank ma
 - **JavaFX Maven Plugin**: Development and packaging
 - **Launch4j**: Windows executable generation
 
-### Advanced Technologies (Simulated)
-- **Machine Learning Algorithms**: Demand prediction and pattern recognition
-- **Blockchain Simulation**: Traceability and verification protocols
-- **IoT Integration Protocols**: Smart device communication standards
-- **Quantum-Inspired Algorithms**: Advanced mathematical modeling
+
 
 ## 📋 Prerequisites
 
@@ -303,13 +247,7 @@ The application uses a comprehensive MySQL database with the following key table
 - **campaigns**: Blood drive campaigns and events
 - **emergency_requests**: Emergency blood requests
 
-### Advanced Feature Tables
-- **ai_predictions**: Machine learning prediction data
-- **iot_sensors**: IoT device monitoring data
-- **blockchain_records**: Blockchain verification records
-- **biometric_data**: Biometric authentication data
-- **gamification_points**: Rewards and points system
-- **voice_commands**: Voice interaction logs
+
 
 ## 🎯 Usage Guide
 
@@ -341,21 +279,7 @@ The application uses a comprehensive MySQL database with the following key table
 3. Activate emergency protocols
 4. Coordinate with medical facilities
 
-### Advanced Features
-
-#### AI Predictions
-1. Navigate to **AI Predictions** tab
-2. View demand forecasts and trend analysis
-3. Access machine learning insights
-4. Generate predictive reports
-
-#### IoT Monitoring
-1. Open **IoT Monitoring** section
-2. Monitor connected sensors and devices
-3. View real-time temperature and location data
-4. Manage smart blood bag tracking
-
-#### Voice Commands
+### Voice Commands
 1. Activate voice recognition
 2. Use natural language commands:
    - "Show dashboard"
@@ -396,9 +320,6 @@ ui.smooth.scrolling=true
 ui.hardware.acceleration=true
 
 # Feature toggles
-features.ai.enabled=true
-features.iot.enabled=true
-features.blockchain.enabled=true
 features.voice.enabled=true
 
 # Logging configuration
@@ -444,9 +365,6 @@ mvn verify
 - **Database**: MySQL connection established
 - **UI**: Responsive interface with working theme toggle
 - **Views**: All major views (Dashboard, Donors, Recipients, etc.) accessible
-- **AI Prediction System**: Blood demand forecasting and trend analysis
-- **IoT Monitoring**: Real-time sensor data tracking
-- **Blockchain Verification**: Immutable blood unit traceability
 
 ## 🐛 Troubleshooting
 
@@ -598,7 +516,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Lead Developer**: [Your Name]
 - **UI/UX Designer**: [Designer Name]
 - **Database Architect**: [Architect Name]
-- **AI/ML Specialist**: [Specialist Name]
 
 ## 🙏 Acknowledgments
 

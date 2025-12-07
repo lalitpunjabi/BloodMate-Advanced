@@ -21,7 +21,11 @@
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <!-- Blood Drop Icon -->
                             <VBox styleClass="blood-drop-logo" alignment="CENTER">
-                                <Label text="🩸" styleClass="blood-drop-icon"/>
+                                <ImageView fitWidth="45" fitHeight="50" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../images/blood_drop_small.png" />
+                                    </image>
+                                </ImageView>
                             </VBox>
                             <!-- Logo Text -->
                             <VBox alignment="CENTER_LEFT">

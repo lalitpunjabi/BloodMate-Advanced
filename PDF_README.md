@@ -93,7 +93,7 @@ BloodMate-Web-Test/
 The successful PDF should contain:
 - Cover page with title and metadata
 - Complete table of contents
-- All 13 main sections
+- All main sections
 - Proper formatting and styling
 - Working internal links
 - Professional appearance

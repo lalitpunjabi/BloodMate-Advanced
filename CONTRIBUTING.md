@@ -123,6 +123,7 @@ Closes #issue-number
 - CSS classes should follow kebab-case naming
 - Controller classes should end with "Controller"
 - Use proper ScrollPane implementation for new views
+- Follow the existing UI component patterns
 
 ### Database Guidelines
 
@@ -140,7 +141,6 @@ Closes #issue-number
 public class DonorService {
     
     private final DonorDao donorDao;
-    private static final Logger logger = LoggerFactory.getLogger(DonorService.class);
     
     /**
      * Registers a new donor in the system.
@@ -155,7 +155,6 @@ public class DonorService {
         try {
             return donorDao.save(donor);
         } catch (SQLException e) {
-            logger.error("Failed to register donor: {}", donor.getEmail(), e);
             throw new DonorRegistrationException("Registration failed", e);
         }
     }
