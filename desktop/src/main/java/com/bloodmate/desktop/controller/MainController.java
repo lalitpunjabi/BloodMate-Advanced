@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,6 +26,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.image.Image;
@@ -1489,8 +1492,25 @@ public class MainController implements Initializable {
             
             // Show logout success message
             showAlert("Logout Successful", "You have been successfully logged out of BloodMate. Thank you for using our system!");
-            
-            // In a real application, you would redirect to a login screen here
+
+            // Redirect back to login screen
+            Platform.runLater(() -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bloodmate/desktop/view/LoginView.fxml"));
+                    Parent loginRoot = loader.load();
+                    Scene scene = new Scene(loginRoot, 500, 700);
+                    String css = getClass().getResource("/styles/main.css").toExternalForm();
+                    scene.getStylesheets().add(css);
+
+                    Stage stage = (Stage) dashboardBtn.getScene().getWindow();
+                    stage.setTitle("🩸 BloodMate - Login");
+                    stage.setScene(scene);
+                    stage.setResizable(false);
+                    stage.show();
+                } catch (IOException e) {
+                    showAlert("Error", "Failed to load login screen: " + e.getMessage());
+                }
+            });
         } else {
             System.out.println("User cancelled logout");
         }

@@ -20,6 +20,7 @@ com\bloodmate\desktop\report\CustomReportDialog.class
 com\bloodmate\desktop\report\ScheduledReportManager.class
 com\bloodmate\desktop\util\SpeechRecognitionUtil.class
 com\bloodmate\desktop\util\CustomReportDialog$ReportParameters.class
+com\bloodmate\desktop\TestScrollbars.class
 com\bloodmate\desktop\util\ValidationUtil.class
 com\bloodmate\desktop\controller\MainController.class
 com\bloodmate\desktop\exception\ServiceException.class

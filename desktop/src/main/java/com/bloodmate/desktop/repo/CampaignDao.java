@@ -3,7 +3,6 @@ package com.bloodmate.desktop.repo;
 import com.bloodmate.desktop.model.Campaign;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -207,16 +206,33 @@ public class CampaignDao {
         campaign.setLocation(rs.getString("location"));
         campaign.setCity(rs.getString("city"));
         campaign.setState(rs.getString("state"));
-        campaign.setTargetUnits(rs.getInt("target_units"));
-        campaign.setCollectedUnits(rs.getInt("collected_units"));
-        campaign.setStatus(rs.getString("status"));
-        campaign.setOrganizer(rs.getString("organizer_name"));
-        campaign.setContactNumber(rs.getString("organizer_contact"));
+        campaign.setTargetUnits(getIntSafely(rs, "target_units", 0));
+        campaign.setCollectedUnits(getIntSafely(rs, "collected_units", 0));
+        campaign.setStatus(getStringSafely(rs, "status", "PLANNED"));
+        campaign.setOrganizer(getStringSafely(rs, "organizer_name", null));
+        campaign.setContactNumber(getStringSafely(rs, "organizer_contact", null));
         Timestamp createdAt = rs.getTimestamp("created_at");
         if (createdAt != null) campaign.setCreatedDate(createdAt.toLocalDateTime());
-        campaign.setParticipantCount(rs.getInt("registered_donors"));
-        campaign.setRequirements(rs.getString("special_requirements"));
+        campaign.setParticipantCount(getIntSafely(rs, "registered_donors", 0));
+        campaign.setRequirements(getStringSafely(rs, "special_requirements", null));
         // The incentives field doesn't exist in the database schema, so we'll leave it as default
         return campaign;
+    }
+
+    private boolean hasColumn(ResultSet rs, String column) {
+        try {
+            rs.findColumn(column);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    private String getStringSafely(ResultSet rs, String column, String defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getString(column) : defaultValue;
+    }
+
+    private int getIntSafely(ResultSet rs, String column, int defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getInt(column) : defaultValue;
     }
 }

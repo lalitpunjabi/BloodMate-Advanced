@@ -197,23 +197,62 @@ public class BloodInventoryDao {
         BloodInventory inventory = new BloodInventory();
         inventory.setId(rs.getString("id"));
         inventory.setBloodGroup(rs.getString("blood_group"));
-        inventory.setBagId(rs.getString("bag_id"));
-        if (rs.getDate("donation_date") != null)
-            inventory.setDonationDate(rs.getDate("donation_date").toLocalDate());
-        if (rs.getDate("expiry_date") != null)
-            inventory.setExpiryDate(rs.getDate("expiry_date").toLocalDate());
-        inventory.setStatus(rs.getString("status"));
-        inventory.setVolume(rs.getDouble("volume"));
-        inventory.setLocation(rs.getString("location"));
-        inventory.setTemperature(rs.getDouble("temperature"));
-        inventory.setQualityScore(rs.getInt("quality_score"));
-        inventory.setDonorId(rs.getString("donor_id"));
-        inventory.setNotes(rs.getString("notes"));
-        inventory.setIsReserved(rs.getBoolean("is_reserved"));
-        inventory.setReservedFor(rs.getString("reserved_for"));
-        inventory.setTestResults(rs.getString("test_results"));
-        if (rs.getTimestamp("last_updated") != null)
-            inventory.setLastUpdated(rs.getTimestamp("last_updated").toLocalDateTime());
+        // Some deployments may have older schemas; guard optional columns.
+        inventory.setBagId(getStringSafely(rs, "bag_id", rs.getString("id")));
+
+        // Prefer donation_date; fall back to collection_date or null.
+        Date donationDate = getDateSafely(rs, "donation_date");
+        if (donationDate == null) donationDate = getDateSafely(rs, "collection_date");
+        if (donationDate != null) inventory.setDonationDate(donationDate.toLocalDate());
+
+        Date expiryDate = getDateSafely(rs, "expiry_date");
+        if (expiryDate != null) inventory.setExpiryDate(expiryDate.toLocalDate());
+
+        inventory.setStatus(getStringSafely(rs, "status", "AVAILABLE"));
+        inventory.setVolume(getDoubleSafely(rs, "volume", 450.0));
+        inventory.setLocation(getStringSafely(rs, "location", getStringSafely(rs, "storage_location", "Storage-A")));
+        inventory.setTemperature(getDoubleSafely(rs, "temperature", 4.0));
+        inventory.setQualityScore(getIntSafely(rs, "quality_score", 100));
+        inventory.setDonorId(getStringSafely(rs, "donor_id", null));
+        inventory.setNotes(getStringSafely(rs, "notes", null));
+        inventory.setIsReserved(getBooleanSafely(rs, "is_reserved", false));
+        inventory.setReservedFor(getStringSafely(rs, "reserved_for", null));
+        inventory.setTestResults(getStringSafely(rs, "test_results", null));
+        Timestamp lastUpdated = getTimestampSafely(rs, "last_updated");
+        if (lastUpdated != null) inventory.setLastUpdated(lastUpdated.toLocalDateTime());
         return inventory;
+    }
+
+    private boolean hasColumn(ResultSet rs, String column) {
+        try {
+            rs.findColumn(column);
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    private String getStringSafely(ResultSet rs, String column, String defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getString(column) : defaultValue;
+    }
+
+    private Date getDateSafely(ResultSet rs, String column) throws SQLException {
+        return hasColumn(rs, column) ? rs.getDate(column) : null;
+    }
+
+    private Timestamp getTimestampSafely(ResultSet rs, String column) throws SQLException {
+        return hasColumn(rs, column) ? rs.getTimestamp(column) : null;
+    }
+
+    private double getDoubleSafely(ResultSet rs, String column, double defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getDouble(column) : defaultValue;
+    }
+
+    private int getIntSafely(ResultSet rs, String column, int defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getInt(column) : defaultValue;
+    }
+
+    private boolean getBooleanSafely(ResultSet rs, String column, boolean defaultValue) throws SQLException {
+        return hasColumn(rs, column) ? rs.getBoolean(column) : defaultValue;
     }
 }

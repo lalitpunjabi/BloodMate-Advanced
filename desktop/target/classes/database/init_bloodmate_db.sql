@@ -71,30 +71,29 @@ CREATE TABLE IF NOT EXISTS recipients (
     INDEX idx_required_date (required_by_date)
 );
 
--- Blood Inventory table
+-- Blood Inventory table (aligned with BloodInventoryDao schema)
 CREATE TABLE IF NOT EXISTS blood_inventory (
     id VARCHAR(64) PRIMARY KEY,
     blood_group VARCHAR(5) NOT NULL,
-    units_available INT NOT NULL DEFAULT 0,
-    units_reserved INT NOT NULL DEFAULT 0,
+    bag_id VARCHAR(50) UNIQUE NOT NULL,
+    donation_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
-    collection_date DATE NOT NULL,
-    storage_location VARCHAR(100),
-    temperature DECIMAL(4,2),
-    status ENUM('AVAILABLE', 'RESERVED', 'EXPIRED', 'USED') DEFAULT 'AVAILABLE',
+    status ENUM('AVAILABLE', 'RESERVED', 'USED', 'EXPIRED', 'DISCARDED') DEFAULT 'AVAILABLE',
+    volume DECIMAL(5,2) DEFAULT 450.00,
+    location VARCHAR(100) NOT NULL,
+    temperature DECIMAL(4,1) DEFAULT 4.0,
+    quality_score INT DEFAULT 100,
     donor_id VARCHAR(64),
-    batch_number VARCHAR(100),
-    blood_bank_id VARCHAR(64),
-    quality_score DECIMAL(3,2) DEFAULT 10.00,
-    tested_for_diseases BOOLEAN DEFAULT FALSE,
-    test_results JSON,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    notes TEXT,
+    is_reserved BOOLEAN DEFAULT FALSE,
+    reserved_for VARCHAR(64),
+    test_results TEXT,
     FOREIGN KEY (donor_id) REFERENCES donors(id) ON DELETE SET NULL,
     INDEX idx_blood_group (blood_group),
-    INDEX idx_expiry (expiry_date),
     INDEX idx_status (status),
-    INDEX idx_collection_date (collection_date)
+    INDEX idx_expiry_date (expiry_date),
+    INDEX idx_location (location)
 );
 
 -- Donation Campaigns table
@@ -210,16 +209,16 @@ INSERT IGNORE INTO donors (id, name, email, phone, blood_group, eligibility_stat
 ('sample-donor-4', 'Sarah Johnson', 'sarah.johnson@email.com', '+91-9876543213', 'AB+', 'ELIGIBLE', 2, 20, 'BRONZE'),
 ('sample-donor-5', 'Mohammed Ali', 'mohammed.ali@email.com', '+91-9876543214', 'O-', 'ELIGIBLE', 12, 120, 'PLATINUM');
 
--- Insert sample blood inventory
-INSERT IGNORE INTO blood_inventory (id, blood_group, units_available, expiry_date, collection_date, storage_location, status, quality_score) VALUES
-('inv-001', 'O+', 25, DATE_ADD(CURDATE(), INTERVAL 30 DAY), DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'Storage-A1', 'AVAILABLE', 9.8),
-('inv-002', 'A+', 18, DATE_ADD(CURDATE(), INTERVAL 25 DAY), DATE_SUB(CURDATE(), INTERVAL 8 DAY), 'Storage-A2', 'AVAILABLE', 9.5),
-('inv-003', 'B+', 12, DATE_ADD(CURDATE(), INTERVAL 35 DAY), DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'Storage-B1', 'AVAILABLE', 9.9),
-('inv-004', 'AB+', 8, DATE_ADD(CURDATE(), INTERVAL 28 DAY), DATE_SUB(CURDATE(), INTERVAL 6 DAY), 'Storage-B2', 'AVAILABLE', 9.7),
-('inv-005', 'O-', 15, DATE_ADD(CURDATE(), INTERVAL 32 DAY), DATE_SUB(CURDATE(), INTERVAL 4 DAY), 'Storage-C1', 'AVAILABLE', 10.0),
-('inv-006', 'A-', 10, DATE_ADD(CURDATE(), INTERVAL 20 DAY), DATE_SUB(CURDATE(), INTERVAL 10 DAY), 'Storage-C2', 'AVAILABLE', 9.3),
-('inv-007', 'B-', 6, DATE_ADD(CURDATE(), INTERVAL 38 DAY), DATE_SUB(CURDATE(), INTERVAL 2 DAY), 'Storage-D1', 'AVAILABLE', 9.6),
-('inv-008', 'AB-', 4, DATE_ADD(CURDATE(), INTERVAL 26 DAY), DATE_SUB(CURDATE(), INTERVAL 7 DAY), 'Storage-D2', 'AVAILABLE', 9.4);
+-- Insert sample blood inventory (bag-based)
+INSERT IGNORE INTO blood_inventory (id, blood_group, bag_id, donation_date, expiry_date, status, volume, location, temperature, quality_score, donor_id, notes, is_reserved, reserved_for, test_results) VALUES
+('inv-001', 'O+', 'BAG-001', DATE_SUB(CURDATE(), INTERVAL 5 DAY), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'AVAILABLE', 450.0, 'Storage-A1', 4.0, 98, NULL, NULL, FALSE, NULL, NULL),
+('inv-002', 'A+', 'BAG-002', DATE_SUB(CURDATE(), INTERVAL 8 DAY), DATE_ADD(CURDATE(), INTERVAL 25 DAY), 'AVAILABLE', 450.0, 'Storage-A2', 4.1, 95, NULL, NULL, FALSE, NULL, NULL),
+('inv-003', 'B+', 'BAG-003', DATE_SUB(CURDATE(), INTERVAL 3 DAY), DATE_ADD(CURDATE(), INTERVAL 35 DAY), 'AVAILABLE', 450.0, 'Storage-B1', 3.9, 99, NULL, NULL, FALSE, NULL, NULL),
+('inv-004', 'AB+', 'BAG-004', DATE_SUB(CURDATE(), INTERVAL 6 DAY), DATE_ADD(CURDATE(), INTERVAL 28 DAY), 'AVAILABLE', 450.0, 'Storage-B2', 4.0, 97, NULL, NULL, FALSE, NULL, NULL),
+('inv-005', 'O-', 'BAG-005', DATE_SUB(CURDATE(), INTERVAL 4 DAY), DATE_ADD(CURDATE(), INTERVAL 32 DAY), 'AVAILABLE', 450.0, 'Storage-C1', 4.0, 100, NULL, NULL, FALSE, NULL, NULL),
+('inv-006', 'A-', 'BAG-006', DATE_SUB(CURDATE(), INTERVAL 10 DAY), DATE_ADD(CURDATE(), INTERVAL 20 DAY), 'AVAILABLE', 450.0, 'Storage-C2', 4.2, 93, NULL, NULL, FALSE, NULL, NULL),
+('inv-007', 'B-', 'BAG-007', DATE_SUB(CURDATE(), INTERVAL 2 DAY), DATE_ADD(CURDATE(), INTERVAL 38 DAY), 'AVAILABLE', 450.0, 'Storage-D1', 3.8, 96, NULL, NULL, FALSE, NULL, NULL),
+('inv-008', 'AB-', 'BAG-008', DATE_SUB(CURDATE(), INTERVAL 7 DAY), DATE_ADD(CURDATE(), INTERVAL 26 DAY), 'AVAILABLE', 450.0, 'Storage-D2', 4.0, 94, NULL, NULL, FALSE, NULL, NULL);
 
 -- Insert sample campaign
 INSERT IGNORE INTO campaigns (id, title, description, start_date, end_date, location, city, state, target_units, collected_units, status, organizer_name) VALUES

@@ -161,18 +161,15 @@
 
 /* Blood Drop Logo Container */
 .blood-drop-logo {
-    -fx-background-color: linear-gradient(
-        to bottom,
-        #ff4444,
-        #cc0000
-    );
-    -fx-background-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    -fx-border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    -fx-border-color: #990000;
-    -fx-border-width: 2;
-    -fx-pref-width: 45;
-    -fx-pref-height: 50;
-    -fx-effect: dropshadow(gaussian, rgba(204, 0, 0, 0.6), 6, 0.3, 0, 2);
+    -fx-background-image: url("../images/blood_drop_logo.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-pref-width: 50;
+    -fx-pref-height: 60;
+    -fx-padding: 5;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(204, 0, 0, 0.45), 6, 0.3, 0, 2);
 }
 
 /* Blood Drop Icon */
