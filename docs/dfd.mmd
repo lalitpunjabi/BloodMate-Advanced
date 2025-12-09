@@ -1,0 +1,52 @@
+flowchart LR
+    Donor((Donor)) -->|Register/Donate| P1[Donor Management]
+    P1 -->|Create/Update| D1[(donors)]
+    P1 -->|Record donation| D5[(donations)]
+    P1 -->|Update points| D1
+
+    Staff((Admin/Staff)) -->|Manage units| P2[Inventory Mgmt]
+    P2 -->|Add/Reserve/Use| D2[(blood_inventory)]
+
+    Recipient((Recipient/Doctor)) -->|Blood request| P3[Recipient Mgmt]
+    P3 -->|Create/Update| D3[(recipients)]
+    P3 -->|Reserve unit| D2
+
+    Staff -->|Plan/Track| P4[Campaign Mgmt]
+    P4 -->|Create/Update| D4[(campaigns)]
+    P4 -->|Link donations| D5
+
+    P5[Reporting & Analytics] -->|Reads| D1
+    P5 -->|Reads| D2
+    P5 -->|Reads| D3
+    P5 -->|Reads| D4
+    P5 -->|Reads| D5
+    P5 -->|CSV/PDF| ReportConsumer((Reports/Exports))
+
+    VoiceUser((Voice Cmd User)) -->|Commands| P6[Voice/UI Layer]
+    P6 -->|Delegates| P1
+    P6 -->|Delegates| P2
+    P6 -->|Delegates| P3
+    P6 -->|Delegates| P4
+    P6 -->|Delegates| P5
+
+    subgraph DataStores
+      D1
+      D2
+      D3
+      D4
+      D5[(donations)]
+      D6[(audit_log)]
+      D7[(system_config)]
+    end
+
+    P1 -->|Audit| D6
+    P2 -->|Audit| D6
+    P3 -->|Audit| D6
+    P4 -->|Audit| D6
+    P5 -->|Audit| D6
+    P1 -->|Read cfg| D7
+    P2 -->|Read cfg| D7
+    P3 -->|Read cfg| D7
+    P4 -->|Read cfg| D7
+    P5 -->|Read cfg| D7
+

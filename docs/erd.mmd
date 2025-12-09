@@ -1,0 +1,132 @@
+erDiagram
+    donors ||--o{ donations : donates
+    campaigns ||--o{ donations : "collects via"
+    donors ||--o{ blood_inventory : "provides unit"
+    recipients ||..o{ blood_inventory : "reserved_for (not FK)"
+
+    donors {
+        string id PK
+        string name
+        string email
+        string phone
+        string blood_group
+        date date_of_birth
+        string eligibility_status
+        date last_donation_date
+        int total_donations
+        float weight_kg
+        int height_cm
+        text medical_conditions
+        string emergency_contact_phone
+        int reward_points
+        string tier_level
+        datetime created_at
+        datetime updated_at
+    }
+
+    recipients {
+        string id PK
+        string name
+        string email
+        string phone
+        string blood_group
+        string urgency_level
+        int required_units
+        string hospital_name
+        string doctor_name
+        text medical_condition
+        datetime required_by_date
+        string status
+        json matched_donors
+        text address
+        string city
+        string state
+        datetime created_at
+        datetime updated_at
+    }
+
+    blood_inventory {
+        string id PK
+        string blood_group
+        string bag_id
+        date donation_date
+        date expiry_date
+        string status
+        float volume
+        string location
+        float temperature
+        int quality_score
+        string donor_id FK
+        boolean is_reserved
+        string reserved_for
+        text test_results
+        datetime last_updated
+        text notes
+    }
+
+    campaigns {
+        string id PK
+        string title
+        text description
+        date start_date
+        date end_date
+        string location
+        string city
+        string state
+        int target_units
+        int collected_units
+        string campaign_type
+        string status
+        string organizer_name
+        string organizer_contact
+        boolean rewards_offered
+        int reward_points_per_donation
+        datetime created_at
+        datetime updated_at
+    }
+
+    donations {
+        string id PK
+        string donor_id FK
+        string campaign_id FK
+        datetime donation_date
+        string blood_group
+        float units_donated
+        float hemoglobin_level
+        string blood_pressure
+        int pulse_rate
+        float temperature
+        float weight_at_donation
+        json pre_donation_tests
+        text post_donation_notes
+        string medical_officer
+        string location
+        int reward_points_earned
+        string status
+        text rejection_reason
+        datetime created_at
+    }
+
+    audit_log {
+        int id PK
+        string user_id
+        string action
+        string table_name
+        string record_id
+        json old_values
+        json new_values
+        string ip_address
+        text user_agent
+        datetime timestamp
+    }
+
+    system_config {
+        string config_key PK
+        text config_value
+        text description
+        string category
+        boolean is_public
+        datetime created_at
+        datetime updated_at
+    }
+
